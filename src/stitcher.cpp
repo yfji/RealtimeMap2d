@@ -7,7 +7,7 @@ ImageStitcher::ImageStitcher(int w, int h)
 	height = h;
 	//ptrFeature.reset(new SurfFeature());
 	ptrFeature.reset(new OrbFeature());
-	ptrFeature->setAlignHeight(height);
+	ptrFeature->setAlignHeight(480);
 	ptrFeature->setMatchNumber(40);
 }
 
@@ -68,13 +68,14 @@ void ImageStitcher::optimize(cv::Mat& patch, cv::Mat& ref, cv::Mat& trans) {
 	// int start_y=box_area.y;
 	// int end_x=box_area.x+box_area.width;
 	// int end_y=box_area.y+box_area.height;
+
 	int W=end_x-start_x+1;
 	int H=end_y-start_y+1;
 
 	int pad=0;
 	float _alpha=0.7;
-	cv::imshow("patch", patch);
-	cv::imshow("ref", ref);
+	const int pix_thresh=50;
+	
 	for(int i=start_y-pad;i<end_y+pad;++i){
 		uchar* patch_data=patch.ptr(i);
 		uchar* ref_data=ref.ptr(i);
@@ -82,10 +83,10 @@ void ImageStitcher::optimize(cv::Mat& patch, cv::Mat& ref, cv::Mat& trans) {
 		for(int j=start_x-pad;j<end_x+pad;++j){
 			int ind=j*3;
 			float alpha=0.;
-			if(ref_data[ind]==0 && ref_data[ind+1]==0 && ref_data[ind+2]==0){
+			if(ref_data[ind]<=pix_thresh && ref_data[ind+1]<=pix_thresh && ref_data[ind+2]<=pix_thresh){
 				alpha=1.0;
 			}
-			else if(patch_data[ind]==0 && patch_data[ind+1]==0 && patch_data[ind+2]==0){	
+			else if(patch_data[ind]<=pix_thresh && patch_data[ind+1]<=pix_thresh && patch_data[ind+2]<=pix_thresh){	
 				alpha=0.0;
 			}
 			else{
@@ -96,7 +97,8 @@ void ImageStitcher::optimize(cv::Mat& patch, cv::Mat& ref, cv::Mat& trans) {
 			trans_data[ind+2]=(int)(alpha*patch_data[ind+2]+(1.-alpha)*ref_data[ind+2]);
 		}
 	}
-	cv::rectangle(trans, cv::Rect(start_x, start_y, W,H), cv::Scalar(0,0,255), 2);
+	cv::imshow("stitch", trans);
+	//cv::rectangle(trans, cv::Rect(start_x, start_y, W,H), cv::Scalar(0,0,255), 2);
 }
 
 void ImageStitcher::applyOffset(){
@@ -126,9 +128,24 @@ void ImageStitcher::applyOffset(){
 		cv::Mat tmp_map=map2d.clone();
 		cv::Mat new_map=cv::Mat::zeros(nh,nw,map2d.type());
 
-		roi.copyTo(new_map(cv::Rect(roi_offset_x, roi_offset_y, roi.cols, roi.rows)));
-		
 		tmp_map.copyTo(new_map(cv::Rect(map_offset.x, map_offset.y, tmp_map.cols, tmp_map.rows)));
+
+		for(int i=roi_offset_y;i<roi_offset_y+roi.rows;++i){
+			uchar* roi_data=roi.ptr(i-roi_offset_y);
+			uchar* map_data=new_map.ptr(i);
+			for(int j=roi_offset_x;j<roi_offset_x+roi.cols;++j){
+				int ind=j*3;
+				int roi_ind=(j-roi_offset_x)*3;
+				if(roi_data[roi_ind]==0 && roi_data[roi_ind+1]==0 && roi_data[roi_ind+2]==0){
+					continue;
+				}
+				map_data[ind]=roi_data[roi_ind];
+				map_data[ind+1]=roi_data[roi_ind+1];
+				map_data[ind+2]=roi_data[roi_ind+2];
+			}
+		}
+
+		//roi.copyTo(new_map(cv::Rect(roi_offset_x, roi_offset_y, roi.cols, roi.rows)));		
 		
 		map2d=new_map.clone();
 
