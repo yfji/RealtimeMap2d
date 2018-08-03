@@ -20,6 +20,7 @@ private:
 	int height;
 	const int pad_x={400};
 	const int pad_y={400};
+	const int pix_thresh=50;
 
 	std::shared_ptr<Feature> ptrFeature;
 

@@ -74,7 +74,6 @@ void ImageStitcher::optimize(cv::Mat& patch, cv::Mat& ref, cv::Mat& trans) {
 
 	int pad=0;
 	float _alpha=0.7;
-	const int pix_thresh=50;
 	
 	for(int i=start_y-pad;i<end_y+pad;++i){
 		uchar* patch_data=patch.ptr(i);
@@ -136,7 +135,7 @@ void ImageStitcher::applyOffset(){
 			for(int j=roi_offset_x;j<roi_offset_x+roi.cols;++j){
 				int ind=j*3;
 				int roi_ind=(j-roi_offset_x)*3;
-				if(roi_data[roi_ind]==0 && roi_data[roi_ind+1]==0 && roi_data[roi_ind+2]==0){
+				if(roi_data[roi_ind]<=pix_thresh && roi_data[roi_ind+1]<=pix_thresh && roi_data[roi_ind+2]<=pix_thresh){
 					continue;
 				}
 				map_data[ind]=roi_data[roi_ind];
@@ -154,10 +153,6 @@ void ImageStitcher::applyOffset(){
 		match_center.x+=offset.x;
 		match_center.y+=offset.y;
 	}
-}
-
-void copyPatch(cv::Mat& patch, cv::Mat& trans){
-
 }
 
 void ImageStitcher::stitch(cv::Mat& img) {
