@@ -26,6 +26,7 @@ int main()
 	// 	"./rgb/1455008971.680000.jpg" };
 	ImageStitcher stitcher(im_w, im_h);
 
+	char key=0;
 	for(int i=0;i<img_paths.size();++i){
 		std::cout<<img_paths[i]<<std::endl;
 		cv::Mat image=cv::imread(img_paths[i]);
@@ -35,8 +36,12 @@ int main()
 		cv::Mat previewMap=map.clone();
 		imresize(previewMap, preview_h);
 		cv::imshow("map", previewMap);
-		if(cv::waitKey()==27){
+		key=cv::waitKey(1);
+		if(key==27){
 			break;
+		}
+		else if(key==' '){
+			cv::waitKey();
 		}
 	}
 

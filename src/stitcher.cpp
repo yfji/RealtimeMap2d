@@ -8,9 +8,14 @@ ImageStitcher::ImageStitcher(int w, int h)
 	//ptrFeature.reset(new SurfFeature());
 	ptrFeature.reset(new OrbFeature());
 	ptrFeature->setAlignHeight(480);
-	ptrFeature->setMatchNumber(40);
-}
+	ptrFeature->setMatchNumber(300);
 
+	dist_max=sqrt(pad_x*pad_x+pad_y*pad_y);
+	match_center=cv::Point2i(0,0);
+	box_area=cv::Rect(0,0,0,0);
+	max_roi_offset=cv::Point2i(0,0);
+	min_roi_offset=cv::Point2i(1e4,1e4);
+}
 
 ImageStitcher::~ImageStitcher()
 {
@@ -23,10 +28,32 @@ cv::Mat ImageStitcher::getPatch() {
 	}
 	int start_x = MAX(0, MIN(map2d.cols - width, match_center.x - width / 2 - 1));
 	int start_y = MAX(0, MIN(map2d.rows - height, match_center.y - height / 2 - 1));
+	speed_x=start_x-offset.x;
+	speed_y=start_y-offset.y;
+	//cv::line(map2d, cv::Point2i(offset.x,offset.y),cv::Point2i(start_x, start_y), cv::Scalar(0,0,255),1);
 	offset.x = start_x;
 	offset.y = start_y;
 	cv::Mat patch=map2d(cv::Rect(start_x, start_y, width, height));
 	return patch;
+}
+
+void ImageStitcher::checkIfStitchable(){
+	float corner_dist=0.;
+	int std_corner_x[4]={pad_x,pad_x,width+pad_x,width+pad_x};
+	int std_corner_y[4]={pad_y,height+pad_y,pad_y,height+pad_y};
+	for(int i=0;i<4;++i){
+		cv::Point2f& c=corners[i];
+		float d1=c.x-std_corner_x[i];
+		float d2=c.y-std_corner_y[i];
+		float dist=sqrt(d1*d1+d2*d2);
+		if(dist>corner_dist){
+			corner_dist=dist;
+		}
+	}
+	float eps=corner_dist/dist_max;
+	if(eps>0.5){
+		ignore=1;
+	}
 }
 
 void ImageStitcher::calcWarpCorners(cv::Mat& warpMatrix) {
@@ -72,8 +99,8 @@ void ImageStitcher::optimize(cv::Mat& patch, cv::Mat& ref, cv::Mat& trans) {
 	int W=end_x-start_x+1;
 	int H=end_y-start_y+1;
 
-	int pad=0;
-	float _alpha=0.7;
+	int pad=5;
+	float _alpha=0.6;
 	
 	for(int i=start_y-pad;i<end_y+pad;++i){
 		uchar* patch_data=patch.ptr(i);
@@ -96,13 +123,14 @@ void ImageStitcher::optimize(cv::Mat& patch, cv::Mat& ref, cv::Mat& trans) {
 			trans_data[ind+2]=(int)(alpha*patch_data[ind+2]+(1.-alpha)*ref_data[ind+2]);
 		}
 	}
-	cv::imshow("stitch", trans);
+	//cv::imshow("stitch", trans);
 	//cv::rectangle(trans, cv::Rect(start_x, start_y, W,H), cv::Scalar(0,0,255), 2);
 }
 
 void ImageStitcher::applyOffset(){
 	cv::Mat roi=stitchImage(box_area);
 	
+	cv::imshow("roi", roi);
 	if(map2d.empty()){
 		map2d=roi.clone();
 	}
@@ -110,24 +138,47 @@ void ImageStitcher::applyOffset(){
 		int min_x=box_area.x;
 		int min_y=box_area.y;
 
-		map_offset.x=MAX(0,pad_x-min_x-offset.x);
-		map_offset.y=MAX(0,pad_y-min_y-offset.y);
+		int map_offset_x=MAX(0,pad_x-min_x-offset.x);
+		int map_offset_y=MAX(0,pad_y-min_y-offset.y);
 
-		int roi_offset_x=MAX(0,offset.x+min_x-pad_x);
-		int roi_offset_y=MAX(0,offset.y+min_y-pad_y);
+		// int roi_offset_x=MAX(0,offset.x+min_x-pad_x);
+		// int roi_offset_y=MAX(0,offset.y+min_y-pad_y);
+		int roi_offset_x=MAX(0,offset.x+MIN(0,min_x-pad_x));
+		int roi_offset_y=MAX(0,offset.y+MIN(0,min_y-pad_y));
 
-		int rb_offset_x=MAX(0,offset.x+min_x-pad_x+box_area.width-map2d.cols);
-		int rb_offset_y=MAX(0,offset.y+min_x-pad_x+box_area.height-map2d.rows);
+		// int rb_offset_x=MAX(0,offset.x+min_x-pad_x+box_area.width-map2d.cols);
+		// int rb_offset_y=MAX(0,offset.y+min_x-pad_x+box_area.height-map2d.rows);
 		
-		//int rb_offset_x=roi_offset_x+box_area.width-map2d.cols-map_offset.x;
-		//int rb_offset_y=roi_offset_y+box_area.width-map2d.rows-map_offset.y;
-		int nw=map2d.cols+map_offset.x+rb_offset_x+1;
-		int nh=map2d.rows+map_offset.y+rb_offset_y+1;
+		int rb_offset_x=MAX(0,roi_offset_x+box_area.width-map2d.cols-map_offset_x);
+		int rb_offset_y=MAX(0,roi_offset_y+box_area.height-map2d.rows-map_offset_y);
+
+		int nw=map2d.cols+map_offset_x+rb_offset_x+1;
+		int nh=map2d.rows+map_offset_x+rb_offset_y+1;
 
 		cv::Mat tmp_map=map2d.clone();
 		cv::Mat new_map=cv::Mat::zeros(nh,nw,map2d.type());
 
-		tmp_map.copyTo(new_map(cv::Rect(map_offset.x, map_offset.y, tmp_map.cols, tmp_map.rows)));
+		// std::cout<<nw<<","<<nh<<std::endl;
+		// std::cout<<map_offset_x<<","<<map_offset_x<<","<<tmp_map.cols<<","<<tmp_map.rows<<std::endl;
+		// std::cout<<rb_offset_x<<","<<rb_offset_y<<std::endl;
+		// std::cout<<roi_offset_x<<","<<roi_offset_y<<","<<roi.cols<<","<<roi.rows<<std::endl;
+
+
+		tmp_map.copyTo(new_map(cv::Rect(map_offset_x, map_offset_x, tmp_map.cols, tmp_map.rows)));
+
+		float _alpha;
+		if((roi_offset_x<min_roi_offset.x && roi_offset_y<min_roi_offset.y) || (roi_offset_x>max_roi_offset.x && roi_offset_y>max_roi_offset.y)){
+			_alpha=0.3;
+			std::cout<<"Trail blazer!"<<std::endl;
+		}
+		else{
+			std::cout<<"Repaint old land!"<<std::endl;
+			_alpha=0.92;
+		}
+		max_roi_offset.x=MAX(max_roi_offset.x, roi_offset_x);
+		max_roi_offset.y=MAX(max_roi_offset.y, roi_offset_y);
+		min_roi_offset.x=MIN(min_roi_offset.x, roi_offset_x);
+		min_roi_offset.y=MIN(min_roi_offset.y, roi_offset_y);
 
 		for(int i=roi_offset_y;i<roi_offset_y+roi.rows;++i){
 			uchar* roi_data=roi.ptr(i-roi_offset_y);
@@ -135,23 +186,31 @@ void ImageStitcher::applyOffset(){
 			for(int j=roi_offset_x;j<roi_offset_x+roi.cols;++j){
 				int ind=j*3;
 				int roi_ind=(j-roi_offset_x)*3;
+				float alpha=0.;
 				if(roi_data[roi_ind]<=pix_thresh && roi_data[roi_ind+1]<=pix_thresh && roi_data[roi_ind+2]<=pix_thresh){
-					continue;
+				 	alpha=1.;
 				}
-				map_data[ind]=roi_data[roi_ind];
-				map_data[ind+1]=roi_data[roi_ind+1];
-				map_data[ind+2]=roi_data[roi_ind+2];
+				else if(map_data[ind]<=pix_thresh && map_data[ind+1]<=pix_thresh && map_data[ind+2]<=pix_thresh){
+					alpha=0.;
+				}
+				else{
+					alpha=_alpha;
+				}
+				map_data[ind]=(int)(alpha*map_data[ind]+(1-alpha)*roi_data[roi_ind]);
+				map_data[ind+1]=(int)(alpha*map_data[ind+1]+(1-alpha)*roi_data[roi_ind+1]);
+				map_data[ind+2]=(int)(alpha*map_data[ind+2]+(1-alpha)*roi_data[roi_ind+2]);
 			}
 		}
 
-		//roi.copyTo(new_map(cv::Rect(roi_offset_x, roi_offset_y, roi.cols, roi.rows)));		
+		// roi.copyTo(new_map(cv::Rect(roi_offset_x, roi_offset_y, roi.cols, roi.rows)));		
 		
 		map2d=new_map.clone();
 
-		offset.x+=map_offset.x;
-		offset.y+=map_offset.y;
-		match_center.x+=offset.x;
-		match_center.y+=offset.y;
+		offset.x+=map_offset_x;
+		offset.y+=map_offset_y;
+
+		match_center.x+=map_offset_x;
+		match_center.y+=map_offset_y;
 	}
 }
 
@@ -184,20 +243,35 @@ void ImageStitcher::stitch(cv::Mat& img) {
 	}
 	match_center.x=(int)(c_x/pt_left.size());
 	match_center.y=(int)(c_y/pt_left.size());
+	match_center.x+=offset.x;
+	match_center.y+=offset.y;
 
-	cv::Mat warpMatrix = cv::findHomography(pt_right, pt_left, CV_RANSAC);
-	warpMatrix.convertTo(warpMatrix, CV_32F, 1.0);
-	calcWarpCorners(warpMatrix);
+	if(pt_left.size()>0){
+		cv::Mat warpMatrix = cv::findHomography(pt_right, pt_left, CV_RANSAC);
+		warpMatrix.convertTo(warpMatrix, CV_32F, 1.0);
+		calcWarpCorners(warpMatrix);
+		checkIfStitchable();
+		if(!ignore){
+			//canvas_img, canvas_patch have the same size if using camera
+			stitch_size.width=MAX(canvas_img.cols, canvas_patch.cols);
+			stitch_size.height=MAX(canvas_img.rows, canvas_patch.rows);
 
-	//canvas_img, canvas_patch have the same size if using camera
-	stitch_size.width=MAX(canvas_img.cols, canvas_patch.cols);
-	stitch_size.height=MAX(canvas_img.rows, canvas_patch.rows);
+			warpPerspective(canvas_img, stitchImage, warpMatrix, stitch_size);
+			cv::Mat refImage=stitchImage.clone();
 
-	warpPerspective(canvas_img, stitchImage, warpMatrix, stitch_size);
-	cv::Mat refImage=stitchImage.clone();
-
-	//cv::imshow("warp", stitchImage);
-	//patch.copyTo(stitchImage(cv::Rect(pad_x, pad_y, patch.cols, patch.rows)));
-	optimize(canvas_patch, refImage, stitchImage);
-	applyOffset();
+			//patch.copyTo(stitchImage(cv::Rect(pad_x, pad_y, patch.cols, patch.rows)));
+			optimize(canvas_patch, refImage, stitchImage);
+			//cv::imshow("warp", stitchImage);
+			applyOffset();
+		}
+		else{
+			std::cout<<"Frame ignored"<<std::endl;
+			ignore=0;
+			offset.x+=speed_x/4;
+			offset.y+=speed_y/4;
+		}
+	}
+	else{
+		std::cout<<"No matching points"<<std::endl;
+	}
 }

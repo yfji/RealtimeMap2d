@@ -20,7 +20,14 @@ private:
 	int height;
 	const int pad_x={400};
 	const int pad_y={400};
-	const int pix_thresh=50;
+	const int pix_thresh=80;
+
+	float speed_x={0.};
+	float speed_y={0.};
+
+	float dist_max=0.0;
+
+	char ignore = {0};
 
 	std::shared_ptr<Feature> ptrFeature;
 
@@ -29,7 +36,9 @@ private:
 	cv::Rect box_area;
 	cv::Point2f corners[4];
 	cv::Point2i offset;
-	cv::Point2i map_offset;
+
+	cv::Point2i max_roi_offset;
+	cv::Point2i min_roi_offset;
 	cv::Mat stitchImage;
 	cv::Mat map2d;
 
@@ -37,6 +46,7 @@ private:
 	void calcWarpCorners(cv::Mat& warpMatrix);
 	void optimize(cv::Mat& patch, cv::Mat& ref, cv::Mat& trans);
 	void copyPatch(cv::Mat& patch, cv::Mat& trans, cv::Rect& pos);
+	void checkIfStitchable();
 	void applyOffset();
 };
 
