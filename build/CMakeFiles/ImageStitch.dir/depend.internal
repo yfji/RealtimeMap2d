@@ -144,6 +144,7 @@ CMakeFiles/ImageStitch.dir/src/main.cpp.o
  /home/yfji/Workspace/OpenCV/ImageStitch/src/main.cpp
  /home/yfji/Workspace/OpenCV/ImageStitch/src/orb_feature.h
  /home/yfji/Workspace/OpenCV/ImageStitch/src/stitcher.h
+ /home/yfji/Workspace/OpenCV/ImageStitch/src/surf_feature.h
  /usr/local/include/opencv2/calib3d.hpp
  /usr/local/include/opencv2/calib3d/calib3d_c.h
  /usr/local/include/opencv2/core.hpp
@@ -423,6 +424,7 @@ CMakeFiles/ImageStitch.dir/src/stitcher.cpp.o
  /home/yfji/Workspace/OpenCV/ImageStitch/src/orb_feature.h
  /home/yfji/Workspace/OpenCV/ImageStitch/src/stitcher.cpp
  /home/yfji/Workspace/OpenCV/ImageStitch/src/stitcher.h
+ /home/yfji/Workspace/OpenCV/ImageStitch/src/surf_feature.h
  /usr/local/include/opencv2/calib3d.hpp
  /usr/local/include/opencv2/calib3d/calib3d_c.h
  /usr/local/include/opencv2/core.hpp

@@ -143,6 +143,7 @@ CMakeFiles/ImageStitch.dir/src/main.cpp.o: ../src/gms_matcher.h
 CMakeFiles/ImageStitch.dir/src/main.cpp.o: ../src/main.cpp
 CMakeFiles/ImageStitch.dir/src/main.cpp.o: ../src/orb_feature.h
 CMakeFiles/ImageStitch.dir/src/main.cpp.o: ../src/stitcher.h
+CMakeFiles/ImageStitch.dir/src/main.cpp.o: ../src/surf_feature.h
 CMakeFiles/ImageStitch.dir/src/main.cpp.o: /usr/local/include/opencv2/calib3d.hpp
 CMakeFiles/ImageStitch.dir/src/main.cpp.o: /usr/local/include/opencv2/calib3d/calib3d_c.h
 CMakeFiles/ImageStitch.dir/src/main.cpp.o: /usr/local/include/opencv2/core.hpp
@@ -422,6 +423,7 @@ CMakeFiles/ImageStitch.dir/src/stitcher.cpp.o: ../src/gms_matcher.h
 CMakeFiles/ImageStitch.dir/src/stitcher.cpp.o: ../src/orb_feature.h
 CMakeFiles/ImageStitch.dir/src/stitcher.cpp.o: ../src/stitcher.cpp
 CMakeFiles/ImageStitch.dir/src/stitcher.cpp.o: ../src/stitcher.h
+CMakeFiles/ImageStitch.dir/src/stitcher.cpp.o: ../src/surf_feature.h
 CMakeFiles/ImageStitch.dir/src/stitcher.cpp.o: /usr/local/include/opencv2/calib3d.hpp
 CMakeFiles/ImageStitch.dir/src/stitcher.cpp.o: /usr/local/include/opencv2/calib3d/calib3d_c.h
 CMakeFiles/ImageStitch.dir/src/stitcher.cpp.o: /usr/local/include/opencv2/core.hpp

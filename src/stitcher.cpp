@@ -1,5 +1,5 @@
 #include "stitcher.h"
-
+#include <exception>
 
 ImageStitcher::ImageStitcher(int w, int h)
 {
@@ -7,8 +7,8 @@ ImageStitcher::ImageStitcher(int w, int h)
 	height = h;
 	//ptrFeature.reset(new SurfFeature());
 	ptrFeature.reset(new OrbFeature());
-	ptrFeature->setAlignHeight(480);
-	ptrFeature->setMatchNumber(300);
+	ptrFeature->setAlignHeight(360);
+	ptrFeature->setMatchNumber(800);
 
 	dist_max=sqrt(pad_x*pad_x+pad_y*pad_y);
 	match_center=cv::Point2i(0,0);
@@ -51,7 +51,7 @@ void ImageStitcher::checkIfStitchable(){
 		}
 	}
 	float eps=corner_dist/dist_max;
-	if(eps>0.5){
+	if(eps>0.3){
 		ignore=1;
 	}
 }
@@ -63,9 +63,17 @@ void ImageStitcher::calcWarpCorners(cv::Mat& warpMatrix) {
 	};
 	cv::Mat coords(4, 3, CV_32F, mat);
 	coords=coords.t();	//3x4
+	std::cout<<warpMatrix.cols<<","<<warpMatrix.rows<<std::endl;
 	cv::Mat warpCoords = warpMatrix*coords;	//3x4
 	warpCoords = warpCoords.t();
-	float* data = (float*)warpCoords.data;
+	float* data=nullptr;
+	try{
+		data = (float*)warpCoords.data;
+	}
+	catch(cv::Exception& e){
+		std::cout<<"Matrix error"<<std::endl;
+		exit(0);
+	}
 	corners[0] = cv::Point2f(data[0] / data[2], data[1] / data[2]);
 	corners[1] = cv::Point2f(data[3] / data[5], data[4] / data[5]);
 	corners[2] = cv::Point2f(data[6] / data[8], data[7] / data[8]);
@@ -246,8 +254,12 @@ void ImageStitcher::stitch(cv::Mat& img) {
 	match_center.x+=offset.x;
 	match_center.y+=offset.y;
 
-	if(pt_left.size()>0){
+	if(pt_left.size()>MIN_MATCH_SIZE){
 		cv::Mat warpMatrix = cv::findHomography(pt_right, pt_left, CV_RANSAC);
+		if(warpMatrix.cols==0 || warpMatrix.rows==0){
+			std::cout<<"Warp matrix error!"<<std::endl;
+			return;
+		}
 		warpMatrix.convertTo(warpMatrix, CV_32F, 1.0);
 		calcWarpCorners(warpMatrix);
 		checkIfStitchable();
@@ -258,7 +270,6 @@ void ImageStitcher::stitch(cv::Mat& img) {
 
 			warpPerspective(canvas_img, stitchImage, warpMatrix, stitch_size);
 			cv::Mat refImage=stitchImage.clone();
-
 			//patch.copyTo(stitchImage(cv::Rect(pad_x, pad_y, patch.cols, patch.rows)));
 			optimize(canvas_patch, refImage, stitchImage);
 			//cv::imshow("warp", stitchImage);
@@ -267,8 +278,8 @@ void ImageStitcher::stitch(cv::Mat& img) {
 		else{
 			std::cout<<"Frame ignored"<<std::endl;
 			ignore=0;
-			offset.x+=speed_x/4;
-			offset.y+=speed_y/4;
+			match_center.x+=speed_x/8;
+			match_center.y+=speed_y/8;
 		}
 	}
 	else{

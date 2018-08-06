@@ -1,5 +1,5 @@
 #pragma once
-//#include "surf_feature.h"
+#include "surf_feature.h"
 #include "orb_feature.h"
 #include <memory>
 
@@ -20,7 +20,8 @@ private:
 	int height;
 	const int pad_x={400};
 	const int pad_y={400};
-	const int pix_thresh=80;
+	const int pix_thresh=100;//80
+	const int MIN_MATCH_SIZE = {10};
 
 	float speed_x={0.};
 	float speed_y={0.};
@@ -48,5 +49,6 @@ private:
 	void copyPatch(cv::Mat& patch, cv::Mat& trans, cv::Rect& pos);
 	void checkIfStitchable();
 	void applyOffset();
+	cv::Mat filter(cv::Mat image_ori);
 };
 

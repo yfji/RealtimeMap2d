@@ -1,8 +1,7 @@
 #include "orb_feature.h"
 
 OrbFeature::OrbFeature(){
-    orb=cv::ORB::create(10000);
-    orb->setFastThreshold(0);
+	
 }
 
 OrbFeature::~OrbFeature(){
@@ -41,5 +40,5 @@ void OrbFeature::getMatches(std::vector<cv::Point2f>& pt_left, std::vector<cv::P
 		pt_right.push_back(cv::Point2f(r_pt.x*scale2, r_pt.y*scale2));
 	}
 	cv::Mat match_img=DrawInlier(image1, image2, keyPoint1, keyPoint2, matches, 2);
-	//cv::imshow("match", match_img);
+	cv::imshow("match", match_img);
 }

@@ -55,8 +55,12 @@ gms_matcher.h
 /home/yfji/Workspace/OpenCV/ImageStitch/src/stitcher.cpp
 stitcher.h
 /home/yfji/Workspace/OpenCV/ImageStitch/src/stitcher.h
+exception
+-
 
 /home/yfji/Workspace/OpenCV/ImageStitch/src/stitcher.h
+surf_feature.h
+/home/yfji/Workspace/OpenCV/ImageStitch/src/surf_feature.h
 orb_feature.h
 /home/yfji/Workspace/OpenCV/ImageStitch/src/orb_feature.h
 memory
@@ -69,6 +73,8 @@ surf_feature.h
 /home/yfji/Workspace/OpenCV/ImageStitch/src/surf_feature.h
 feature.h
 /home/yfji/Workspace/OpenCV/ImageStitch/src/feature.h
+opencv2/opencv.hpp
+-
 opencv2/xfeatures2d/nonfree.hpp
 -
 memory

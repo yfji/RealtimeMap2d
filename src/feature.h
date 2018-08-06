@@ -1,3 +1,5 @@
+#ifndef _FEATURE_H_
+#define _FEATURE_H_
 #include <opencv2/opencv.hpp>
 #include <vector>
 #include <iostream>
@@ -22,4 +24,5 @@ protected:
 	int height={480};
 	int top_n={50};
 };
+#endif
 
