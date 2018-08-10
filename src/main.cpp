@@ -7,8 +7,8 @@ int main()
 {
 	const int im_w=640;
 	const int im_h=360;
-	const int preview_w=720;
-	const int preview_h=720;
+	const int preview_w=360;
+	const int preview_h=360;
 
 	std::ifstream in;
 	in.open("file_lst.txt", std::ios::in);

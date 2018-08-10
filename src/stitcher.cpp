@@ -7,8 +7,8 @@ ImageStitcher::ImageStitcher(int w, int h)
 	height = h;
 	//ptrFeature.reset(new SurfFeature());
 	ptrFeature.reset(new OrbFeature());
-	ptrFeature->setAlignHeight(360);
-	ptrFeature->setMatchNumber(600);
+	ptrFeature->setAlignHeight(height);
+	ptrFeature->setMatchNumber(800);
 
 	dist_max=sqrt(pad_x*pad_x+pad_y*pad_y);
 	match_center=cv::Point2i(0,0);
@@ -64,7 +64,7 @@ void ImageStitcher::calcWarpCorners(cv::Mat& warpMatrix) {
 	};
 	cv::Mat coords(4, 3, CV_32F, mat);
 	coords=coords.t();	//3x4
-	std::cout<<warpMatrix.cols<<","<<warpMatrix.rows<<std::endl;
+	//std::cout<<warpMatrix.cols<<","<<warpMatrix.rows<<std::endl;
 	cv::Mat warpCoords = warpMatrix*coords;	//3x4
 	warpCoords = warpCoords.t();
 	float* data=nullptr;
@@ -167,11 +167,10 @@ void ImageStitcher::applyOffset(){
 		cv::Mat tmp_map=map2d.clone();
 		cv::Mat new_map=cv::Mat::zeros(nh,nw,map2d.type());
 
-		std::cout<<nw<<","<<nh<<std::endl;
-		std::cout<<map_offset_x<<","<<map_offset_x<<","<<tmp_map.cols<<","<<tmp_map.rows<<std::endl;
-		std::cout<<rb_offset_x<<","<<rb_offset_y<<std::endl;
-		std::cout<<roi_offset_x<<","<<roi_offset_y<<","<<roi.cols<<","<<roi.rows<<std::endl;
-
+		// std::cout<<nw<<","<<nh<<std::endl;
+		// std::cout<<map_offset_x<<","<<map_offset_x<<","<<tmp_map.cols<<","<<tmp_map.rows<<std::endl;
+		// std::cout<<rb_offset_x<<","<<rb_offset_y<<std::endl;
+		// std::cout<<roi_offset_x<<","<<roi_offset_y<<","<<roi.cols<<","<<roi.rows<<std::endl;
 
 		tmp_map.copyTo(new_map(cv::Rect(map_offset_x, map_offset_x, tmp_map.cols, tmp_map.rows)));
 
