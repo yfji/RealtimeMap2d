@@ -1,0 +1,3 @@
+/home/yfji/Workspace/OpenCV/ImageStitch_multiscale/build/CMakeFiles/edit_cache.dir
+/home/yfji/Workspace/OpenCV/ImageStitch_multiscale/build/CMakeFiles/rebuild_cache.dir
+/home/yfji/Workspace/OpenCV/ImageStitch_multiscale/build/CMakeFiles/ImageStitch.dir
