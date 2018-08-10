@@ -29,7 +29,7 @@ int main()
 	ImageStitcher stitcher(im_w, im_h);
 
 	char key=0;
-	cv::VideoWriter writer("map.avi", CV_FOURCC('M','J','P','G'), 3, cv::Size(preview_w, preview_h));
+	//cv::VideoWriter writer("map.avi", CV_FOURCC('M','J','P','G'), 3, cv::Size(preview_w, preview_h));
 	for(int i=0;i<img_paths.size();++i){
 		std::cout<<img_paths[i]<<std::endl;
 		cv::Mat image=cv::imread(img_paths[i]);
