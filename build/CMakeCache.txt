@@ -171,6 +171,9 @@ ImageStitch_BINARY_DIR:STATIC=/home/yfji/Workspace/OpenCV/ImageStitch/build
 //Value Computed by CMake
 ImageStitch_SOURCE_DIR:STATIC=/home/yfji/Workspace/OpenCV/ImageStitch
 
+//select to use gpu
+USE_GPU:BOOL=ON
+
 
 ########################
 # INTERNAL cache entries

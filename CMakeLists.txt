@@ -3,7 +3,13 @@ project(ImageStitch)
 cmake_minimum_required(VERSION 2.6)
 aux_source_directory(${PROJECT_SOURCE_DIR}/src DIR_SRCS)
 add_definitions("-Wall -g -std=c++11 -fPIC")
-add_definitions(-DUSE_GPU=OFF)
+
+option(USE_GPU "select to use gpu" OFF)
+message("USE_GPU is ${USE_GPU}")
+
+if(USE_GPU)
+    add_definitions(-DUSE_GPU)
+endif(USE_GPU)
 
 include_directories(
 	/usr/include/
