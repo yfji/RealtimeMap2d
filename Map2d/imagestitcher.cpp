@@ -184,7 +184,7 @@ void ImageStitcher::applyOffset(){
 
         float _alpha;
         if((roi_offset_x<min_roi_offset.x && roi_offset_y<min_roi_offset.y) || (roi_offset_x>max_roi_offset.x && roi_offset_y>max_roi_offset.y)){
-            _alpha=0.9;
+            _alpha=0.3;
             std::cout<<"Trail blazer!"<<std::endl;
         }
         else{
@@ -341,7 +341,7 @@ void ImageStitcher::matchNoStitch(cv::Mat& img){
         match_center.y+=offset.y;
         offset.x = start_x;
         offset.y = start_y;
-        map2dCanvas=map2dNoStitch.clone();
     }
+    map2dCanvas=map2dNoStitch.clone();
     cv::rectangle(map2dCanvas, cv::Rect(start_x, start_y, width, height), cv::Scalar(0,0,255), 2);
 }
