@@ -1,8 +1,11 @@
 ﻿#include "mapmanager.h"
 
-MapManager::MapManager()
+MapManager::MapManager(QObject* parent):
+    QObject(parent)
 {
     _stitcher.reset(new ImageStitcher(frame_w, frame_h));
+    qRegisterMetaType<cv::Mat>("cv::Mat");
+    qRegisterMetaType<cv::Mat>("cv::Mat&");
 }
 
 void MapManager::open(InputMethod method){
@@ -38,11 +41,13 @@ void MapManager::threadFunction(){
         if(curFrame.empty()){
             finished=true;
             curState=STOP;
-            callbackFunction(map2d, curFrame);
+            //callbackFunction(map2d, curFrame);
+            emit publishFrames(map2d, curFrame);
             break;
         }
         if(curState==PREVIEW){
-            callbackFunction(map2d, curFrame);
+            //callbackFunction(map2d, curFrame);
+            emit publishFrames(map2d, curFrame);
             auto now=std::chrono::high_resolution_clock::now();
             float duration_us=(float)std::chrono::duration_cast<std::chrono::microseconds>(now-start).count();
             micro_seconds=period*1e6;
@@ -74,7 +79,8 @@ void MapManager::threadFunction(){
         time_reached=false;
         std::cout<<"Stitching frame "<<curIndex<<std::endl;
         curIndex++;
-        callbackFunction(map2d, curFrame);
+        //callbackFunction(map2d, curFrame);
+        emit publishFrames(map2d, curFrame);
 
         auto now=std::chrono::high_resolution_clock::now();
         float duration_us=(float)std::chrono::duration_cast<std::chrono::microseconds>(now-start).count();

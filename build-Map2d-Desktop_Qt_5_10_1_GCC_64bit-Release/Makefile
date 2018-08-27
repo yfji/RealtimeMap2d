@@ -59,7 +59,8 @@ SOURCES       = ../Map2d/main.cpp \
 		../Map2d/baseimageinput.cpp \
 		../Map2d/videoimageinput.cpp \
 		../Map2d/cameraimageinput.cpp \
-		../Map2d/filelistimageinput.cpp moc_mainwindow.cpp
+		../Map2d/filelistimageinput.cpp moc_mainwindow.cpp \
+		moc_mapmanager.cpp
 OBJECTS       = main.o \
 		mainwindow.o \
 		imagestitcher.o \
@@ -70,7 +71,8 @@ OBJECTS       = main.o \
 		videoimageinput.o \
 		cameraimageinput.o \
 		filelistimageinput.o \
-		moc_mainwindow.o
+		moc_mainwindow.o \
+		moc_mapmanager.o
 DIST          = ../../../../Qt5.10.1/5.10.1/gcc_64/mkspecs/features/spec_pre.prf \
 		../../../../Qt5.10.1/5.10.1/gcc_64/mkspecs/common/unix.conf \
 		../../../../Qt5.10.1/5.10.1/gcc_64/mkspecs/common/linux.conf \
@@ -700,9 +702,9 @@ compiler_moc_predefs_clean:
 moc_predefs.h: ../../../../Qt5.10.1/5.10.1/gcc_64/mkspecs/features/data/dummy.cpp
 	g++ -pipe -O2 -std=gnu++11 -Wall -W -dM -E -o moc_predefs.h ../../../../Qt5.10.1/5.10.1/gcc_64/mkspecs/features/data/dummy.cpp
 
-compiler_moc_header_make_all: moc_mainwindow.cpp
+compiler_moc_header_make_all: moc_mainwindow.cpp moc_mapmanager.cpp
 compiler_moc_header_clean:
-	-$(DEL_FILE) moc_mainwindow.cpp
+	-$(DEL_FILE) moc_mainwindow.cpp moc_mapmanager.cpp
 moc_mainwindow.cpp: ../../../../Qt5.10.1/5.10.1/gcc_64/include/QtWidgets/QMainWindow \
 		../../../../Qt5.10.1/5.10.1/gcc_64/include/QtWidgets/qmainwindow.h \
 		../../../../Qt5.10.1/5.10.1/gcc_64/include/QtWidgets/qtwidgetsglobal.h \
@@ -810,6 +812,8 @@ moc_mainwindow.cpp: ../../../../Qt5.10.1/5.10.1/gcc_64/include/QtWidgets/QMainWi
 		../../../../Qt5.10.1/5.10.1/gcc_64/include/QtWidgets/qtabwidget.h \
 		../../../../Qt5.10.1/5.10.1/gcc_64/include/QtGui/qicon.h \
 		../Map2d/mapmanager.h \
+		../../../../Qt5.10.1/5.10.1/gcc_64/include/QtCore/QObject \
+		../../../../Qt5.10.1/5.10.1/gcc_64/include/QtCore/QMetaType \
 		../Map2d/imagestitcher.h \
 		../Map2d/orb_feature.h \
 		../Map2d/feature.h \
@@ -823,6 +827,71 @@ moc_mainwindow.cpp: ../../../../Qt5.10.1/5.10.1/gcc_64/include/QtWidgets/QMainWi
 		moc_predefs.h \
 		../../../../Qt5.10.1/5.10.1/gcc_64/bin/moc
 	/home/yfji/Qt5.10.1/5.10.1/gcc_64/bin/moc $(DEFINES) --include ./moc_predefs.h -I/home/yfji/Qt5.10.1/5.10.1/gcc_64/mkspecs/linux-g++ -I/home/yfji/Workspace/Qt/Map2d/Map2d -I/usr/local/include -I/home/yfji/Qt5.10.1/5.10.1/gcc_64/include -I/home/yfji/Qt5.10.1/5.10.1/gcc_64/include/QtWidgets -I/home/yfji/Qt5.10.1/5.10.1/gcc_64/include/QtGui -I/home/yfji/Qt5.10.1/5.10.1/gcc_64/include/QtCore -I. -I/usr/include/c++/5 -I/usr/include/x86_64-linux-gnu/c++/5 -I/usr/include/c++/5/backward -I/usr/lib/gcc/x86_64-linux-gnu/5/include -I/usr/local/include -I/usr/lib/gcc/x86_64-linux-gnu/5/include-fixed -I/usr/include/x86_64-linux-gnu -I/usr/include ../Map2d/mainwindow.h -o moc_mainwindow.cpp
+
+moc_mapmanager.cpp: ../../../../Qt5.10.1/5.10.1/gcc_64/include/QtCore/QObject \
+		../../../../Qt5.10.1/5.10.1/gcc_64/include/QtCore/qobject.h \
+		../../../../Qt5.10.1/5.10.1/gcc_64/include/QtCore/qobjectdefs.h \
+		../../../../Qt5.10.1/5.10.1/gcc_64/include/QtCore/qnamespace.h \
+		../../../../Qt5.10.1/5.10.1/gcc_64/include/QtCore/qglobal.h \
+		../../../../Qt5.10.1/5.10.1/gcc_64/include/QtCore/qconfig-bootstrapped.h \
+		../../../../Qt5.10.1/5.10.1/gcc_64/include/QtCore/qconfig.h \
+		../../../../Qt5.10.1/5.10.1/gcc_64/include/QtCore/qtcore-config.h \
+		../../../../Qt5.10.1/5.10.1/gcc_64/include/QtCore/qsystemdetection.h \
+		../../../../Qt5.10.1/5.10.1/gcc_64/include/QtCore/qprocessordetection.h \
+		../../../../Qt5.10.1/5.10.1/gcc_64/include/QtCore/qcompilerdetection.h \
+		../../../../Qt5.10.1/5.10.1/gcc_64/include/QtCore/qtypeinfo.h \
+		../../../../Qt5.10.1/5.10.1/gcc_64/include/QtCore/qsysinfo.h \
+		../../../../Qt5.10.1/5.10.1/gcc_64/include/QtCore/qlogging.h \
+		../../../../Qt5.10.1/5.10.1/gcc_64/include/QtCore/qflags.h \
+		../../../../Qt5.10.1/5.10.1/gcc_64/include/QtCore/qatomic.h \
+		../../../../Qt5.10.1/5.10.1/gcc_64/include/QtCore/qbasicatomic.h \
+		../../../../Qt5.10.1/5.10.1/gcc_64/include/QtCore/qatomic_bootstrap.h \
+		../../../../Qt5.10.1/5.10.1/gcc_64/include/QtCore/qgenericatomic.h \
+		../../../../Qt5.10.1/5.10.1/gcc_64/include/QtCore/qatomic_cxx11.h \
+		../../../../Qt5.10.1/5.10.1/gcc_64/include/QtCore/qatomic_msvc.h \
+		../../../../Qt5.10.1/5.10.1/gcc_64/include/QtCore/qglobalstatic.h \
+		../../../../Qt5.10.1/5.10.1/gcc_64/include/QtCore/qmutex.h \
+		../../../../Qt5.10.1/5.10.1/gcc_64/include/QtCore/qnumeric.h \
+		../../../../Qt5.10.1/5.10.1/gcc_64/include/QtCore/qversiontagging.h \
+		../../../../Qt5.10.1/5.10.1/gcc_64/include/QtCore/qobjectdefs_impl.h \
+		../../../../Qt5.10.1/5.10.1/gcc_64/include/QtCore/qstring.h \
+		../../../../Qt5.10.1/5.10.1/gcc_64/include/QtCore/qchar.h \
+		../../../../Qt5.10.1/5.10.1/gcc_64/include/QtCore/qbytearray.h \
+		../../../../Qt5.10.1/5.10.1/gcc_64/include/QtCore/qrefcount.h \
+		../../../../Qt5.10.1/5.10.1/gcc_64/include/QtCore/qarraydata.h \
+		../../../../Qt5.10.1/5.10.1/gcc_64/include/QtCore/qstringliteral.h \
+		../../../../Qt5.10.1/5.10.1/gcc_64/include/QtCore/qstringalgorithms.h \
+		../../../../Qt5.10.1/5.10.1/gcc_64/include/QtCore/qstringview.h \
+		../../../../Qt5.10.1/5.10.1/gcc_64/include/QtCore/qstringbuilder.h \
+		../../../../Qt5.10.1/5.10.1/gcc_64/include/QtCore/qlist.h \
+		../../../../Qt5.10.1/5.10.1/gcc_64/include/QtCore/qalgorithms.h \
+		../../../../Qt5.10.1/5.10.1/gcc_64/include/QtCore/qiterator.h \
+		../../../../Qt5.10.1/5.10.1/gcc_64/include/QtCore/qhashfunctions.h \
+		../../../../Qt5.10.1/5.10.1/gcc_64/include/QtCore/qpair.h \
+		../../../../Qt5.10.1/5.10.1/gcc_64/include/QtCore/qbytearraylist.h \
+		../../../../Qt5.10.1/5.10.1/gcc_64/include/QtCore/qstringlist.h \
+		../../../../Qt5.10.1/5.10.1/gcc_64/include/QtCore/qregexp.h \
+		../../../../Qt5.10.1/5.10.1/gcc_64/include/QtCore/qstringmatcher.h \
+		../../../../Qt5.10.1/5.10.1/gcc_64/include/QtCore/qcoreevent.h \
+		../../../../Qt5.10.1/5.10.1/gcc_64/include/QtCore/qscopedpointer.h \
+		../../../../Qt5.10.1/5.10.1/gcc_64/include/QtCore/qmetatype.h \
+		../../../../Qt5.10.1/5.10.1/gcc_64/include/QtCore/qvarlengtharray.h \
+		../../../../Qt5.10.1/5.10.1/gcc_64/include/QtCore/qcontainerfwd.h \
+		../../../../Qt5.10.1/5.10.1/gcc_64/include/QtCore/qobject_impl.h \
+		../../../../Qt5.10.1/5.10.1/gcc_64/include/QtCore/QMetaType \
+		../Map2d/imagestitcher.h \
+		../Map2d/orb_feature.h \
+		../Map2d/feature.h \
+		../Map2d/gms_matcher.h \
+		../Map2d/Header.h \
+		../Map2d/baseimageinput.h \
+		../Map2d/videoimageinput.h \
+		../Map2d/cameraimageinput.h \
+		../Map2d/filelistimageinput.h \
+		../Map2d/mapmanager.h \
+		moc_predefs.h \
+		../../../../Qt5.10.1/5.10.1/gcc_64/bin/moc
+	/home/yfji/Qt5.10.1/5.10.1/gcc_64/bin/moc $(DEFINES) --include ./moc_predefs.h -I/home/yfji/Qt5.10.1/5.10.1/gcc_64/mkspecs/linux-g++ -I/home/yfji/Workspace/Qt/Map2d/Map2d -I/usr/local/include -I/home/yfji/Qt5.10.1/5.10.1/gcc_64/include -I/home/yfji/Qt5.10.1/5.10.1/gcc_64/include/QtWidgets -I/home/yfji/Qt5.10.1/5.10.1/gcc_64/include/QtGui -I/home/yfji/Qt5.10.1/5.10.1/gcc_64/include/QtCore -I. -I/usr/include/c++/5 -I/usr/include/x86_64-linux-gnu/c++/5 -I/usr/include/c++/5/backward -I/usr/lib/gcc/x86_64-linux-gnu/5/include -I/usr/local/include -I/usr/lib/gcc/x86_64-linux-gnu/5/include-fixed -I/usr/include/x86_64-linux-gnu -I/usr/include ../Map2d/mapmanager.h -o moc_mapmanager.cpp
 
 compiler_moc_objc_header_make_all:
 compiler_moc_objc_header_clean:
@@ -953,6 +1022,8 @@ main.o: ../Map2d/main.cpp ../Map2d/mainwindow.h \
 		../../../../Qt5.10.1/5.10.1/gcc_64/include/QtWidgets/qtabwidget.h \
 		../../../../Qt5.10.1/5.10.1/gcc_64/include/QtGui/qicon.h \
 		../Map2d/mapmanager.h \
+		../../../../Qt5.10.1/5.10.1/gcc_64/include/QtCore/QObject \
+		../../../../Qt5.10.1/5.10.1/gcc_64/include/QtCore/QMetaType \
 		../Map2d/imagestitcher.h \
 		../Map2d/orb_feature.h \
 		../Map2d/feature.h \
@@ -1079,6 +1150,8 @@ mainwindow.o: ../Map2d/mainwindow.cpp ../Map2d/mainwindow.h \
 		../../../../Qt5.10.1/5.10.1/gcc_64/include/QtWidgets/qtabwidget.h \
 		../../../../Qt5.10.1/5.10.1/gcc_64/include/QtGui/qicon.h \
 		../Map2d/mapmanager.h \
+		../../../../Qt5.10.1/5.10.1/gcc_64/include/QtCore/QObject \
+		../../../../Qt5.10.1/5.10.1/gcc_64/include/QtCore/QMetaType \
 		../Map2d/imagestitcher.h \
 		../Map2d/orb_feature.h \
 		../Map2d/feature.h \
@@ -1170,6 +1243,57 @@ orb_feature.o: ../Map2d/orb_feature.cpp ../Map2d/orb_feature.h \
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o orb_feature.o ../Map2d/orb_feature.cpp
 
 mapmanager.o: ../Map2d/mapmanager.cpp ../Map2d/mapmanager.h \
+		../../../../Qt5.10.1/5.10.1/gcc_64/include/QtCore/QObject \
+		../../../../Qt5.10.1/5.10.1/gcc_64/include/QtCore/qobject.h \
+		../../../../Qt5.10.1/5.10.1/gcc_64/include/QtCore/qobjectdefs.h \
+		../../../../Qt5.10.1/5.10.1/gcc_64/include/QtCore/qnamespace.h \
+		../../../../Qt5.10.1/5.10.1/gcc_64/include/QtCore/qglobal.h \
+		../../../../Qt5.10.1/5.10.1/gcc_64/include/QtCore/qconfig-bootstrapped.h \
+		../../../../Qt5.10.1/5.10.1/gcc_64/include/QtCore/qconfig.h \
+		../../../../Qt5.10.1/5.10.1/gcc_64/include/QtCore/qtcore-config.h \
+		../../../../Qt5.10.1/5.10.1/gcc_64/include/QtCore/qsystemdetection.h \
+		../../../../Qt5.10.1/5.10.1/gcc_64/include/QtCore/qprocessordetection.h \
+		../../../../Qt5.10.1/5.10.1/gcc_64/include/QtCore/qcompilerdetection.h \
+		../../../../Qt5.10.1/5.10.1/gcc_64/include/QtCore/qtypeinfo.h \
+		../../../../Qt5.10.1/5.10.1/gcc_64/include/QtCore/qsysinfo.h \
+		../../../../Qt5.10.1/5.10.1/gcc_64/include/QtCore/qlogging.h \
+		../../../../Qt5.10.1/5.10.1/gcc_64/include/QtCore/qflags.h \
+		../../../../Qt5.10.1/5.10.1/gcc_64/include/QtCore/qatomic.h \
+		../../../../Qt5.10.1/5.10.1/gcc_64/include/QtCore/qbasicatomic.h \
+		../../../../Qt5.10.1/5.10.1/gcc_64/include/QtCore/qatomic_bootstrap.h \
+		../../../../Qt5.10.1/5.10.1/gcc_64/include/QtCore/qgenericatomic.h \
+		../../../../Qt5.10.1/5.10.1/gcc_64/include/QtCore/qatomic_cxx11.h \
+		../../../../Qt5.10.1/5.10.1/gcc_64/include/QtCore/qatomic_msvc.h \
+		../../../../Qt5.10.1/5.10.1/gcc_64/include/QtCore/qglobalstatic.h \
+		../../../../Qt5.10.1/5.10.1/gcc_64/include/QtCore/qmutex.h \
+		../../../../Qt5.10.1/5.10.1/gcc_64/include/QtCore/qnumeric.h \
+		../../../../Qt5.10.1/5.10.1/gcc_64/include/QtCore/qversiontagging.h \
+		../../../../Qt5.10.1/5.10.1/gcc_64/include/QtCore/qobjectdefs_impl.h \
+		../../../../Qt5.10.1/5.10.1/gcc_64/include/QtCore/qstring.h \
+		../../../../Qt5.10.1/5.10.1/gcc_64/include/QtCore/qchar.h \
+		../../../../Qt5.10.1/5.10.1/gcc_64/include/QtCore/qbytearray.h \
+		../../../../Qt5.10.1/5.10.1/gcc_64/include/QtCore/qrefcount.h \
+		../../../../Qt5.10.1/5.10.1/gcc_64/include/QtCore/qarraydata.h \
+		../../../../Qt5.10.1/5.10.1/gcc_64/include/QtCore/qstringliteral.h \
+		../../../../Qt5.10.1/5.10.1/gcc_64/include/QtCore/qstringalgorithms.h \
+		../../../../Qt5.10.1/5.10.1/gcc_64/include/QtCore/qstringview.h \
+		../../../../Qt5.10.1/5.10.1/gcc_64/include/QtCore/qstringbuilder.h \
+		../../../../Qt5.10.1/5.10.1/gcc_64/include/QtCore/qlist.h \
+		../../../../Qt5.10.1/5.10.1/gcc_64/include/QtCore/qalgorithms.h \
+		../../../../Qt5.10.1/5.10.1/gcc_64/include/QtCore/qiterator.h \
+		../../../../Qt5.10.1/5.10.1/gcc_64/include/QtCore/qhashfunctions.h \
+		../../../../Qt5.10.1/5.10.1/gcc_64/include/QtCore/qpair.h \
+		../../../../Qt5.10.1/5.10.1/gcc_64/include/QtCore/qbytearraylist.h \
+		../../../../Qt5.10.1/5.10.1/gcc_64/include/QtCore/qstringlist.h \
+		../../../../Qt5.10.1/5.10.1/gcc_64/include/QtCore/qregexp.h \
+		../../../../Qt5.10.1/5.10.1/gcc_64/include/QtCore/qstringmatcher.h \
+		../../../../Qt5.10.1/5.10.1/gcc_64/include/QtCore/qcoreevent.h \
+		../../../../Qt5.10.1/5.10.1/gcc_64/include/QtCore/qscopedpointer.h \
+		../../../../Qt5.10.1/5.10.1/gcc_64/include/QtCore/qmetatype.h \
+		../../../../Qt5.10.1/5.10.1/gcc_64/include/QtCore/qvarlengtharray.h \
+		../../../../Qt5.10.1/5.10.1/gcc_64/include/QtCore/qcontainerfwd.h \
+		../../../../Qt5.10.1/5.10.1/gcc_64/include/QtCore/qobject_impl.h \
+		../../../../Qt5.10.1/5.10.1/gcc_64/include/QtCore/QMetaType \
 		../Map2d/imagestitcher.h \
 		../Map2d/orb_feature.h \
 		../Map2d/feature.h \
@@ -1198,6 +1322,9 @@ filelistimageinput.o: ../Map2d/filelistimageinput.cpp ../Map2d/filelistimageinpu
 
 moc_mainwindow.o: moc_mainwindow.cpp 
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o moc_mainwindow.o moc_mainwindow.cpp
+
+moc_mapmanager.o: moc_mapmanager.cpp 
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o moc_mapmanager.o moc_mapmanager.cpp
 
 ####### Install
 

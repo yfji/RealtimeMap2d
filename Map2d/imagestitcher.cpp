@@ -55,11 +55,9 @@ void ImageStitcher::checkIfStitchable(){
         float d1=c.x-std_corner_x[i];
         float d2=c.y-std_corner_y[i];
         float dist=sqrt(d1*d1+d2*d2);
-        if(dist>corner_dist){
-            corner_dist=dist;
-        }
+        corner_dist+=dist;
     }
-    float eps=corner_dist/dist_max;
+    float eps=corner_dist/(4*dist_max);
     if(eps>0.333){
         ignore=1;
     }

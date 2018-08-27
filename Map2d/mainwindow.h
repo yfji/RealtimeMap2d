@@ -48,6 +48,8 @@ private slots:
 
     void on_check_orb_stateChanged(int arg1);
 
+    void onUpdateFrames(cv::Mat&, cv::Mat&);
+
 private:
     Ui::MainWindow *ui;
     bool _requestStop = {false};

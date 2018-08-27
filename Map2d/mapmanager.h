@@ -1,6 +1,8 @@
 #ifndef MAPMANAGER_H
 #define MAPMANAGER_H
 
+#include <QObject>
+#include <QMetaType>
 #include <opencv2/opencv.hpp>
 #include <iostream>
 #include <vector>
@@ -31,10 +33,13 @@ enum State{
 
 using map_callback=std::function<void(cv::Mat&, cv::Mat&)>;
 
-class MapManager
+class MapManager :public QObject
 {
+    Q_OBJECT
 public:
-    MapManager();
+    explicit MapManager(QObject* parent=0);
+
+    ~MapManager(){}
 
     void open(InputMethod method);
     void start();
@@ -73,6 +78,9 @@ public:
     std::string fileList;
     std::string videoFile;
     int cam_id;
+
+signals:
+    void publishFrames(cv::Mat&, cv::Mat&);
 
 private:
     State curState = {STOP};

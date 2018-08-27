@@ -11,6 +11,7 @@ MainWindow::MainWindow(QWidget *parent) :
     _mapManager.reset(new MapManager());
     map_callback callback=std::bind(&MainWindow::drawImages,this,std::placeholders::_1,std::placeholders::_2);
     _mapManager->callbackFunction=callback;
+    QObject::connect(_mapManager.get(), SIGNAL(publishFrames(cv::Mat&,cv::Mat&)), SLOT(onUpdateFrames(cv::Mat&,cv::Mat&)));
 }
 
 MainWindow::~MainWindow()
@@ -210,4 +211,8 @@ void MainWindow::on_slide_optim_actionTriggered(int action)
 void MainWindow::on_check_orb_stateChanged(int arg1)
 {
 
+}
+
+void MainWindow::onUpdateFrames(cv::Mat & map2d, cv::Mat & curFrame){
+    drawImages(map2d, curFrame);
 }
