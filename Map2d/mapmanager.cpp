@@ -89,6 +89,7 @@ void MapManager::threadFunction(){
     }
     _input->release();
     opened=false;
+    cv::destroyAllWindows();
 }
 
 cv::Mat MapManager::getImage(){

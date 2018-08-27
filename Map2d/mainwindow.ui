@@ -20,7 +20,7 @@
       <x>10</x>
       <y>0</y>
       <width>671</width>
-      <height>721</height>
+      <height>731</height>
      </rect>
     </property>
     <property name="title">
@@ -139,7 +139,7 @@ File List</string>
       <x>710</x>
       <y>140</y>
       <width>351</width>
-      <height>291</height>
+      <height>311</height>
      </rect>
     </property>
     <property name="inputMethodHints">
@@ -191,7 +191,7 @@ File List</string>
      <property name="geometry">
       <rect>
        <x>20</x>
-       <y>140</y>
+       <y>130</y>
        <width>141</width>
        <height>41</height>
       </rect>
@@ -204,7 +204,7 @@ File List</string>
      <property name="geometry">
       <rect>
        <x>180</x>
-       <y>140</y>
+       <y>130</y>
        <width>131</width>
        <height>41</height>
       </rect>
@@ -230,7 +230,7 @@ File List</string>
      <property name="geometry">
       <rect>
        <x>90</x>
-       <y>220</y>
+       <y>210</y>
        <width>191</width>
        <height>20</height>
       </rect>
@@ -249,7 +249,7 @@ File List</string>
      <property name="geometry">
       <rect>
        <x>100</x>
-       <y>190</y>
+       <y>180</y>
        <width>16</width>
        <height>21</height>
       </rect>
@@ -262,7 +262,7 @@ File List</string>
      <property name="geometry">
       <rect>
        <x>230</x>
-       <y>190</y>
+       <y>180</y>
        <width>51</width>
        <height>25</height>
       </rect>
@@ -291,7 +291,7 @@ File List</string>
      <property name="geometry">
       <rect>
        <x>90</x>
-       <y>240</y>
+       <y>230</y>
        <width>191</width>
        <height>20</height>
       </rect>
@@ -310,7 +310,7 @@ File List</string>
      <property name="geometry">
       <rect>
        <x>90</x>
-       <y>260</y>
+       <y>250</y>
        <width>191</width>
        <height>20</height>
       </rect>
@@ -329,7 +329,7 @@ File List</string>
      <property name="geometry">
       <rect>
        <x>290</x>
-       <y>240</y>
+       <y>230</y>
        <width>51</width>
        <height>17</height>
       </rect>
@@ -342,7 +342,7 @@ File List</string>
      <property name="geometry">
       <rect>
        <x>290</x>
-       <y>260</y>
+       <y>250</y>
        <width>51</width>
        <height>17</height>
       </rect>
@@ -355,7 +355,7 @@ File List</string>
      <property name="geometry">
       <rect>
        <x>20</x>
-       <y>220</y>
+       <y>210</y>
        <width>67</width>
        <height>17</height>
       </rect>
@@ -368,7 +368,7 @@ File List</string>
      <property name="geometry">
       <rect>
        <x>20</x>
-       <y>240</y>
+       <y>230</y>
        <width>67</width>
        <height>17</height>
       </rect>
@@ -381,7 +381,7 @@ File List</string>
      <property name="geometry">
       <rect>
        <x>20</x>
-       <y>260</y>
+       <y>250</y>
        <width>67</width>
        <height>17</height>
       </rect>
@@ -403,14 +403,27 @@ File List</string>
       <string>Start Preview</string>
      </property>
     </widget>
+    <widget class="QCheckBox" name="check_orb">
+     <property name="geometry">
+      <rect>
+       <x>20</x>
+       <y>280</y>
+       <width>92</width>
+       <height>23</height>
+      </rect>
+     </property>
+     <property name="text">
+      <string>Show ORB</string>
+     </property>
+    </widget>
    </widget>
    <widget class="QGroupBox" name="groupBox_4">
     <property name="geometry">
      <rect>
       <x>710</x>
-      <y>440</y>
+      <y>460</y>
       <width>351</width>
-      <height>281</height>
+      <height>271</height>
      </rect>
     </property>
     <property name="title">
@@ -420,7 +433,7 @@ File List</string>
      <property name="geometry">
       <rect>
        <x>20</x>
-       <y>30</y>
+       <y>40</y>
        <width>311</width>
        <height>231</height>
       </rect>

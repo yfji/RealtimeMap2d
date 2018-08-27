@@ -13,6 +13,7 @@
 #include <QtWidgets/QAction>
 #include <QtWidgets/QApplication>
 #include <QtWidgets/QButtonGroup>
+#include <QtWidgets/QCheckBox>
 #include <QtWidgets/QComboBox>
 #include <QtWidgets/QGroupBox>
 #include <QtWidgets/QHeaderView>
@@ -59,6 +60,7 @@ public:
     QLabel *label_5;
     QLabel *label_6;
     QPushButton *btn_preview;
+    QCheckBox *check_orb;
     QGroupBox *groupBox_4;
     QLabel *label_frame;
     QMenuBar *menuBar;
@@ -74,7 +76,7 @@ public:
         centralWidget->setObjectName(QStringLiteral("centralWidget"));
         groupBox = new QGroupBox(centralWidget);
         groupBox->setObjectName(QStringLiteral("groupBox"));
-        groupBox->setGeometry(QRect(10, 0, 671, 721));
+        groupBox->setGeometry(QRect(10, 0, 671, 731));
         label_map = new QLabel(groupBox);
         label_map->setObjectName(QStringLiteral("label_map"));
         label_map->setGeometry(QRect(10, 30, 640, 640));
@@ -101,7 +103,7 @@ public:
         combo_cam_id->setGeometry(QRect(110, 90, 121, 31));
         groupBox_3 = new QGroupBox(centralWidget);
         groupBox_3->setObjectName(QStringLiteral("groupBox_3"));
-        groupBox_3->setGeometry(QRect(710, 140, 351, 291));
+        groupBox_3->setGeometry(QRect(710, 140, 351, 311));
         groupBox_3->setInputMethodHints(Qt::ImhNone);
         btn_start = new QPushButton(groupBox_3);
         btn_start->setObjectName(QStringLiteral("btn_start"));
@@ -114,65 +116,68 @@ public:
         btn_resume->setGeometry(QRect(180, 80, 131, 41));
         btn_finish = new QPushButton(groupBox_3);
         btn_finish->setObjectName(QStringLiteral("btn_finish"));
-        btn_finish->setGeometry(QRect(20, 140, 141, 41));
+        btn_finish->setGeometry(QRect(20, 130, 141, 41));
         btn_save = new QPushButton(groupBox_3);
         btn_save->setObjectName(QStringLiteral("btn_save"));
-        btn_save->setGeometry(QRect(180, 140, 131, 41));
+        btn_save->setGeometry(QRect(180, 130, 131, 41));
         label_2 = new QLabel(groupBox_3);
         label_2->setObjectName(QStringLiteral("label_2"));
         label_2->setGeometry(QRect(290, 216, 20, 20));
         slide_period = new QSlider(groupBox_3);
         slide_period->setObjectName(QStringLiteral("slide_period"));
-        slide_period->setGeometry(QRect(90, 220, 191, 20));
+        slide_period->setGeometry(QRect(90, 210, 191, 20));
         slide_period->setMaximum(100);
         slide_period->setValue(10);
         slide_period->setOrientation(Qt::Horizontal);
         label = new QLabel(groupBox_3);
         label->setObjectName(QStringLiteral("label"));
-        label->setGeometry(QRect(100, 190, 16, 21));
+        label->setGeometry(QRect(100, 180, 16, 21));
         txt_max_time = new QLineEdit(groupBox_3);
         txt_max_time->setObjectName(QStringLiteral("txt_max_time"));
-        txt_max_time->setGeometry(QRect(230, 190, 51, 25));
+        txt_max_time->setGeometry(QRect(230, 180, 51, 25));
         txt_max_time->setAlignment(Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter);
         txt_cur_time = new QLabel(groupBox_3);
         txt_cur_time->setObjectName(QStringLiteral("txt_cur_time"));
         txt_cur_time->setGeometry(QRect(130, 190, 61, 21));
         slide_offset = new QSlider(groupBox_3);
         slide_offset->setObjectName(QStringLiteral("slide_offset"));
-        slide_offset->setGeometry(QRect(90, 240, 191, 20));
+        slide_offset->setGeometry(QRect(90, 230, 191, 20));
         slide_offset->setMaximum(100);
         slide_offset->setValue(30);
         slide_offset->setOrientation(Qt::Horizontal);
         slide_optim = new QSlider(groupBox_3);
         slide_optim->setObjectName(QStringLiteral("slide_optim"));
-        slide_optim->setGeometry(QRect(90, 260, 191, 20));
+        slide_optim->setGeometry(QRect(90, 250, 191, 20));
         slide_optim->setMaximum(100);
         slide_optim->setValue(60);
         slide_optim->setOrientation(Qt::Horizontal);
         txt_offset = new QLabel(groupBox_3);
         txt_offset->setObjectName(QStringLiteral("txt_offset"));
-        txt_offset->setGeometry(QRect(290, 240, 51, 17));
+        txt_offset->setGeometry(QRect(290, 230, 51, 17));
         txt_optim = new QLabel(groupBox_3);
         txt_optim->setObjectName(QStringLiteral("txt_optim"));
-        txt_optim->setGeometry(QRect(290, 260, 51, 17));
+        txt_optim->setGeometry(QRect(290, 250, 51, 17));
         label_4 = new QLabel(groupBox_3);
         label_4->setObjectName(QStringLiteral("label_4"));
-        label_4->setGeometry(QRect(20, 220, 67, 17));
+        label_4->setGeometry(QRect(20, 210, 67, 17));
         label_5 = new QLabel(groupBox_3);
         label_5->setObjectName(QStringLiteral("label_5"));
-        label_5->setGeometry(QRect(20, 240, 67, 17));
+        label_5->setGeometry(QRect(20, 230, 67, 17));
         label_6 = new QLabel(groupBox_3);
         label_6->setObjectName(QStringLiteral("label_6"));
-        label_6->setGeometry(QRect(20, 260, 67, 17));
+        label_6->setGeometry(QRect(20, 250, 67, 17));
         btn_preview = new QPushButton(groupBox_3);
         btn_preview->setObjectName(QStringLiteral("btn_preview"));
         btn_preview->setGeometry(QRect(20, 30, 141, 41));
+        check_orb = new QCheckBox(groupBox_3);
+        check_orb->setObjectName(QStringLiteral("check_orb"));
+        check_orb->setGeometry(QRect(20, 280, 92, 23));
         groupBox_4 = new QGroupBox(centralWidget);
         groupBox_4->setObjectName(QStringLiteral("groupBox_4"));
-        groupBox_4->setGeometry(QRect(710, 440, 351, 281));
+        groupBox_4->setGeometry(QRect(710, 460, 351, 271));
         label_frame = new QLabel(groupBox_4);
         label_frame->setObjectName(QStringLiteral("label_frame"));
-        label_frame->setGeometry(QRect(20, 30, 311, 231));
+        label_frame->setGeometry(QRect(20, 40, 311, 231));
         MainWindow->setCentralWidget(centralWidget);
         menuBar = new QMenuBar(MainWindow);
         menuBar->setObjectName(QStringLiteral("menuBar"));
@@ -225,6 +230,7 @@ public:
         label_5->setText(QApplication::translate("MainWindow", "offset", nullptr));
         label_6->setText(QApplication::translate("MainWindow", "optimize", nullptr));
         btn_preview->setText(QApplication::translate("MainWindow", "Start Preview", nullptr));
+        check_orb->setText(QApplication::translate("MainWindow", "Show ORB", nullptr));
         groupBox_4->setTitle(QApplication::translate("MainWindow", "Current Frame", nullptr));
         label_frame->setText(QString());
     } // retranslateUi

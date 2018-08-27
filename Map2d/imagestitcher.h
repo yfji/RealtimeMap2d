@@ -27,6 +27,7 @@ public:
     inline void updateAlphaOptim(float _a){
         _alpha_optim=_a;
     }
+    bool showORB= {false};
     void reset();
 
 private:

@@ -100,6 +100,7 @@ void MainWindow::on_btn_finish_clicked()
         return;
     }
     _mapManager->updateState(STOP);
+    QMessageBox::information(this,tr("Info"),tr("All frames stitched!"),QMessageBox::Ok);
 }
 
 void MainWindow::on_btn_save_clicked()
@@ -139,11 +140,12 @@ void MainWindow::drawImages(cv::Mat& map, cv::Mat& curFrame){
         img_part.copyTo(canvas(cv::Rect(start_x, start_y, MIN(map.cols, map_w), MIN(map.rows, map_h))));
 
         //cv::cvtColor(canvas, canvas, cv::COLOR_BGR2RGB);
-        cv::cvtColor(map, map, cv::COLOR_BGR2RGB);
-        cv::cvtColor(curFrame, curFrame, cv::COLOR_BGR2RGB);
+        cv::Mat tmp1, tmp2;
+        cv::cvtColor(map, tmp1, cv::COLOR_BGR2RGB);
+        cv::cvtColor(curFrame, tmp2, cv::COLOR_BGR2RGB);
         //QImage q_map = QImage((const unsigned char*)(canvas.data), canvas.cols, canvas.rows, canvas.cols*canvas.channels(), QImage::Format_RGB888);
-        QImage q_map = QImage((const unsigned char*)(map.data), map.cols, map.rows, map.cols*map.channels(), QImage::Format_RGB888);
-        QImage q_frame=QImage((const unsigned char*)(curFrame.data), curFrame.cols, curFrame.rows, curFrame.cols*curFrame.channels(), QImage::Format_RGB888);
+        QImage q_map = QImage((const unsigned char*)(tmp1.data), tmp1.cols, tmp1.rows, tmp1.cols*tmp1.channels(), QImage::Format_RGB888);
+        QImage q_frame=QImage((const unsigned char*)(tmp2.data), tmp2.cols, tmp2.rows, tmp2.cols*tmp2.channels(), QImage::Format_RGB888);
 
         ui->label_map->setPixmap(QPixmap::fromImage(q_map));
         ui->label_frame->setPixmap(QPixmap::fromImage(q_frame));
@@ -193,6 +195,7 @@ void MainWindow::on_slide_offset_actionTriggered(int action)
 {
     float max_value=ui->slide_offset->maximum();
     float alpha=1.0*ui->slide_offset->value()/max_value;
+    ui->txt_offset->setText(QString::number(alpha));
     _mapManager->updateStitchAlphas(alpha, "OFFSET");
 }
 
@@ -200,5 +203,11 @@ void MainWindow::on_slide_optim_actionTriggered(int action)
 {
     float max_value=ui->slide_optim->maximum();
     float alpha=1.0*ui->slide_optim->value()/max_value;
+    ui->txt_optim->setText(QString::number(alpha));
     _mapManager->updateStitchAlphas(alpha, "OPTIM");
+}
+
+void MainWindow::on_check_orb_stateChanged(int arg1)
+{
+
 }

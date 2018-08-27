@@ -20,6 +20,8 @@ public:
 	inline void setMatchNumber(int n){
 		top_n=n;
 	}
+
+    bool showMatchImage= {false};
 protected:
 	int height={480};
 	int top_n={50};

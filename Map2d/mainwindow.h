@@ -46,6 +46,8 @@ private slots:
 
     void on_slide_optim_actionTriggered(int action);
 
+    void on_check_orb_stateChanged(int arg1);
+
 private:
     Ui::MainWindow *ui;
     bool _requestStop = {false};

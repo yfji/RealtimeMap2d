@@ -8,7 +8,7 @@ ImageStitcher::ImageStitcher(int w, int h)
     height = h;
     ptrFeature.reset(new OrbFeature());
     ptrFeature->setAlignHeight(height);
-    ptrFeature->setMatchNumber(800);
+    ptrFeature->setMatchNumber(1600);
 
     dist_max=sqrt(pad_x*pad_x+pad_y*pad_y);
 
@@ -133,6 +133,7 @@ void ImageStitcher::optimize(cv::Mat& patch, cv::Mat& ref, cv::Mat& trans) {
                 alpha=0.0;
             }
             else{
+            //else if(i==pad_y || i==pad_y+height || )
                 alpha=_alpha;
             }
             trans_data[ind]=(int)(alpha*patch_data[ind]+(1.-alpha)*ref_data[ind]);
@@ -157,33 +158,35 @@ void ImageStitcher::applyOffset(){
 
         int map_offset_x=MAX(0,pad_x-min_x-offset.x);
         int map_offset_y=MAX(0,pad_y-min_y-offset.y);
+        //int map_offset_x=MAX(0,pad_x-min_x);
+        //int map_offset_y=MAX(0,pad_y-min_y);
 
-        // int roi_offset_x=MAX(0,offset.x+min_x-pad_x);
-        // int roi_offset_y=MAX(0,offset.y+min_y-pad_y);
+        //int roi_offset_x=MAX(0,offset.x+min_x-pad_x);
+        //int roi_offset_y=MAX(0,offset.y+min_y-pad_y);
         int roi_offset_x=MAX(0,offset.x+MIN(0,min_x-pad_x));
         int roi_offset_y=MAX(0,offset.y+MIN(0,min_y-pad_y));
 
         // int rb_offset_x=MAX(0,offset.x+min_x-pad_x+box_area.width-map2d.cols);
         // int rb_offset_y=MAX(0,offset.y+min_x-pad_x+box_area.height-map2d.rows);
 
-        int rb_offset_x=MAX(0,roi_offset_x+box_area.width-map2d.cols-map_offset_x);
-        int rb_offset_y=MAX(0,roi_offset_y+box_area.height-map2d.rows-map_offset_y);
+        int rb_pad_x=MAX(0,roi_offset_x+box_area.width-map2d.cols-map_offset_x);
+        int rb_pad_y=MAX(0,roi_offset_y+box_area.height-map2d.rows-map_offset_y);
 
-        int nw=map2d.cols+map_offset_x+rb_offset_x+5;
-        int nh=map2d.rows+map_offset_x+rb_offset_y+5;
+        int nw=map2d.cols+map_offset_x+rb_pad_x+2;
+        int nh=map2d.rows+map_offset_y+rb_pad_y+2;
 
         cv::Mat tmp_map=map2d.clone();
         cv::Mat new_map=cv::Mat::zeros(nh,nw,map2d.type());
 
-        // std::cout<<nw<<","<<nh<<std::endl;
-        // std::cout<<map_offset_x<<","<<map_offset_x<<","<<tmp_map.cols<<","<<tmp_map.rows<<std::endl;
-        // std::cout<<rb_offset_x<<","<<rb_offset_y<<std::endl;
-        // std::cout<<roi_offset_x<<","<<roi_offset_y<<","<<roi.cols<<","<<roi.rows<<std::endl;
+        //std::cout<<nw<<","<<nh<<std::endl;
+        //std::cout<<map_offset_x<<","<<map_offset_y<<","<<tmp_map.cols<<","<<tmp_map.rows<<std::endl;
+        //std::cout<<rb_pad_x<<","<<rb_pad_y<<std::endl;
+        //std::cout<<roi_offset_x<<","<<roi_offset_y<<","<<roi.cols<<","<<roi.rows<<std::endl;
 
-        tmp_map.copyTo(new_map(cv::Rect(map_offset_x, map_offset_x, tmp_map.cols, tmp_map.rows)));
+        tmp_map.copyTo(new_map(cv::Rect(map_offset_x, map_offset_y, tmp_map.cols, tmp_map.rows)));
 
         float _alpha;
-        if((roi_offset_x<min_roi_offset.x && roi_offset_y<min_roi_offset.y) || (roi_offset_x>max_roi_offset.x && roi_offset_y>max_roi_offset.y)){
+        if((roi_offset_x<min_roi_offset.x || roi_offset_y<min_roi_offset.y) || (roi_offset_x>max_roi_offset.x || roi_offset_y>max_roi_offset.y)){
             //_alpha=0.3;
             _alpha=_alpha_offset;
             std::cout<<"Trail blazer!"<<std::endl;
@@ -286,7 +289,8 @@ void ImageStitcher::stitch(cv::Mat& img) {
             //patch.copyTo(stitchImage(cv::Rect(pad_x, pad_y, patch.cols, patch.rows)));
             optimize(canvas_patch, refImage, stitchImage);
             //cv::imshow("warp", stitchImage);
-            //cv::waitKey();
+            //cv::waitKey(1);
+            cv::imwrite("warp.jpg", stitchImage);
             applyOffset();
         }
         else{
