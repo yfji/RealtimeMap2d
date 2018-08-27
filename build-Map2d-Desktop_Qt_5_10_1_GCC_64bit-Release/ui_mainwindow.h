@@ -58,6 +58,7 @@ public:
     QLabel *label_4;
     QLabel *label_5;
     QLabel *label_6;
+    QPushButton *btn_preview;
     QGroupBox *groupBox_4;
     QLabel *label_frame;
     QMenuBar *menuBar;
@@ -104,7 +105,7 @@ public:
         groupBox_3->setInputMethodHints(Qt::ImhNone);
         btn_start = new QPushButton(groupBox_3);
         btn_start->setObjectName(QStringLiteral("btn_start"));
-        btn_start->setGeometry(QRect(20, 30, 141, 91));
+        btn_start->setGeometry(QRect(20, 80, 141, 41));
         btn_pause = new QPushButton(groupBox_3);
         btn_pause->setObjectName(QStringLiteral("btn_pause"));
         btn_pause->setGeometry(QRect(180, 30, 131, 41));
@@ -163,6 +164,9 @@ public:
         label_6 = new QLabel(groupBox_3);
         label_6->setObjectName(QStringLiteral("label_6"));
         label_6->setGeometry(QRect(20, 260, 67, 17));
+        btn_preview = new QPushButton(groupBox_3);
+        btn_preview->setObjectName(QStringLiteral("btn_preview"));
+        btn_preview->setGeometry(QRect(20, 30, 141, 41));
         groupBox_4 = new QGroupBox(centralWidget);
         groupBox_4->setObjectName(QStringLiteral("groupBox_4"));
         groupBox_4->setGeometry(QRect(710, 440, 351, 281));
@@ -220,6 +224,7 @@ public:
         label_4->setText(QApplication::translate("MainWindow", "period", nullptr));
         label_5->setText(QApplication::translate("MainWindow", "offset", nullptr));
         label_6->setText(QApplication::translate("MainWindow", "optimize", nullptr));
+        btn_preview->setText(QApplication::translate("MainWindow", "Start Preview", nullptr));
         groupBox_4->setTitle(QApplication::translate("MainWindow", "Current Frame", nullptr));
         label_frame->setText(QString());
     } // retranslateUi

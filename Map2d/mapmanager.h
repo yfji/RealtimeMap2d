@@ -23,6 +23,7 @@ enum InputMethod{
 };
 
 enum State{
+    PREVIEW,
     BUILD,
     PAUSE,
     STOP
@@ -56,7 +57,17 @@ public:
         //return (_input->getCurFrameIndex()==_input->getNumFrames());
         return finished;
     }
-
+    inline void updateStitchAlphas(float _a, const char* name){
+        if(strcmp(name, "OFFSET")==0){
+            _stitcher->updateAlphaOffset(_a);
+        }
+        else if(strcmp(name, "OPTIM")==0){
+            _stitcher->updateAlphaOptim(_a);
+        }
+    }
+    State getCurState(){
+        return curState;
+    }
     map_callback callbackFunction;
 
     std::string fileList;
@@ -69,6 +80,7 @@ private:
     bool opened = {false};
     bool finished= {false};
     float period = {1};
+    float micro_seconds;
 
     const int frame_h= {360};
     const int frame_w= {640};

@@ -117,8 +117,8 @@ void ImageStitcher::optimize(cv::Mat& patch, cv::Mat& ref, cv::Mat& trans) {
     int H=end_y-start_y+1;
 
     int pad=0;
-    float _alpha=0.6;
-
+    //float _alpha=0.6;
+    float _alpha=_alpha_optim;
     for(int i=start_y-pad;i<end_y+pad;++i){
         uchar* patch_data=patch.ptr(i);
         uchar* ref_data=ref.ptr(i);
@@ -184,7 +184,8 @@ void ImageStitcher::applyOffset(){
 
         float _alpha;
         if((roi_offset_x<min_roi_offset.x && roi_offset_y<min_roi_offset.y) || (roi_offset_x>max_roi_offset.x && roi_offset_y>max_roi_offset.y)){
-            _alpha=0.3;
+            //_alpha=0.3;
+            _alpha=_alpha_offset;
             std::cout<<"Trail blazer!"<<std::endl;
         }
         else{

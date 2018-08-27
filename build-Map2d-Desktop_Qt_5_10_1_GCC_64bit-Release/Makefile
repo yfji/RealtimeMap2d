@@ -1137,6 +1137,7 @@ mainwindow.o: ../Map2d/mainwindow.cpp ../Map2d/mainwindow.h \
 		../../../../Qt5.10.1/5.10.1/gcc_64/include/QtWidgets/QPushButton \
 		../../../../Qt5.10.1/5.10.1/gcc_64/include/QtWidgets/qpushbutton.h \
 		../../../../Qt5.10.1/5.10.1/gcc_64/include/QtWidgets/qabstractbutton.h \
+		../../../../Qt5.10.1/5.10.1/gcc_64/include/QtWidgets/QSlider \
 		../../../../Qt5.10.1/5.10.1/gcc_64/include/QtWidgets/QStatusBar \
 		../../../../Qt5.10.1/5.10.1/gcc_64/include/QtWidgets/qstatusbar.h \
 		../../../../Qt5.10.1/5.10.1/gcc_64/include/QtWidgets/QToolBar \

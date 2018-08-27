@@ -65,9 +65,14 @@ void MainWindow::on_btn_start_clicked()
         QMessageBox::warning(this,tr("Warning"),tr("Input source not opened!"),QMessageBox::Ok);
         return;
     }
-    _mapManager->updateState(BUILD);
     updatePeriod();
-    _mapManager->start();
+    if(_mapManager->getCurState()==STOP){
+        _mapManager->updateState(BUILD);
+        _mapManager->start();
+    }
+    else{
+        _mapManager->updateState(BUILD);
+    }
 }
 
 void MainWindow::on_btn_pause_clicked()
@@ -112,8 +117,8 @@ void MainWindow::on_btn_update_period_clicked()
     updatePeriod();
 }
 
-void MainWindow::drawImages(cv::Mat& map, cv::Mat curFrame){
-    if(map.empty() || curFrame.empty()){
+void MainWindow::drawImages(cv::Mat& map, cv::Mat& curFrame){
+    if(curFrame.empty()){
         QMessageBox::information(this,tr("Info"),tr("All frames stitched!"),QMessageBox::Ok);
         return;
     }
@@ -122,24 +127,35 @@ void MainWindow::drawImages(cv::Mat& map, cv::Mat curFrame){
     int frame_w=ui->label_frame->width();
     int frame_h=ui->label_frame->height();
 
-    float ratio=MIN(frame_h*1.0/curFrame.rows, frame_w*1.0/curFrame.cols);
-    cv::resize(curFrame, curFrame, cv::Size(0,0), ratio, ratio, cv::INTER_LINEAR);
-    ratio=MIN(map_h*1.0/map.rows, map_w*1.0/map.cols);
-    cv::resize(map, map, cv::Size(0,0), ratio, ratio, cv::INTER_LINEAR);
-    cv::Mat canvas=cv::Mat::zeros(map_h, map_w, CV_8UC3);
-    int start_y=MAX(0,std::floor((map_h-map.rows)/2));
-    int start_x=MAX(0,std::floor((map_w-map.cols)/2));
-    cv::Mat img_part=map(cv::Rect(0,0,MIN(map.cols, map_w), MIN(map.rows, map_h)));
-    img_part.copyTo(canvas(cv::Rect(start_x, start_y, MIN(map.cols, map_w), MIN(map.rows, map_h))));
+    if(_mapManager->getCurState()==BUILD){
+        float ratio=MIN(frame_h*1.0/curFrame.rows, frame_w*1.0/curFrame.cols);
+        cv::resize(curFrame, curFrame, cv::Size(0,0), ratio, ratio, cv::INTER_LINEAR);
+        ratio=MIN(map_h*1.0/map.rows, map_w*1.0/map.cols);
+        cv::resize(map, map, cv::Size(0,0), ratio, ratio, cv::INTER_LINEAR);
+        cv::Mat canvas=cv::Mat::zeros(map_h, map_w, CV_8UC3);
+        int start_y=MAX(0,std::floor((map_h-map.rows)/2));
+        int start_x=MAX(0,std::floor((map_w-map.cols)/2));
+        cv::Mat img_part=map(cv::Rect(0,0,MIN(map.cols, map_w), MIN(map.rows, map_h)));
+        img_part.copyTo(canvas(cv::Rect(start_x, start_y, MIN(map.cols, map_w), MIN(map.rows, map_h))));
 
-    cv::cvtColor(canvas, canvas, cv::COLOR_BGR2RGB);
-    cv::cvtColor(curFrame, curFrame, cv::COLOR_BGR2RGB);
-    QImage q_map = QImage((const unsigned char*)(canvas.data), canvas.cols, canvas.rows, canvas.cols*canvas.channels(), QImage::Format_RGB888);
-    QImage q_frame=QImage((const unsigned char*)(curFrame.data), curFrame.cols, curFrame.rows, curFrame.cols*curFrame.channels(), QImage::Format_RGB888);
+        //cv::cvtColor(canvas, canvas, cv::COLOR_BGR2RGB);
+        cv::cvtColor(map, map, cv::COLOR_BGR2RGB);
+        cv::cvtColor(curFrame, curFrame, cv::COLOR_BGR2RGB);
+        //QImage q_map = QImage((const unsigned char*)(canvas.data), canvas.cols, canvas.rows, canvas.cols*canvas.channels(), QImage::Format_RGB888);
+        QImage q_map = QImage((const unsigned char*)(map.data), map.cols, map.rows, map.cols*map.channels(), QImage::Format_RGB888);
+        QImage q_frame=QImage((const unsigned char*)(curFrame.data), curFrame.cols, curFrame.rows, curFrame.cols*curFrame.channels(), QImage::Format_RGB888);
 
-    ui->label_map->setPixmap(QPixmap::fromImage(q_map));
-    ui->label_frame->setPixmap(QPixmap::fromImage(q_frame));
+        ui->label_map->setPixmap(QPixmap::fromImage(q_map));
+        ui->label_frame->setPixmap(QPixmap::fromImage(q_frame));
 
+    }
+    else if(_mapManager->getCurState()==PREVIEW){
+        float ratio=MIN(map_h*1.0/curFrame.rows, map_w*1.0/curFrame.cols);
+        cv::resize(curFrame, curFrame, cv::Size(0,0), ratio, ratio, cv::INTER_LINEAR);
+        cv::cvtColor(curFrame, curFrame, cv::COLOR_BGR2RGB);
+        QImage q_frame=QImage((const unsigned char*)(curFrame.data), curFrame.cols, curFrame.rows, curFrame.cols*curFrame.channels(), QImage::Format_RGB888);
+        ui->label_map->setPixmap(QPixmap::fromImage(q_frame));
+    }
     if(_mapManager->isFinished()){
         QMessageBox::information(this,tr("Info"),tr("All frames stitched!"),QMessageBox::Ok);
     }
@@ -155,4 +171,34 @@ void MainWindow::updatePeriod(){
 void MainWindow::on_slide_period_actionTriggered(int action)
 {
     updatePeriod();
+}
+
+void MainWindow::on_btn_preview_clicked()
+{
+    if(!_mapManager->isOpened()){
+        QMessageBox::warning(this,tr("Warning"),tr("Input source not opened!"),QMessageBox::Ok);
+        return;
+    }
+    updatePeriod();
+    if(_mapManager->getCurState()==STOP){
+        _mapManager->updateState(PREVIEW);
+        _mapManager->start();
+    }
+    else{
+        _mapManager->updateState(PREVIEW);
+    }
+}
+
+void MainWindow::on_slide_offset_actionTriggered(int action)
+{
+    float max_value=ui->slide_offset->maximum();
+    float alpha=1.0*ui->slide_offset->value()/max_value;
+    _mapManager->updateStitchAlphas(alpha, "OFFSET");
+}
+
+void MainWindow::on_slide_optim_actionTriggered(int action)
+{
+    float max_value=ui->slide_optim->maximum();
+    float alpha=1.0*ui->slide_optim->value()/max_value;
+    _mapManager->updateStitchAlphas(alpha, "OPTIM");
 }

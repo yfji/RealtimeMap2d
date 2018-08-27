@@ -40,6 +40,12 @@ private slots:
 
     void updatePeriod();
 
+    void on_btn_preview_clicked();
+
+    void on_slide_offset_actionTriggered(int action);
+
+    void on_slide_optim_actionTriggered(int action);
+
 private:
     Ui::MainWindow *ui;
     bool _requestStop = {false};
@@ -49,7 +55,7 @@ private:
     int savedIndex= {0};
     bool _inputSourceSelected= {false};
 
-    void drawImages(cv::Mat& map, cv::Mat curFrame);
+    void drawImages(cv::Mat& map, cv::Mat& curFrame);
 };
 
 #endif // MAINWINDOW_H

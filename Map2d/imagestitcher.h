@@ -21,7 +21,12 @@ public:
     inline cv::Mat getMatchedImage(){
         return map2dCanvas;
     }
-
+    inline void updateAlphaOffset(float _a){
+        _alpha_offset=_a;
+    }
+    inline void updateAlphaOptim(float _a){
+        _alpha_optim=_a;
+    }
     void reset();
 
 private:
@@ -35,6 +40,9 @@ private:
 
     float speed_x={0.};
     float speed_y={0.};
+
+    float _alpha_offset = {0.3};
+    float _alpha_optim = {0.6};
 
     float dist_max=0.0;
 
