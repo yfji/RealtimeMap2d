@@ -39,6 +39,6 @@ void OrbFeature::getMatches(std::vector<cv::Point2f>& pt_left, std::vector<cv::P
 		pt_left.push_back(cv::Point2f(l_pt.x*scale1, l_pt.y*scale1));
 		pt_right.push_back(cv::Point2f(r_pt.x*scale2, r_pt.y*scale2));
 	}
-	cv::Mat match_img=DrawInlier(image1, image2, keyPoint1, keyPoint2, matches, 2);
-	cv::imshow("match", match_img);
+	//cv::Mat match_img=DrawInlier(image1, image2, keyPoint1, keyPoint2, matches, 2);
+	//cv::imshow("match", match_img);
 }

@@ -5,13 +5,13 @@ cv::Mat alignImage(cv::Mat& img, const cv::Size& size);
 
 int main()
 {
-	const int im_w=640;
-	const int im_h=360;
-	const int preview_w=360;
-	const int preview_h=360;
+	const int im_w=853;
+	const int im_h=480;
+	const int preview_w=480;
+	const int preview_h=480;
 
 	std::ifstream in;
-	in.open("file_lst.txt", std::ios::in);
+	in.open("centralPark.txt", std::ios::in);
 	std::vector<std::string> img_paths;
 	while(!in.eof()){
 		std::string line;
@@ -20,6 +20,7 @@ int main()
 			continue;
 		}
 		img_paths.push_back(line);
+		//std::cout<<line<<endl;
 	}
 	in.close();
 	// std::vector<std::string> img_paths = { "./rgb/1455008966.000000.jpg",\
@@ -31,7 +32,7 @@ int main()
 	char key=0;
 	//cv::VideoWriter writer("map.avi", CV_FOURCC('M','J','P','G'), 3, cv::Size(preview_w, preview_h));
 	for(int i=0;i<img_paths.size();++i){
-		std::cout<<img_paths[i]<<std::endl;
+		//std::cout<<img_paths[i]<<std::endl;
 		cv::Mat image=cv::imread(img_paths[i]);
 		cv::resize(image, image, cv::Size(im_w, im_h), cv::INTER_LINEAR);
 		stitcher.stitch(image);
@@ -39,7 +40,7 @@ int main()
 		cv::Mat previewMap=map.clone();
 		imresize(previewMap, preview_h);
 		cv::imshow("map", previewMap);
-		cv::Mat w_image=alignImage(previewMap, cv::Size(preview_w, preview_h));
+		//cv::Mat w_image=alignImage(previewMap, cv::Size(preview_w, preview_h));
 		//writer<<w_image;
 		key=cv::waitKey(1);
 		if(key==27){

@@ -52,7 +52,7 @@ void ImageStitcher::checkIfStitchable(){
 		}
 	}
 	float eps=corner_dist/dist_max;
-	if(eps>0.333){
+	if(eps>0.5){
 		ignore=1;
 	}
 }
@@ -162,17 +162,17 @@ void ImageStitcher::applyOffset(){
 		int rb_offset_y=MAX(0,roi_offset_y+box_area.height-map2d.rows-map_offset_y);
 
 		int nw=map2d.cols+map_offset_x+rb_offset_x+5;
-		int nh=map2d.rows+map_offset_x+rb_offset_y+5;
+		int nh=map2d.rows+map_offset_y+rb_offset_y+5;
 
 		cv::Mat tmp_map=map2d.clone();
 		cv::Mat new_map=cv::Mat::zeros(nh,nw,map2d.type());
 
-		// std::cout<<nw<<","<<nh<<std::endl;
-		// std::cout<<map_offset_x<<","<<map_offset_x<<","<<tmp_map.cols<<","<<tmp_map.rows<<std::endl;
-		// std::cout<<rb_offset_x<<","<<rb_offset_y<<std::endl;
-		// std::cout<<roi_offset_x<<","<<roi_offset_y<<","<<roi.cols<<","<<roi.rows<<std::endl;
+		std::cout<<nw<<","<<nh<<std::endl;
+		std::cout<<map_offset_x<<","<<map_offset_y<<","<<tmp_map.cols<<","<<tmp_map.rows<<std::endl;
+		std::cout<<rb_offset_x<<","<<rb_offset_y<<std::endl;
+		//std::cout<<roi_offset_x<<","<<roi_offset_y<<","<<roi.cols<<","<<roi.rows<<std::endl;
 
-		tmp_map.copyTo(new_map(cv::Rect(map_offset_x, map_offset_x, tmp_map.cols, tmp_map.rows)));
+		tmp_map.copyTo(new_map(cv::Rect(map_offset_x, map_offset_y, tmp_map.cols, tmp_map.rows)));
 
 		float _alpha;
 		if((roi_offset_x<min_roi_offset.x && roi_offset_y<min_roi_offset.y) || (roi_offset_x>max_roi_offset.x && roi_offset_y>max_roi_offset.y)){
@@ -272,7 +272,6 @@ void ImageStitcher::stitch(cv::Mat& img) {
 			//patch.copyTo(stitchImage(cv::Rect(pad_x, pad_y, patch.cols, patch.rows)));
 			optimize(canvas_patch, refImage, stitchImage);
 			//cv::imshow("warp", stitchImage);
-			//cv::waitKey();
 			applyOffset();
 		}
 		else{
