@@ -36,7 +36,7 @@ private:
     int height;
     const int pad_x={400};
     const int pad_y={400};
-    const int pix_thresh=90;//80
+    const int pix_thresh=40;//80
     const int MIN_MATCH_SIZE = {10};
 
     float speed_x={0.};
