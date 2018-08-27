@@ -82,7 +82,8 @@ void MainWindow::on_btn_pause_clicked()
         QMessageBox::warning(this,tr("Warning"),tr("Input source not opened!"),QMessageBox::Ok);
         return;
     }
-    _mapManager->updateState(PAUSE);
+    if(_mapManager->getCurState()==BUILD)
+        _mapManager->updateState(PAUSE);
 }
 
 void MainWindow::on_btn_resume_clicked()
@@ -91,7 +92,8 @@ void MainWindow::on_btn_resume_clicked()
         QMessageBox::warning(this,tr("Warning"),tr("Input source not opened!"),QMessageBox::Ok);
         return;
     }
-    _mapManager->updateState(BUILD);
+    if(_mapManager->getCurState()==PAUSE)
+        _mapManager->updateState(BUILD);
 }
 
 void MainWindow::on_btn_finish_clicked()
@@ -129,7 +131,7 @@ void MainWindow::drawImages(cv::Mat& map, cv::Mat& curFrame){
     int frame_w=ui->label_frame->width();
     int frame_h=ui->label_frame->height();
 
-    if(_mapManager->getCurState()==BUILD){
+    if(_mapManager->getCurState()==BUILD || _mapManager->getCurState()==PAUSE){
         float ratio=MIN(frame_h*1.0/curFrame.rows, frame_w*1.0/curFrame.cols);
         cv::resize(curFrame, curFrame, cv::Size(0,0), ratio, ratio, cv::INTER_LINEAR);
         ratio=MIN(map_h*1.0/map.rows, map_w*1.0/map.cols);

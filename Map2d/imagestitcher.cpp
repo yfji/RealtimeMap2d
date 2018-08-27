@@ -294,8 +294,8 @@ void ImageStitcher::stitch(cv::Mat& img) {
         else{
             std::cout<<"Frame ignored"<<std::endl;
             ignore=0;
-            //match_center.x+=speed_x/8;
-            //match_center.y+=speed_y/8;
+            match_center.x+=speed_x/8;
+            match_center.y+=speed_y/8;
         }
     }
     else{
@@ -344,6 +344,10 @@ void ImageStitcher::matchNoStitch(cv::Mat& img){
         match_center.y+=offset.y;
         offset.x = start_x;
         offset.y = start_y;
+    }
+    else{
+        match_center.x+=speed_x/8;
+        match_center.y+=speed_y/8;
     }
     map2dCanvas=map2dNoStitch.clone();
     cv::rectangle(map2dCanvas, cv::Rect(start_x, start_y, width, height), cv::Scalar(0,0,255), 2);
