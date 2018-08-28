@@ -47,7 +47,8 @@ SOURCES += \
     baseimageinput.cpp \
     videoimageinput.cpp \
     cameraimageinput.cpp \
-    filelistimageinput.cpp
+    filelistimageinput.cpp \
+    ipcamimageinput.cpp
 
 HEADERS += \
         mainwindow.h \
@@ -60,7 +61,8 @@ HEADERS += \
     baseimageinput.h \
     videoimageinput.h \
     cameraimageinput.h \
-    filelistimageinput.h
+    filelistimageinput.h \
+    ipcamimageinput.h
 
 FORMS += \
         mainwindow.ui

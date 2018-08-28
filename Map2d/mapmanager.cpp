@@ -6,6 +6,8 @@ MapManager::MapManager(QObject* parent):
     _stitcher.reset(new ImageStitcher(frame_w, frame_h));
     qRegisterMetaType<cv::Mat>("cv::Mat");
     qRegisterMetaType<cv::Mat>("cv::Mat&");
+    qRegisterMetaType<std::string>("std::string");
+    qRegisterMetaType<std::string>("std::string&");
 }
 
 void MapManager::open(InputMethod method){
@@ -20,6 +22,9 @@ void MapManager::open(InputMethod method){
     }
     else if(method==FILELIST){
         _input.reset(new FileListImageInput(fileList));
+    }
+    else if(method==IPCAMERA){
+        _input.reset(new IPCamImageInput(camIP));
     }
 }
 
@@ -77,9 +82,9 @@ void MapManager::threadFunction(){
             usleep(50e3);
         }
         time_reached=false;
-        std::cout<<"Stitching frame "<<curIndex<<std::endl;
-        curIndex++;
         //callbackFunction(map2d, curFrame);
+        std::string state=_stitcher->getState();
+        emit publishStates(state);
         emit publishFrames(map2d, curFrame);
 
         auto now=std::chrono::high_resolution_clock::now();
@@ -92,19 +97,21 @@ void MapManager::threadFunction(){
             time_reached=true;
             duration=0;
         }
+        std::cout<<"Stitching frame "<<curIndex<<std::endl;
+        curIndex++;
     }
     _input->release();
     opened=false;
     cv::destroyAllWindows();
 }
 
-cv::Mat MapManager::getImage(){
+cv::Mat MapManager::getImage(bool withRect){
     cv::Mat image;
     if(curState==BUILD){
-        image=_stitcher->getStitchedImage();
+        image=_stitcher->getStitchedImage(withRect);
     }
     else if(curState==PAUSE){
-        image=_stitcher->getMatchedImage();
+        image=_stitcher->getMatchedImage(withRect);
     }
     return image;
 }

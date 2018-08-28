@@ -15,11 +15,18 @@ public:
     void stitch(cv::Mat& img);
     void matchNoStitch(cv::Mat& img);
 
-    inline cv::Mat getStitchedImage() {
+    inline cv::Mat getStitchedImage(bool withRect=true) {
+        if(withRect)
+            return map2dCanvas;
         return map2d;
     }
-    inline cv::Mat getMatchedImage(){
-        return map2dCanvas;
+    inline cv::Mat getMatchedImage(bool withRect= true){
+        if(withRect)
+            return map2dCanvas;
+        return map2dNoStitch;
+    }
+    inline std::string getState(){
+        return state;
     }
     inline void updateAlphaOffset(float _a){
         _alpha_offset=_a;
@@ -48,6 +55,7 @@ private:
     float dist_max=0.0;
 
     char ignore = {0};
+    std::string state;
 
     std::shared_ptr<Feature> ptrFeature;
 

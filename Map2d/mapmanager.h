@@ -16,9 +16,11 @@
 #include "videoimageinput.h"
 #include "cameraimageinput.h"
 #include "filelistimageinput.h"
+#include "ipcamimageinput.h"
 
 enum InputMethod{
     CAMERA,
+    IPCAMERA,
     VIDEO,
     FILELIST,
     FOLDER
@@ -45,7 +47,7 @@ public:
     void start();
     void threadFunction();
 
-    cv::Mat getImage();
+    cv::Mat getImage(bool withRect=true);
 
     inline void updateState(State s){
         curState=s;
@@ -77,10 +79,12 @@ public:
 
     std::string fileList;
     std::string videoFile;
+    std::string camIP;
     int cam_id;
 
 signals:
     void publishFrames(cv::Mat&, cv::Mat&);
+    void publishStates(std::string&);
 
 private:
     State curState = {STOP};

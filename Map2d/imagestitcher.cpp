@@ -174,24 +174,26 @@ void ImageStitcher::applyOffset(){
         int nh=map2d.rows+map_offset_y+rb_pad_y+2;
 
         cv::Mat tmp_map=map2d.clone();
-        cv::Mat new_map=cv::Mat::zeros(nh,nw,map2d.type());
+
 
         //std::cout<<nw<<","<<nh<<std::endl;
         //std::cout<<map_offset_x<<","<<map_offset_y<<","<<tmp_map.cols<<","<<tmp_map.rows<<std::endl;
         //std::cout<<rb_pad_x<<","<<rb_pad_y<<std::endl;
         //std::cout<<roi_offset_x<<","<<roi_offset_y<<","<<roi.cols<<","<<roi.rows<<std::endl;
-
+        cv::Mat new_map=cv::Mat::zeros(nh,nw,map2d.type());
         tmp_map.copyTo(new_map(cv::Rect(map_offset_x, map_offset_y, tmp_map.cols, tmp_map.rows)));
 
         float _alpha;
         if((roi_offset_x<min_roi_offset.x || roi_offset_y<min_roi_offset.y) || (roi_offset_x>max_roi_offset.x || roi_offset_y>max_roi_offset.y)){
             //_alpha=0.3;
             _alpha=_alpha_offset;
-            std::cout<<"Trail blazer!"<<std::endl;
+            //std::cout<<"Trail blazer!"<<std::endl;
+            state="Trail blazer!";
         }
         else{
-            std::cout<<"Repaint old land!"<<std::endl;
-            _alpha=0.92;
+            //std::cout<<"Repaint old land!"<<std::endl;
+            state="Repainting...";
+            _alpha=0.95;
         }
         max_roi_offset.x=MAX(max_roi_offset.x, roi_offset_x);
         max_roi_offset.y=MAX(max_roi_offset.y, roi_offset_y);
@@ -234,6 +236,10 @@ void ImageStitcher::applyOffset(){
 void ImageStitcher::stitch(cv::Mat& img) {
     if (map2d.empty()) {
         map2d=img.clone();
+        map2dNoStitch=map2d;
+        map2dCanvas=map2dNoStitch.clone();
+        cv::rectangle(map2dCanvas, cv::Rect(0,0, width, height), cv::Scalar(0,0,255), 2);
+        state="First frame";
         return;
     }
     std::vector<cv::Point2f> pt_left, pt_right;
@@ -292,16 +298,22 @@ void ImageStitcher::stitch(cv::Mat& img) {
             applyOffset();
         }
         else{
-            std::cout<<"Frame ignored"<<std::endl;
+            //std::cout<<"Frame ignored"<<std::endl;
+            state="Frame ignored";
             ignore=0;
-            match_center.x+=speed_x/8;
-            match_center.y+=speed_y/8;
+            match_center.x+=speed_x;
+            match_center.y+=speed_y;
         }
     }
     else{
-        std::cout<<"No matching points"<<std::endl;
+        //std::cout<<"No matching points"<<std::endl;
+        state="No matching points...";
     }
     map2dNoStitch=map2d;
+    map2dCanvas=map2dNoStitch.clone();
+    int start_x = MAX(0, MIN(map2dNoStitch.cols - width, match_center.x - width / 2 - 1));
+    int start_y = MAX(0, MIN(map2dNoStitch.rows - height, match_center.y - height / 2 - 1));
+    cv::rectangle(map2dCanvas, cv::Rect(start_x, start_y, width, height), cv::Scalar(0,0,255), 2);
 }
 
 void ImageStitcher::matchNoStitch(cv::Mat& img){
@@ -344,11 +356,19 @@ void ImageStitcher::matchNoStitch(cv::Mat& img){
         match_center.y+=offset.y;
         offset.x = start_x;
         offset.y = start_y;
+        if((offset.x<min_roi_offset.x || offset.y<min_roi_offset.y) || (offset.x>max_roi_offset.x || offset.y>max_roi_offset.y)){
+            state="Trail blazer!";
+        }
+        else{
+            state="Repainting...";
+        }
     }
     else{
-        match_center.x+=speed_x/8;
-        match_center.y+=speed_y/8;
+        match_center.x+=speed_x;
+        match_center.y+=speed_y;
+        state="No matching points...";
     }
+
     map2dCanvas=map2dNoStitch.clone();
     cv::rectangle(map2dCanvas, cv::Rect(start_x, start_y, width, height), cv::Scalar(0,0,255), 2);
 }

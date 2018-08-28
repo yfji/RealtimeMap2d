@@ -12,6 +12,7 @@ MainWindow::MainWindow(QWidget *parent) :
     map_callback callback=std::bind(&MainWindow::drawImages,this,std::placeholders::_1,std::placeholders::_2);
     _mapManager->callbackFunction=callback;
     QObject::connect(_mapManager.get(), SIGNAL(publishFrames(cv::Mat&,cv::Mat&)), SLOT(onUpdateFrames(cv::Mat&,cv::Mat&)));
+    QObject::connect(_mapManager.get(), SIGNAL(publishStates(std::string&)), SLOT(onUpdateStates(std::string&)));
 }
 
 MainWindow::~MainWindow()
@@ -41,6 +42,14 @@ void MainWindow::on_btn_open_list_clicked()
         _mapManager->open(FILELIST);
     }
     delete fileDialog;
+}
+
+
+void MainWindow::on_btn_open_ipcam_clicked()
+{
+    std::string ipAddr=ui->txt_ip_addr->text().toStdString();
+    _mapManager->camIP=ipAddr;
+    _mapManager->open(IPCAMERA);
 }
 
 void MainWindow::on_btn_open_video_clicked()
@@ -108,17 +117,12 @@ void MainWindow::on_btn_finish_clicked()
 
 void MainWindow::on_btn_save_clicked()
 {
-    cv::Mat map2d=_mapManager->getImage();
+    cv::Mat map2d=_mapManager->getImage(false);
     std::stringstream ss;
     ss<<"./maps/map_"<<savedIndex<<".jpg";
     std::cout<<"Savint to "<<ss.str()<<std::endl;
     savedIndex++;
     cv::imwrite(ss.str(), map2d);
-}
-
-void MainWindow::on_btn_update_period_clicked()
-{
-    updatePeriod();
 }
 
 void MainWindow::drawImages(cv::Mat& map, cv::Mat& curFrame){
@@ -217,4 +221,18 @@ void MainWindow::on_check_orb_stateChanged(int arg1)
 
 void MainWindow::onUpdateFrames(cv::Mat & map2d, cv::Mat & curFrame){
     drawImages(map2d, curFrame);
+}
+
+void MainWindow::onUpdateStates(std::string & s){
+    QString qstr=ui->txt_console->toPlainText();
+    if(qstr.length()==0)
+        qstr=tr(s.c_str());
+    else
+        qstr=qstr+tr("\n")+tr(s.c_str());
+    ui->txt_console->setText(qstr);
+    consoleLines++;
+    if(consoleLines==500){
+        ui->txt_console->clear();
+        consoleLines=0;
+    }
 }

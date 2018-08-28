@@ -59,7 +59,8 @@ SOURCES       = ../Map2d/main.cpp \
 		../Map2d/baseimageinput.cpp \
 		../Map2d/videoimageinput.cpp \
 		../Map2d/cameraimageinput.cpp \
-		../Map2d/filelistimageinput.cpp moc_mainwindow.cpp \
+		../Map2d/filelistimageinput.cpp \
+		../Map2d/ipcamimageinput.cpp moc_mainwindow.cpp \
 		moc_mapmanager.cpp
 OBJECTS       = main.o \
 		mainwindow.o \
@@ -71,6 +72,7 @@ OBJECTS       = main.o \
 		videoimageinput.o \
 		cameraimageinput.o \
 		filelistimageinput.o \
+		ipcamimageinput.o \
 		moc_mainwindow.o \
 		moc_mapmanager.o
 DIST          = ../../../../Qt5.10.1/5.10.1/gcc_64/mkspecs/features/spec_pre.prf \
@@ -263,7 +265,8 @@ DIST          = ../../../../Qt5.10.1/5.10.1/gcc_64/mkspecs/features/spec_pre.prf
 		../Map2d/baseimageinput.h \
 		../Map2d/videoimageinput.h \
 		../Map2d/cameraimageinput.h \
-		../Map2d/filelistimageinput.h ../Map2d/main.cpp \
+		../Map2d/filelistimageinput.h \
+		../Map2d/ipcamimageinput.h ../Map2d/main.cpp \
 		../Map2d/mainwindow.cpp \
 		../Map2d/imagestitcher.cpp \
 		../Map2d/feature.cpp \
@@ -272,7 +275,8 @@ DIST          = ../../../../Qt5.10.1/5.10.1/gcc_64/mkspecs/features/spec_pre.prf
 		../Map2d/baseimageinput.cpp \
 		../Map2d/videoimageinput.cpp \
 		../Map2d/cameraimageinput.cpp \
-		../Map2d/filelistimageinput.cpp
+		../Map2d/filelistimageinput.cpp \
+		../Map2d/ipcamimageinput.cpp
 QMAKE_TARGET  = Map2d
 DESTDIR       = 
 TARGET        = Map2d
@@ -668,8 +672,8 @@ distdir: FORCE
 	@test -d $(DISTDIR) || mkdir -p $(DISTDIR)
 	$(COPY_FILE) --parents $(DIST) $(DISTDIR)/
 	$(COPY_FILE) --parents ../../../../Qt5.10.1/5.10.1/gcc_64/mkspecs/features/data/dummy.cpp $(DISTDIR)/
-	$(COPY_FILE) --parents ../Map2d/mainwindow.h ../Map2d/imagestitcher.h ../Map2d/feature.h ../Map2d/orb_feature.h ../Map2d/gms_matcher.h ../Map2d/Header.h ../Map2d/mapmanager.h ../Map2d/baseimageinput.h ../Map2d/videoimageinput.h ../Map2d/cameraimageinput.h ../Map2d/filelistimageinput.h $(DISTDIR)/
-	$(COPY_FILE) --parents ../Map2d/main.cpp ../Map2d/mainwindow.cpp ../Map2d/imagestitcher.cpp ../Map2d/feature.cpp ../Map2d/orb_feature.cpp ../Map2d/mapmanager.cpp ../Map2d/baseimageinput.cpp ../Map2d/videoimageinput.cpp ../Map2d/cameraimageinput.cpp ../Map2d/filelistimageinput.cpp $(DISTDIR)/
+	$(COPY_FILE) --parents ../Map2d/mainwindow.h ../Map2d/imagestitcher.h ../Map2d/feature.h ../Map2d/orb_feature.h ../Map2d/gms_matcher.h ../Map2d/Header.h ../Map2d/mapmanager.h ../Map2d/baseimageinput.h ../Map2d/videoimageinput.h ../Map2d/cameraimageinput.h ../Map2d/filelistimageinput.h ../Map2d/ipcamimageinput.h $(DISTDIR)/
+	$(COPY_FILE) --parents ../Map2d/main.cpp ../Map2d/mainwindow.cpp ../Map2d/imagestitcher.cpp ../Map2d/feature.cpp ../Map2d/orb_feature.cpp ../Map2d/mapmanager.cpp ../Map2d/baseimageinput.cpp ../Map2d/videoimageinput.cpp ../Map2d/cameraimageinput.cpp ../Map2d/filelistimageinput.cpp ../Map2d/ipcamimageinput.cpp $(DISTDIR)/
 	$(COPY_FILE) --parents ../Map2d/mainwindow.ui $(DISTDIR)/
 
 
@@ -823,6 +827,7 @@ moc_mainwindow.cpp: ../../../../Qt5.10.1/5.10.1/gcc_64/include/QtWidgets/QMainWi
 		../Map2d/videoimageinput.h \
 		../Map2d/cameraimageinput.h \
 		../Map2d/filelistimageinput.h \
+		../Map2d/ipcamimageinput.h \
 		../Map2d/mainwindow.h \
 		moc_predefs.h \
 		../../../../Qt5.10.1/5.10.1/gcc_64/bin/moc
@@ -888,6 +893,7 @@ moc_mapmanager.cpp: ../../../../Qt5.10.1/5.10.1/gcc_64/include/QtCore/QObject \
 		../Map2d/videoimageinput.h \
 		../Map2d/cameraimageinput.h \
 		../Map2d/filelistimageinput.h \
+		../Map2d/ipcamimageinput.h \
 		../Map2d/mapmanager.h \
 		moc_predefs.h \
 		../../../../Qt5.10.1/5.10.1/gcc_64/bin/moc
@@ -1033,6 +1039,7 @@ main.o: ../Map2d/main.cpp ../Map2d/mainwindow.h \
 		../Map2d/videoimageinput.h \
 		../Map2d/cameraimageinput.h \
 		../Map2d/filelistimageinput.h \
+		../Map2d/ipcamimageinput.h \
 		../../../../Qt5.10.1/5.10.1/gcc_64/include/QtWidgets/QApplication \
 		../../../../Qt5.10.1/5.10.1/gcc_64/include/QtWidgets/qapplication.h \
 		../../../../Qt5.10.1/5.10.1/gcc_64/include/QtCore/qcoreapplication.h \
@@ -1161,6 +1168,7 @@ mainwindow.o: ../Map2d/mainwindow.cpp ../Map2d/mainwindow.h \
 		../Map2d/videoimageinput.h \
 		../Map2d/cameraimageinput.h \
 		../Map2d/filelistimageinput.h \
+		../Map2d/ipcamimageinput.h \
 		ui_mainwindow.h \
 		../../../../Qt5.10.1/5.10.1/gcc_64/include/QtCore/QVariant \
 		../../../../Qt5.10.1/5.10.1/gcc_64/include/QtWidgets/QAction \
@@ -1215,6 +1223,9 @@ mainwindow.o: ../Map2d/mainwindow.cpp ../Map2d/mainwindow.h \
 		../../../../Qt5.10.1/5.10.1/gcc_64/include/QtWidgets/QSlider \
 		../../../../Qt5.10.1/5.10.1/gcc_64/include/QtWidgets/QStatusBar \
 		../../../../Qt5.10.1/5.10.1/gcc_64/include/QtWidgets/qstatusbar.h \
+		../../../../Qt5.10.1/5.10.1/gcc_64/include/QtWidgets/QTextEdit \
+		../../../../Qt5.10.1/5.10.1/gcc_64/include/QtWidgets/qtextedit.h \
+		../../../../Qt5.10.1/5.10.1/gcc_64/include/QtGui/qtextdocument.h \
 		../../../../Qt5.10.1/5.10.1/gcc_64/include/QtWidgets/QToolBar \
 		../../../../Qt5.10.1/5.10.1/gcc_64/include/QtWidgets/qtoolbar.h \
 		../../../../Qt5.10.1/5.10.1/gcc_64/include/QtWidgets/QWidget \
@@ -1302,7 +1313,8 @@ mapmanager.o: ../Map2d/mapmanager.cpp ../Map2d/mapmanager.h \
 		../Map2d/baseimageinput.h \
 		../Map2d/videoimageinput.h \
 		../Map2d/cameraimageinput.h \
-		../Map2d/filelistimageinput.h
+		../Map2d/filelistimageinput.h \
+		../Map2d/ipcamimageinput.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o mapmanager.o ../Map2d/mapmanager.cpp
 
 baseimageinput.o: ../Map2d/baseimageinput.cpp ../Map2d/baseimageinput.h
@@ -1319,6 +1331,10 @@ cameraimageinput.o: ../Map2d/cameraimageinput.cpp ../Map2d/cameraimageinput.h \
 filelistimageinput.o: ../Map2d/filelistimageinput.cpp ../Map2d/filelistimageinput.h \
 		../Map2d/baseimageinput.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o filelistimageinput.o ../Map2d/filelistimageinput.cpp
+
+ipcamimageinput.o: ../Map2d/ipcamimageinput.cpp ../Map2d/ipcamimageinput.h \
+		../Map2d/baseimageinput.h
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o ipcamimageinput.o ../Map2d/ipcamimageinput.cpp
 
 moc_mainwindow.o: moc_mainwindow.cpp 
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o moc_mainwindow.o moc_mainwindow.cpp

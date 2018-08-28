@@ -32,8 +32,6 @@ private slots:
 
     void on_btn_save_clicked();
 
-    void on_btn_update_period_clicked();
-
     void on_btn_open_video_clicked();
 
     void on_slide_period_actionTriggered(int action);
@@ -49,6 +47,9 @@ private slots:
     void on_check_orb_stateChanged(int arg1);
 
     void onUpdateFrames(cv::Mat&, cv::Mat&);
+    void onUpdateStates(std::string&);
+
+    void on_btn_open_ipcam_clicked();
 
 private:
     Ui::MainWindow *ui;
@@ -57,6 +58,7 @@ private:
 
     //map_callback callback;
     int savedIndex= {0};
+    int consoleLines={0};
     bool _inputSourceSelected= {false};
 
     void drawImages(cv::Mat& map, cv::Mat& curFrame);
