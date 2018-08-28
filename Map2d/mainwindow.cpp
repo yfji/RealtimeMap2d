@@ -2,6 +2,7 @@
 #include "ui_mainwindow.h"
 #include <qmessagebox.h>
 #include <QFileDialog>
+#include <QScrollBar>
 
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
@@ -127,7 +128,7 @@ void MainWindow::on_btn_save_clicked()
 
 void MainWindow::drawImages(cv::Mat& map, cv::Mat& curFrame){
     if(curFrame.empty()){
-        QMessageBox::information(this,tr("Info"),tr("All frames stitched!"),QMessageBox::Ok);
+        //QMessageBox::information(this,tr("Info"),tr("All frames stitched!"),QMessageBox::Ok);
         return;
     }
     int map_w=ui->label_map->width();
@@ -234,5 +235,10 @@ void MainWindow::onUpdateStates(std::string & s){
     if(consoleLines==500){
         ui->txt_console->clear();
         consoleLines=0;
+    }
+    QScrollBar *scrollbar = ui->txt_console->verticalScrollBar();
+    if (scrollbar)
+    {
+        scrollbar->setSliderPosition(scrollbar->maximum());
     }
 }

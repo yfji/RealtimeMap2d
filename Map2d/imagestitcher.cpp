@@ -58,7 +58,7 @@ void ImageStitcher::checkIfStitchable(){
         corner_dist+=dist;
     }
     float eps=corner_dist/(4*dist_max);
-    if(eps>0.333){
+    if(eps>0.25){
         ignore=1;
     }
 }
@@ -294,7 +294,7 @@ void ImageStitcher::stitch(cv::Mat& img) {
             optimize(canvas_patch, refImage, stitchImage);
             //cv::imshow("warp", stitchImage);
             //cv::waitKey(1);
-            cv::imwrite("warp.jpg", stitchImage);
+            //cv::imwrite("warp.jpg", stitchImage);
             applyOffset();
         }
         else{
@@ -308,6 +308,8 @@ void ImageStitcher::stitch(cv::Mat& img) {
     else{
         //std::cout<<"No matching points"<<std::endl;
         state="No matching points...";
+        match_center.x+=speed_x;
+        match_center.y+=speed_y;
     }
     map2dNoStitch=map2d;
     map2dCanvas=map2dNoStitch.clone();
