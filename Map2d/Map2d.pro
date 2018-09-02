@@ -48,7 +48,8 @@ SOURCES += \
     videoimageinput.cpp \
     cameraimageinput.cpp \
     filelistimageinput.cpp \
-    ipcamimageinput.cpp
+    ipcamimageinput.cpp \
+    maplabel.cpp
 
 HEADERS += \
         mainwindow.h \
@@ -62,7 +63,8 @@ HEADERS += \
     videoimageinput.h \
     cameraimageinput.h \
     filelistimageinput.h \
-    ipcamimageinput.h
+    ipcamimageinput.h \
+    maplabel.h
 
 FORMS += \
         mainwindow.ui

@@ -26,7 +26,7 @@
     <property name="title">
      <string>Map</string>
     </property>
-    <widget class="QLabel" name="label_map">
+    <widget class="MapLabel" name="label_map">
      <property name="geometry">
       <rect>
        <x>10</x>
@@ -37,6 +37,9 @@
      </property>
      <property name="text">
       <string/>
+     </property>
+     <property name="alignment">
+      <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignTop</set>
      </property>
     </widget>
    </widget>
@@ -597,6 +600,13 @@ IP Camera</string>
   <widget class="QStatusBar" name="statusBar"/>
  </widget>
  <layoutdefault spacing="6" margin="11"/>
+ <customwidgets>
+  <customwidget>
+   <class>MapLabel</class>
+   <extends>QLabel</extends>
+   <header>maplabel.h</header>
+  </customwidget>
+ </customwidgets>
  <resources/>
  <connections/>
 </ui>

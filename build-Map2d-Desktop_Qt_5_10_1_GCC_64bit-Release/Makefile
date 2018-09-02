@@ -60,8 +60,10 @@ SOURCES       = ../Map2d/main.cpp \
 		../Map2d/videoimageinput.cpp \
 		../Map2d/cameraimageinput.cpp \
 		../Map2d/filelistimageinput.cpp \
-		../Map2d/ipcamimageinput.cpp moc_mainwindow.cpp \
-		moc_mapmanager.cpp
+		../Map2d/ipcamimageinput.cpp \
+		../Map2d/maplabel.cpp moc_mainwindow.cpp \
+		moc_mapmanager.cpp \
+		moc_maplabel.cpp
 OBJECTS       = main.o \
 		mainwindow.o \
 		imagestitcher.o \
@@ -73,8 +75,10 @@ OBJECTS       = main.o \
 		cameraimageinput.o \
 		filelistimageinput.o \
 		ipcamimageinput.o \
+		maplabel.o \
 		moc_mainwindow.o \
-		moc_mapmanager.o
+		moc_mapmanager.o \
+		moc_maplabel.o
 DIST          = ../../../../Qt5.10.1/5.10.1/gcc_64/mkspecs/features/spec_pre.prf \
 		../../../../Qt5.10.1/5.10.1/gcc_64/mkspecs/common/unix.conf \
 		../../../../Qt5.10.1/5.10.1/gcc_64/mkspecs/common/linux.conf \
@@ -266,7 +270,8 @@ DIST          = ../../../../Qt5.10.1/5.10.1/gcc_64/mkspecs/features/spec_pre.prf
 		../Map2d/videoimageinput.h \
 		../Map2d/cameraimageinput.h \
 		../Map2d/filelistimageinput.h \
-		../Map2d/ipcamimageinput.h ../Map2d/main.cpp \
+		../Map2d/ipcamimageinput.h \
+		../Map2d/maplabel.h ../Map2d/main.cpp \
 		../Map2d/mainwindow.cpp \
 		../Map2d/imagestitcher.cpp \
 		../Map2d/feature.cpp \
@@ -276,7 +281,8 @@ DIST          = ../../../../Qt5.10.1/5.10.1/gcc_64/mkspecs/features/spec_pre.prf
 		../Map2d/videoimageinput.cpp \
 		../Map2d/cameraimageinput.cpp \
 		../Map2d/filelistimageinput.cpp \
-		../Map2d/ipcamimageinput.cpp
+		../Map2d/ipcamimageinput.cpp \
+		../Map2d/maplabel.cpp
 QMAKE_TARGET  = Map2d
 DESTDIR       = 
 TARGET        = Map2d
@@ -672,8 +678,8 @@ distdir: FORCE
 	@test -d $(DISTDIR) || mkdir -p $(DISTDIR)
 	$(COPY_FILE) --parents $(DIST) $(DISTDIR)/
 	$(COPY_FILE) --parents ../../../../Qt5.10.1/5.10.1/gcc_64/mkspecs/features/data/dummy.cpp $(DISTDIR)/
-	$(COPY_FILE) --parents ../Map2d/mainwindow.h ../Map2d/imagestitcher.h ../Map2d/feature.h ../Map2d/orb_feature.h ../Map2d/gms_matcher.h ../Map2d/Header.h ../Map2d/mapmanager.h ../Map2d/baseimageinput.h ../Map2d/videoimageinput.h ../Map2d/cameraimageinput.h ../Map2d/filelistimageinput.h ../Map2d/ipcamimageinput.h $(DISTDIR)/
-	$(COPY_FILE) --parents ../Map2d/main.cpp ../Map2d/mainwindow.cpp ../Map2d/imagestitcher.cpp ../Map2d/feature.cpp ../Map2d/orb_feature.cpp ../Map2d/mapmanager.cpp ../Map2d/baseimageinput.cpp ../Map2d/videoimageinput.cpp ../Map2d/cameraimageinput.cpp ../Map2d/filelistimageinput.cpp ../Map2d/ipcamimageinput.cpp $(DISTDIR)/
+	$(COPY_FILE) --parents ../Map2d/mainwindow.h ../Map2d/imagestitcher.h ../Map2d/feature.h ../Map2d/orb_feature.h ../Map2d/gms_matcher.h ../Map2d/Header.h ../Map2d/mapmanager.h ../Map2d/baseimageinput.h ../Map2d/videoimageinput.h ../Map2d/cameraimageinput.h ../Map2d/filelistimageinput.h ../Map2d/ipcamimageinput.h ../Map2d/maplabel.h $(DISTDIR)/
+	$(COPY_FILE) --parents ../Map2d/main.cpp ../Map2d/mainwindow.cpp ../Map2d/imagestitcher.cpp ../Map2d/feature.cpp ../Map2d/orb_feature.cpp ../Map2d/mapmanager.cpp ../Map2d/baseimageinput.cpp ../Map2d/videoimageinput.cpp ../Map2d/cameraimageinput.cpp ../Map2d/filelistimageinput.cpp ../Map2d/ipcamimageinput.cpp ../Map2d/maplabel.cpp $(DISTDIR)/
 	$(COPY_FILE) --parents ../Map2d/mainwindow.ui $(DISTDIR)/
 
 
@@ -706,9 +712,9 @@ compiler_moc_predefs_clean:
 moc_predefs.h: ../../../../Qt5.10.1/5.10.1/gcc_64/mkspecs/features/data/dummy.cpp
 	g++ -pipe -O2 -std=gnu++11 -Wall -W -dM -E -o moc_predefs.h ../../../../Qt5.10.1/5.10.1/gcc_64/mkspecs/features/data/dummy.cpp
 
-compiler_moc_header_make_all: moc_mainwindow.cpp moc_mapmanager.cpp
+compiler_moc_header_make_all: moc_mainwindow.cpp moc_mapmanager.cpp moc_maplabel.cpp
 compiler_moc_header_clean:
-	-$(DEL_FILE) moc_mainwindow.cpp moc_mapmanager.cpp
+	-$(DEL_FILE) moc_mainwindow.cpp moc_mapmanager.cpp moc_maplabel.cpp
 moc_mainwindow.cpp: ../../../../Qt5.10.1/5.10.1/gcc_64/include/QtWidgets/QMainWindow \
 		../../../../Qt5.10.1/5.10.1/gcc_64/include/QtWidgets/qmainwindow.h \
 		../../../../Qt5.10.1/5.10.1/gcc_64/include/QtWidgets/qtwidgetsglobal.h \
@@ -828,6 +834,11 @@ moc_mainwindow.cpp: ../../../../Qt5.10.1/5.10.1/gcc_64/include/QtWidgets/QMainWi
 		../Map2d/cameraimageinput.h \
 		../Map2d/filelistimageinput.h \
 		../Map2d/ipcamimageinput.h \
+		../Map2d/maplabel.h \
+		../../../../Qt5.10.1/5.10.1/gcc_64/include/QtWidgets/QLabel \
+		../../../../Qt5.10.1/5.10.1/gcc_64/include/QtWidgets/qlabel.h \
+		../../../../Qt5.10.1/5.10.1/gcc_64/include/QtWidgets/qframe.h \
+		../../../../Qt5.10.1/5.10.1/gcc_64/include/QtGui/QMouseEvent \
 		../Map2d/mainwindow.h \
 		moc_predefs.h \
 		../../../../Qt5.10.1/5.10.1/gcc_64/bin/moc
@@ -899,6 +910,118 @@ moc_mapmanager.cpp: ../../../../Qt5.10.1/5.10.1/gcc_64/include/QtCore/QObject \
 		../../../../Qt5.10.1/5.10.1/gcc_64/bin/moc
 	/home/yfji/Qt5.10.1/5.10.1/gcc_64/bin/moc $(DEFINES) --include ./moc_predefs.h -I/home/yfji/Qt5.10.1/5.10.1/gcc_64/mkspecs/linux-g++ -I/home/yfji/Workspace/Qt/Map2d/Map2d -I/usr/local/include -I/home/yfji/Qt5.10.1/5.10.1/gcc_64/include -I/home/yfji/Qt5.10.1/5.10.1/gcc_64/include/QtWidgets -I/home/yfji/Qt5.10.1/5.10.1/gcc_64/include/QtGui -I/home/yfji/Qt5.10.1/5.10.1/gcc_64/include/QtCore -I. -I/usr/include/c++/5 -I/usr/include/x86_64-linux-gnu/c++/5 -I/usr/include/c++/5/backward -I/usr/lib/gcc/x86_64-linux-gnu/5/include -I/usr/local/include -I/usr/lib/gcc/x86_64-linux-gnu/5/include-fixed -I/usr/include/x86_64-linux-gnu -I/usr/include ../Map2d/mapmanager.h -o moc_mapmanager.cpp
 
+moc_maplabel.cpp: ../../../../Qt5.10.1/5.10.1/gcc_64/include/QtWidgets/QLabel \
+		../../../../Qt5.10.1/5.10.1/gcc_64/include/QtWidgets/qlabel.h \
+		../../../../Qt5.10.1/5.10.1/gcc_64/include/QtWidgets/qtwidgetsglobal.h \
+		../../../../Qt5.10.1/5.10.1/gcc_64/include/QtGui/qtguiglobal.h \
+		../../../../Qt5.10.1/5.10.1/gcc_64/include/QtCore/qglobal.h \
+		../../../../Qt5.10.1/5.10.1/gcc_64/include/QtCore/qconfig-bootstrapped.h \
+		../../../../Qt5.10.1/5.10.1/gcc_64/include/QtCore/qconfig.h \
+		../../../../Qt5.10.1/5.10.1/gcc_64/include/QtCore/qtcore-config.h \
+		../../../../Qt5.10.1/5.10.1/gcc_64/include/QtCore/qsystemdetection.h \
+		../../../../Qt5.10.1/5.10.1/gcc_64/include/QtCore/qprocessordetection.h \
+		../../../../Qt5.10.1/5.10.1/gcc_64/include/QtCore/qcompilerdetection.h \
+		../../../../Qt5.10.1/5.10.1/gcc_64/include/QtCore/qtypeinfo.h \
+		../../../../Qt5.10.1/5.10.1/gcc_64/include/QtCore/qsysinfo.h \
+		../../../../Qt5.10.1/5.10.1/gcc_64/include/QtCore/qlogging.h \
+		../../../../Qt5.10.1/5.10.1/gcc_64/include/QtCore/qflags.h \
+		../../../../Qt5.10.1/5.10.1/gcc_64/include/QtCore/qatomic.h \
+		../../../../Qt5.10.1/5.10.1/gcc_64/include/QtCore/qbasicatomic.h \
+		../../../../Qt5.10.1/5.10.1/gcc_64/include/QtCore/qatomic_bootstrap.h \
+		../../../../Qt5.10.1/5.10.1/gcc_64/include/QtCore/qgenericatomic.h \
+		../../../../Qt5.10.1/5.10.1/gcc_64/include/QtCore/qatomic_cxx11.h \
+		../../../../Qt5.10.1/5.10.1/gcc_64/include/QtCore/qatomic_msvc.h \
+		../../../../Qt5.10.1/5.10.1/gcc_64/include/QtCore/qglobalstatic.h \
+		../../../../Qt5.10.1/5.10.1/gcc_64/include/QtCore/qmutex.h \
+		../../../../Qt5.10.1/5.10.1/gcc_64/include/QtCore/qnumeric.h \
+		../../../../Qt5.10.1/5.10.1/gcc_64/include/QtCore/qversiontagging.h \
+		../../../../Qt5.10.1/5.10.1/gcc_64/include/QtGui/qtgui-config.h \
+		../../../../Qt5.10.1/5.10.1/gcc_64/include/QtWidgets/qtwidgets-config.h \
+		../../../../Qt5.10.1/5.10.1/gcc_64/include/QtWidgets/qframe.h \
+		../../../../Qt5.10.1/5.10.1/gcc_64/include/QtWidgets/qwidget.h \
+		../../../../Qt5.10.1/5.10.1/gcc_64/include/QtGui/qwindowdefs.h \
+		../../../../Qt5.10.1/5.10.1/gcc_64/include/QtCore/qobjectdefs.h \
+		../../../../Qt5.10.1/5.10.1/gcc_64/include/QtCore/qnamespace.h \
+		../../../../Qt5.10.1/5.10.1/gcc_64/include/QtCore/qobjectdefs_impl.h \
+		../../../../Qt5.10.1/5.10.1/gcc_64/include/QtGui/qwindowdefs_win.h \
+		../../../../Qt5.10.1/5.10.1/gcc_64/include/QtCore/qobject.h \
+		../../../../Qt5.10.1/5.10.1/gcc_64/include/QtCore/qstring.h \
+		../../../../Qt5.10.1/5.10.1/gcc_64/include/QtCore/qchar.h \
+		../../../../Qt5.10.1/5.10.1/gcc_64/include/QtCore/qbytearray.h \
+		../../../../Qt5.10.1/5.10.1/gcc_64/include/QtCore/qrefcount.h \
+		../../../../Qt5.10.1/5.10.1/gcc_64/include/QtCore/qarraydata.h \
+		../../../../Qt5.10.1/5.10.1/gcc_64/include/QtCore/qstringliteral.h \
+		../../../../Qt5.10.1/5.10.1/gcc_64/include/QtCore/qstringalgorithms.h \
+		../../../../Qt5.10.1/5.10.1/gcc_64/include/QtCore/qstringview.h \
+		../../../../Qt5.10.1/5.10.1/gcc_64/include/QtCore/qstringbuilder.h \
+		../../../../Qt5.10.1/5.10.1/gcc_64/include/QtCore/qlist.h \
+		../../../../Qt5.10.1/5.10.1/gcc_64/include/QtCore/qalgorithms.h \
+		../../../../Qt5.10.1/5.10.1/gcc_64/include/QtCore/qiterator.h \
+		../../../../Qt5.10.1/5.10.1/gcc_64/include/QtCore/qhashfunctions.h \
+		../../../../Qt5.10.1/5.10.1/gcc_64/include/QtCore/qpair.h \
+		../../../../Qt5.10.1/5.10.1/gcc_64/include/QtCore/qbytearraylist.h \
+		../../../../Qt5.10.1/5.10.1/gcc_64/include/QtCore/qstringlist.h \
+		../../../../Qt5.10.1/5.10.1/gcc_64/include/QtCore/qregexp.h \
+		../../../../Qt5.10.1/5.10.1/gcc_64/include/QtCore/qstringmatcher.h \
+		../../../../Qt5.10.1/5.10.1/gcc_64/include/QtCore/qcoreevent.h \
+		../../../../Qt5.10.1/5.10.1/gcc_64/include/QtCore/qscopedpointer.h \
+		../../../../Qt5.10.1/5.10.1/gcc_64/include/QtCore/qmetatype.h \
+		../../../../Qt5.10.1/5.10.1/gcc_64/include/QtCore/qvarlengtharray.h \
+		../../../../Qt5.10.1/5.10.1/gcc_64/include/QtCore/qcontainerfwd.h \
+		../../../../Qt5.10.1/5.10.1/gcc_64/include/QtCore/qobject_impl.h \
+		../../../../Qt5.10.1/5.10.1/gcc_64/include/QtCore/qmargins.h \
+		../../../../Qt5.10.1/5.10.1/gcc_64/include/QtGui/qpaintdevice.h \
+		../../../../Qt5.10.1/5.10.1/gcc_64/include/QtCore/qrect.h \
+		../../../../Qt5.10.1/5.10.1/gcc_64/include/QtCore/qsize.h \
+		../../../../Qt5.10.1/5.10.1/gcc_64/include/QtCore/qpoint.h \
+		../../../../Qt5.10.1/5.10.1/gcc_64/include/QtGui/qpalette.h \
+		../../../../Qt5.10.1/5.10.1/gcc_64/include/QtGui/qcolor.h \
+		../../../../Qt5.10.1/5.10.1/gcc_64/include/QtGui/qrgb.h \
+		../../../../Qt5.10.1/5.10.1/gcc_64/include/QtGui/qrgba64.h \
+		../../../../Qt5.10.1/5.10.1/gcc_64/include/QtGui/qbrush.h \
+		../../../../Qt5.10.1/5.10.1/gcc_64/include/QtCore/qvector.h \
+		../../../../Qt5.10.1/5.10.1/gcc_64/include/QtGui/qmatrix.h \
+		../../../../Qt5.10.1/5.10.1/gcc_64/include/QtGui/qpolygon.h \
+		../../../../Qt5.10.1/5.10.1/gcc_64/include/QtGui/qregion.h \
+		../../../../Qt5.10.1/5.10.1/gcc_64/include/QtCore/qdatastream.h \
+		../../../../Qt5.10.1/5.10.1/gcc_64/include/QtCore/qiodevice.h \
+		../../../../Qt5.10.1/5.10.1/gcc_64/include/QtCore/qline.h \
+		../../../../Qt5.10.1/5.10.1/gcc_64/include/QtGui/qtransform.h \
+		../../../../Qt5.10.1/5.10.1/gcc_64/include/QtGui/qpainterpath.h \
+		../../../../Qt5.10.1/5.10.1/gcc_64/include/QtGui/qimage.h \
+		../../../../Qt5.10.1/5.10.1/gcc_64/include/QtGui/qpixelformat.h \
+		../../../../Qt5.10.1/5.10.1/gcc_64/include/QtGui/qpixmap.h \
+		../../../../Qt5.10.1/5.10.1/gcc_64/include/QtCore/qsharedpointer.h \
+		../../../../Qt5.10.1/5.10.1/gcc_64/include/QtCore/qshareddata.h \
+		../../../../Qt5.10.1/5.10.1/gcc_64/include/QtCore/qhash.h \
+		../../../../Qt5.10.1/5.10.1/gcc_64/include/QtCore/qsharedpointer_impl.h \
+		../../../../Qt5.10.1/5.10.1/gcc_64/include/QtGui/qfont.h \
+		../../../../Qt5.10.1/5.10.1/gcc_64/include/QtGui/qfontmetrics.h \
+		../../../../Qt5.10.1/5.10.1/gcc_64/include/QtGui/qfontinfo.h \
+		../../../../Qt5.10.1/5.10.1/gcc_64/include/QtWidgets/qsizepolicy.h \
+		../../../../Qt5.10.1/5.10.1/gcc_64/include/QtGui/qcursor.h \
+		../../../../Qt5.10.1/5.10.1/gcc_64/include/QtGui/qkeysequence.h \
+		../../../../Qt5.10.1/5.10.1/gcc_64/include/QtGui/qevent.h \
+		../../../../Qt5.10.1/5.10.1/gcc_64/include/QtCore/qvariant.h \
+		../../../../Qt5.10.1/5.10.1/gcc_64/include/QtCore/qmap.h \
+		../../../../Qt5.10.1/5.10.1/gcc_64/include/QtCore/qdebug.h \
+		../../../../Qt5.10.1/5.10.1/gcc_64/include/QtCore/qtextstream.h \
+		../../../../Qt5.10.1/5.10.1/gcc_64/include/QtCore/qlocale.h \
+		../../../../Qt5.10.1/5.10.1/gcc_64/include/QtCore/qset.h \
+		../../../../Qt5.10.1/5.10.1/gcc_64/include/QtCore/qcontiguouscache.h \
+		../../../../Qt5.10.1/5.10.1/gcc_64/include/QtCore/qurl.h \
+		../../../../Qt5.10.1/5.10.1/gcc_64/include/QtCore/qurlquery.h \
+		../../../../Qt5.10.1/5.10.1/gcc_64/include/QtCore/qfile.h \
+		../../../../Qt5.10.1/5.10.1/gcc_64/include/QtCore/qfiledevice.h \
+		../../../../Qt5.10.1/5.10.1/gcc_64/include/QtGui/qvector2d.h \
+		../../../../Qt5.10.1/5.10.1/gcc_64/include/QtGui/qtouchdevice.h \
+		../../../../Qt5.10.1/5.10.1/gcc_64/include/QtCore/QObject \
+		../../../../Qt5.10.1/5.10.1/gcc_64/include/QtGui/QMouseEvent \
+		../Map2d/maplabel.h \
+		moc_predefs.h \
+		../../../../Qt5.10.1/5.10.1/gcc_64/bin/moc
+	/home/yfji/Qt5.10.1/5.10.1/gcc_64/bin/moc $(DEFINES) --include ./moc_predefs.h -I/home/yfji/Qt5.10.1/5.10.1/gcc_64/mkspecs/linux-g++ -I/home/yfji/Workspace/Qt/Map2d/Map2d -I/usr/local/include -I/home/yfji/Qt5.10.1/5.10.1/gcc_64/include -I/home/yfji/Qt5.10.1/5.10.1/gcc_64/include/QtWidgets -I/home/yfji/Qt5.10.1/5.10.1/gcc_64/include/QtGui -I/home/yfji/Qt5.10.1/5.10.1/gcc_64/include/QtCore -I. -I/usr/include/c++/5 -I/usr/include/x86_64-linux-gnu/c++/5 -I/usr/include/c++/5/backward -I/usr/lib/gcc/x86_64-linux-gnu/5/include -I/usr/local/include -I/usr/lib/gcc/x86_64-linux-gnu/5/include-fixed -I/usr/include/x86_64-linux-gnu -I/usr/include ../Map2d/maplabel.h -o moc_maplabel.cpp
+
 compiler_moc_objc_header_make_all:
 compiler_moc_objc_header_clean:
 compiler_moc_source_make_all:
@@ -907,7 +1030,115 @@ compiler_uic_make_all: ui_mainwindow.h
 compiler_uic_clean:
 	-$(DEL_FILE) ui_mainwindow.h
 ui_mainwindow.h: ../Map2d/mainwindow.ui \
-		../../../../Qt5.10.1/5.10.1/gcc_64/bin/uic
+		../../../../Qt5.10.1/5.10.1/gcc_64/bin/uic \
+		../Map2d/maplabel.h \
+		../../../../Qt5.10.1/5.10.1/gcc_64/include/QtWidgets/QLabel \
+		../../../../Qt5.10.1/5.10.1/gcc_64/include/QtWidgets/qlabel.h \
+		../../../../Qt5.10.1/5.10.1/gcc_64/include/QtWidgets/qtwidgetsglobal.h \
+		../../../../Qt5.10.1/5.10.1/gcc_64/include/QtGui/qtguiglobal.h \
+		../../../../Qt5.10.1/5.10.1/gcc_64/include/QtCore/qglobal.h \
+		../../../../Qt5.10.1/5.10.1/gcc_64/include/QtCore/qconfig-bootstrapped.h \
+		../../../../Qt5.10.1/5.10.1/gcc_64/include/QtCore/qconfig.h \
+		../../../../Qt5.10.1/5.10.1/gcc_64/include/QtCore/qtcore-config.h \
+		../../../../Qt5.10.1/5.10.1/gcc_64/include/QtCore/qsystemdetection.h \
+		../../../../Qt5.10.1/5.10.1/gcc_64/include/QtCore/qprocessordetection.h \
+		../../../../Qt5.10.1/5.10.1/gcc_64/include/QtCore/qcompilerdetection.h \
+		../../../../Qt5.10.1/5.10.1/gcc_64/include/QtCore/qtypeinfo.h \
+		../../../../Qt5.10.1/5.10.1/gcc_64/include/QtCore/qsysinfo.h \
+		../../../../Qt5.10.1/5.10.1/gcc_64/include/QtCore/qlogging.h \
+		../../../../Qt5.10.1/5.10.1/gcc_64/include/QtCore/qflags.h \
+		../../../../Qt5.10.1/5.10.1/gcc_64/include/QtCore/qatomic.h \
+		../../../../Qt5.10.1/5.10.1/gcc_64/include/QtCore/qbasicatomic.h \
+		../../../../Qt5.10.1/5.10.1/gcc_64/include/QtCore/qatomic_bootstrap.h \
+		../../../../Qt5.10.1/5.10.1/gcc_64/include/QtCore/qgenericatomic.h \
+		../../../../Qt5.10.1/5.10.1/gcc_64/include/QtCore/qatomic_cxx11.h \
+		../../../../Qt5.10.1/5.10.1/gcc_64/include/QtCore/qatomic_msvc.h \
+		../../../../Qt5.10.1/5.10.1/gcc_64/include/QtCore/qglobalstatic.h \
+		../../../../Qt5.10.1/5.10.1/gcc_64/include/QtCore/qmutex.h \
+		../../../../Qt5.10.1/5.10.1/gcc_64/include/QtCore/qnumeric.h \
+		../../../../Qt5.10.1/5.10.1/gcc_64/include/QtCore/qversiontagging.h \
+		../../../../Qt5.10.1/5.10.1/gcc_64/include/QtGui/qtgui-config.h \
+		../../../../Qt5.10.1/5.10.1/gcc_64/include/QtWidgets/qtwidgets-config.h \
+		../../../../Qt5.10.1/5.10.1/gcc_64/include/QtWidgets/qframe.h \
+		../../../../Qt5.10.1/5.10.1/gcc_64/include/QtWidgets/qwidget.h \
+		../../../../Qt5.10.1/5.10.1/gcc_64/include/QtGui/qwindowdefs.h \
+		../../../../Qt5.10.1/5.10.1/gcc_64/include/QtCore/qobjectdefs.h \
+		../../../../Qt5.10.1/5.10.1/gcc_64/include/QtCore/qnamespace.h \
+		../../../../Qt5.10.1/5.10.1/gcc_64/include/QtCore/qobjectdefs_impl.h \
+		../../../../Qt5.10.1/5.10.1/gcc_64/include/QtGui/qwindowdefs_win.h \
+		../../../../Qt5.10.1/5.10.1/gcc_64/include/QtCore/qobject.h \
+		../../../../Qt5.10.1/5.10.1/gcc_64/include/QtCore/qstring.h \
+		../../../../Qt5.10.1/5.10.1/gcc_64/include/QtCore/qchar.h \
+		../../../../Qt5.10.1/5.10.1/gcc_64/include/QtCore/qbytearray.h \
+		../../../../Qt5.10.1/5.10.1/gcc_64/include/QtCore/qrefcount.h \
+		../../../../Qt5.10.1/5.10.1/gcc_64/include/QtCore/qarraydata.h \
+		../../../../Qt5.10.1/5.10.1/gcc_64/include/QtCore/qstringliteral.h \
+		../../../../Qt5.10.1/5.10.1/gcc_64/include/QtCore/qstringalgorithms.h \
+		../../../../Qt5.10.1/5.10.1/gcc_64/include/QtCore/qstringview.h \
+		../../../../Qt5.10.1/5.10.1/gcc_64/include/QtCore/qstringbuilder.h \
+		../../../../Qt5.10.1/5.10.1/gcc_64/include/QtCore/qlist.h \
+		../../../../Qt5.10.1/5.10.1/gcc_64/include/QtCore/qalgorithms.h \
+		../../../../Qt5.10.1/5.10.1/gcc_64/include/QtCore/qiterator.h \
+		../../../../Qt5.10.1/5.10.1/gcc_64/include/QtCore/qhashfunctions.h \
+		../../../../Qt5.10.1/5.10.1/gcc_64/include/QtCore/qpair.h \
+		../../../../Qt5.10.1/5.10.1/gcc_64/include/QtCore/qbytearraylist.h \
+		../../../../Qt5.10.1/5.10.1/gcc_64/include/QtCore/qstringlist.h \
+		../../../../Qt5.10.1/5.10.1/gcc_64/include/QtCore/qregexp.h \
+		../../../../Qt5.10.1/5.10.1/gcc_64/include/QtCore/qstringmatcher.h \
+		../../../../Qt5.10.1/5.10.1/gcc_64/include/QtCore/qcoreevent.h \
+		../../../../Qt5.10.1/5.10.1/gcc_64/include/QtCore/qscopedpointer.h \
+		../../../../Qt5.10.1/5.10.1/gcc_64/include/QtCore/qmetatype.h \
+		../../../../Qt5.10.1/5.10.1/gcc_64/include/QtCore/qvarlengtharray.h \
+		../../../../Qt5.10.1/5.10.1/gcc_64/include/QtCore/qcontainerfwd.h \
+		../../../../Qt5.10.1/5.10.1/gcc_64/include/QtCore/qobject_impl.h \
+		../../../../Qt5.10.1/5.10.1/gcc_64/include/QtCore/qmargins.h \
+		../../../../Qt5.10.1/5.10.1/gcc_64/include/QtGui/qpaintdevice.h \
+		../../../../Qt5.10.1/5.10.1/gcc_64/include/QtCore/qrect.h \
+		../../../../Qt5.10.1/5.10.1/gcc_64/include/QtCore/qsize.h \
+		../../../../Qt5.10.1/5.10.1/gcc_64/include/QtCore/qpoint.h \
+		../../../../Qt5.10.1/5.10.1/gcc_64/include/QtGui/qpalette.h \
+		../../../../Qt5.10.1/5.10.1/gcc_64/include/QtGui/qcolor.h \
+		../../../../Qt5.10.1/5.10.1/gcc_64/include/QtGui/qrgb.h \
+		../../../../Qt5.10.1/5.10.1/gcc_64/include/QtGui/qrgba64.h \
+		../../../../Qt5.10.1/5.10.1/gcc_64/include/QtGui/qbrush.h \
+		../../../../Qt5.10.1/5.10.1/gcc_64/include/QtCore/qvector.h \
+		../../../../Qt5.10.1/5.10.1/gcc_64/include/QtGui/qmatrix.h \
+		../../../../Qt5.10.1/5.10.1/gcc_64/include/QtGui/qpolygon.h \
+		../../../../Qt5.10.1/5.10.1/gcc_64/include/QtGui/qregion.h \
+		../../../../Qt5.10.1/5.10.1/gcc_64/include/QtCore/qdatastream.h \
+		../../../../Qt5.10.1/5.10.1/gcc_64/include/QtCore/qiodevice.h \
+		../../../../Qt5.10.1/5.10.1/gcc_64/include/QtCore/qline.h \
+		../../../../Qt5.10.1/5.10.1/gcc_64/include/QtGui/qtransform.h \
+		../../../../Qt5.10.1/5.10.1/gcc_64/include/QtGui/qpainterpath.h \
+		../../../../Qt5.10.1/5.10.1/gcc_64/include/QtGui/qimage.h \
+		../../../../Qt5.10.1/5.10.1/gcc_64/include/QtGui/qpixelformat.h \
+		../../../../Qt5.10.1/5.10.1/gcc_64/include/QtGui/qpixmap.h \
+		../../../../Qt5.10.1/5.10.1/gcc_64/include/QtCore/qsharedpointer.h \
+		../../../../Qt5.10.1/5.10.1/gcc_64/include/QtCore/qshareddata.h \
+		../../../../Qt5.10.1/5.10.1/gcc_64/include/QtCore/qhash.h \
+		../../../../Qt5.10.1/5.10.1/gcc_64/include/QtCore/qsharedpointer_impl.h \
+		../../../../Qt5.10.1/5.10.1/gcc_64/include/QtGui/qfont.h \
+		../../../../Qt5.10.1/5.10.1/gcc_64/include/QtGui/qfontmetrics.h \
+		../../../../Qt5.10.1/5.10.1/gcc_64/include/QtGui/qfontinfo.h \
+		../../../../Qt5.10.1/5.10.1/gcc_64/include/QtWidgets/qsizepolicy.h \
+		../../../../Qt5.10.1/5.10.1/gcc_64/include/QtGui/qcursor.h \
+		../../../../Qt5.10.1/5.10.1/gcc_64/include/QtGui/qkeysequence.h \
+		../../../../Qt5.10.1/5.10.1/gcc_64/include/QtGui/qevent.h \
+		../../../../Qt5.10.1/5.10.1/gcc_64/include/QtCore/qvariant.h \
+		../../../../Qt5.10.1/5.10.1/gcc_64/include/QtCore/qmap.h \
+		../../../../Qt5.10.1/5.10.1/gcc_64/include/QtCore/qdebug.h \
+		../../../../Qt5.10.1/5.10.1/gcc_64/include/QtCore/qtextstream.h \
+		../../../../Qt5.10.1/5.10.1/gcc_64/include/QtCore/qlocale.h \
+		../../../../Qt5.10.1/5.10.1/gcc_64/include/QtCore/qset.h \
+		../../../../Qt5.10.1/5.10.1/gcc_64/include/QtCore/qcontiguouscache.h \
+		../../../../Qt5.10.1/5.10.1/gcc_64/include/QtCore/qurl.h \
+		../../../../Qt5.10.1/5.10.1/gcc_64/include/QtCore/qurlquery.h \
+		../../../../Qt5.10.1/5.10.1/gcc_64/include/QtCore/qfile.h \
+		../../../../Qt5.10.1/5.10.1/gcc_64/include/QtCore/qfiledevice.h \
+		../../../../Qt5.10.1/5.10.1/gcc_64/include/QtGui/qvector2d.h \
+		../../../../Qt5.10.1/5.10.1/gcc_64/include/QtGui/qtouchdevice.h \
+		../../../../Qt5.10.1/5.10.1/gcc_64/include/QtCore/QObject \
+		../../../../Qt5.10.1/5.10.1/gcc_64/include/QtGui/QMouseEvent
 	/home/yfji/Qt5.10.1/5.10.1/gcc_64/bin/uic ../Map2d/mainwindow.ui -o ui_mainwindow.h
 
 compiler_yacc_decl_make_all:
@@ -1040,6 +1271,11 @@ main.o: ../Map2d/main.cpp ../Map2d/mainwindow.h \
 		../Map2d/cameraimageinput.h \
 		../Map2d/filelistimageinput.h \
 		../Map2d/ipcamimageinput.h \
+		../Map2d/maplabel.h \
+		../../../../Qt5.10.1/5.10.1/gcc_64/include/QtWidgets/QLabel \
+		../../../../Qt5.10.1/5.10.1/gcc_64/include/QtWidgets/qlabel.h \
+		../../../../Qt5.10.1/5.10.1/gcc_64/include/QtWidgets/qframe.h \
+		../../../../Qt5.10.1/5.10.1/gcc_64/include/QtGui/QMouseEvent \
 		../../../../Qt5.10.1/5.10.1/gcc_64/include/QtWidgets/QApplication \
 		../../../../Qt5.10.1/5.10.1/gcc_64/include/QtWidgets/qapplication.h \
 		../../../../Qt5.10.1/5.10.1/gcc_64/include/QtCore/qcoreapplication.h \
@@ -1169,6 +1405,11 @@ mainwindow.o: ../Map2d/mainwindow.cpp ../Map2d/mainwindow.h \
 		../Map2d/cameraimageinput.h \
 		../Map2d/filelistimageinput.h \
 		../Map2d/ipcamimageinput.h \
+		../Map2d/maplabel.h \
+		../../../../Qt5.10.1/5.10.1/gcc_64/include/QtWidgets/QLabel \
+		../../../../Qt5.10.1/5.10.1/gcc_64/include/QtWidgets/qlabel.h \
+		../../../../Qt5.10.1/5.10.1/gcc_64/include/QtWidgets/qframe.h \
+		../../../../Qt5.10.1/5.10.1/gcc_64/include/QtGui/QMouseEvent \
 		ui_mainwindow.h \
 		../../../../Qt5.10.1/5.10.1/gcc_64/include/QtCore/QVariant \
 		../../../../Qt5.10.1/5.10.1/gcc_64/include/QtWidgets/QAction \
@@ -1198,7 +1439,6 @@ mainwindow.o: ../Map2d/mainwindow.cpp ../Map2d/mainwindow.h \
 		../../../../Qt5.10.1/5.10.1/gcc_64/include/QtWidgets/qstyle.h \
 		../../../../Qt5.10.1/5.10.1/gcc_64/include/QtWidgets/qtabbar.h \
 		../../../../Qt5.10.1/5.10.1/gcc_64/include/QtWidgets/qrubberband.h \
-		../../../../Qt5.10.1/5.10.1/gcc_64/include/QtWidgets/qframe.h \
 		../../../../Qt5.10.1/5.10.1/gcc_64/include/QtCore/qabstractitemmodel.h \
 		../../../../Qt5.10.1/5.10.1/gcc_64/include/QtWidgets/QGroupBox \
 		../../../../Qt5.10.1/5.10.1/gcc_64/include/QtWidgets/qgroupbox.h \
@@ -1207,8 +1447,6 @@ mainwindow.o: ../Map2d/mainwindow.cpp ../Map2d/mainwindow.h \
 		../../../../Qt5.10.1/5.10.1/gcc_64/include/QtWidgets/qabstractitemview.h \
 		../../../../Qt5.10.1/5.10.1/gcc_64/include/QtWidgets/qabstractscrollarea.h \
 		../../../../Qt5.10.1/5.10.1/gcc_64/include/QtCore/qitemselectionmodel.h \
-		../../../../Qt5.10.1/5.10.1/gcc_64/include/QtWidgets/QLabel \
-		../../../../Qt5.10.1/5.10.1/gcc_64/include/QtWidgets/qlabel.h \
 		../../../../Qt5.10.1/5.10.1/gcc_64/include/QtWidgets/QLineEdit \
 		../../../../Qt5.10.1/5.10.1/gcc_64/include/QtWidgets/qlineedit.h \
 		../../../../Qt5.10.1/5.10.1/gcc_64/include/QtGui/qtextcursor.h \
@@ -1234,7 +1472,9 @@ mainwindow.o: ../Map2d/mainwindow.cpp ../Map2d/mainwindow.h \
 		../../../../Qt5.10.1/5.10.1/gcc_64/include/QtWidgets/QFileDialog \
 		../../../../Qt5.10.1/5.10.1/gcc_64/include/QtWidgets/qfiledialog.h \
 		../../../../Qt5.10.1/5.10.1/gcc_64/include/QtCore/qdir.h \
-		../../../../Qt5.10.1/5.10.1/gcc_64/include/QtCore/qfileinfo.h
+		../../../../Qt5.10.1/5.10.1/gcc_64/include/QtCore/qfileinfo.h \
+		../../../../Qt5.10.1/5.10.1/gcc_64/include/QtWidgets/QScrollBar \
+		../../../../Qt5.10.1/5.10.1/gcc_64/include/QtWidgets/qscrollbar.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o mainwindow.o ../Map2d/mainwindow.cpp
 
 imagestitcher.o: ../Map2d/imagestitcher.cpp ../Map2d/imagestitcher.h \
@@ -1336,11 +1576,125 @@ ipcamimageinput.o: ../Map2d/ipcamimageinput.cpp ../Map2d/ipcamimageinput.h \
 		../Map2d/baseimageinput.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o ipcamimageinput.o ../Map2d/ipcamimageinput.cpp
 
+maplabel.o: ../Map2d/maplabel.cpp ../Map2d/maplabel.h \
+		../../../../Qt5.10.1/5.10.1/gcc_64/include/QtWidgets/QLabel \
+		../../../../Qt5.10.1/5.10.1/gcc_64/include/QtWidgets/qlabel.h \
+		../../../../Qt5.10.1/5.10.1/gcc_64/include/QtWidgets/qtwidgetsglobal.h \
+		../../../../Qt5.10.1/5.10.1/gcc_64/include/QtGui/qtguiglobal.h \
+		../../../../Qt5.10.1/5.10.1/gcc_64/include/QtCore/qglobal.h \
+		../../../../Qt5.10.1/5.10.1/gcc_64/include/QtCore/qconfig-bootstrapped.h \
+		../../../../Qt5.10.1/5.10.1/gcc_64/include/QtCore/qconfig.h \
+		../../../../Qt5.10.1/5.10.1/gcc_64/include/QtCore/qtcore-config.h \
+		../../../../Qt5.10.1/5.10.1/gcc_64/include/QtCore/qsystemdetection.h \
+		../../../../Qt5.10.1/5.10.1/gcc_64/include/QtCore/qprocessordetection.h \
+		../../../../Qt5.10.1/5.10.1/gcc_64/include/QtCore/qcompilerdetection.h \
+		../../../../Qt5.10.1/5.10.1/gcc_64/include/QtCore/qtypeinfo.h \
+		../../../../Qt5.10.1/5.10.1/gcc_64/include/QtCore/qsysinfo.h \
+		../../../../Qt5.10.1/5.10.1/gcc_64/include/QtCore/qlogging.h \
+		../../../../Qt5.10.1/5.10.1/gcc_64/include/QtCore/qflags.h \
+		../../../../Qt5.10.1/5.10.1/gcc_64/include/QtCore/qatomic.h \
+		../../../../Qt5.10.1/5.10.1/gcc_64/include/QtCore/qbasicatomic.h \
+		../../../../Qt5.10.1/5.10.1/gcc_64/include/QtCore/qatomic_bootstrap.h \
+		../../../../Qt5.10.1/5.10.1/gcc_64/include/QtCore/qgenericatomic.h \
+		../../../../Qt5.10.1/5.10.1/gcc_64/include/QtCore/qatomic_cxx11.h \
+		../../../../Qt5.10.1/5.10.1/gcc_64/include/QtCore/qatomic_msvc.h \
+		../../../../Qt5.10.1/5.10.1/gcc_64/include/QtCore/qglobalstatic.h \
+		../../../../Qt5.10.1/5.10.1/gcc_64/include/QtCore/qmutex.h \
+		../../../../Qt5.10.1/5.10.1/gcc_64/include/QtCore/qnumeric.h \
+		../../../../Qt5.10.1/5.10.1/gcc_64/include/QtCore/qversiontagging.h \
+		../../../../Qt5.10.1/5.10.1/gcc_64/include/QtGui/qtgui-config.h \
+		../../../../Qt5.10.1/5.10.1/gcc_64/include/QtWidgets/qtwidgets-config.h \
+		../../../../Qt5.10.1/5.10.1/gcc_64/include/QtWidgets/qframe.h \
+		../../../../Qt5.10.1/5.10.1/gcc_64/include/QtWidgets/qwidget.h \
+		../../../../Qt5.10.1/5.10.1/gcc_64/include/QtGui/qwindowdefs.h \
+		../../../../Qt5.10.1/5.10.1/gcc_64/include/QtCore/qobjectdefs.h \
+		../../../../Qt5.10.1/5.10.1/gcc_64/include/QtCore/qnamespace.h \
+		../../../../Qt5.10.1/5.10.1/gcc_64/include/QtCore/qobjectdefs_impl.h \
+		../../../../Qt5.10.1/5.10.1/gcc_64/include/QtGui/qwindowdefs_win.h \
+		../../../../Qt5.10.1/5.10.1/gcc_64/include/QtCore/qobject.h \
+		../../../../Qt5.10.1/5.10.1/gcc_64/include/QtCore/qstring.h \
+		../../../../Qt5.10.1/5.10.1/gcc_64/include/QtCore/qchar.h \
+		../../../../Qt5.10.1/5.10.1/gcc_64/include/QtCore/qbytearray.h \
+		../../../../Qt5.10.1/5.10.1/gcc_64/include/QtCore/qrefcount.h \
+		../../../../Qt5.10.1/5.10.1/gcc_64/include/QtCore/qarraydata.h \
+		../../../../Qt5.10.1/5.10.1/gcc_64/include/QtCore/qstringliteral.h \
+		../../../../Qt5.10.1/5.10.1/gcc_64/include/QtCore/qstringalgorithms.h \
+		../../../../Qt5.10.1/5.10.1/gcc_64/include/QtCore/qstringview.h \
+		../../../../Qt5.10.1/5.10.1/gcc_64/include/QtCore/qstringbuilder.h \
+		../../../../Qt5.10.1/5.10.1/gcc_64/include/QtCore/qlist.h \
+		../../../../Qt5.10.1/5.10.1/gcc_64/include/QtCore/qalgorithms.h \
+		../../../../Qt5.10.1/5.10.1/gcc_64/include/QtCore/qiterator.h \
+		../../../../Qt5.10.1/5.10.1/gcc_64/include/QtCore/qhashfunctions.h \
+		../../../../Qt5.10.1/5.10.1/gcc_64/include/QtCore/qpair.h \
+		../../../../Qt5.10.1/5.10.1/gcc_64/include/QtCore/qbytearraylist.h \
+		../../../../Qt5.10.1/5.10.1/gcc_64/include/QtCore/qstringlist.h \
+		../../../../Qt5.10.1/5.10.1/gcc_64/include/QtCore/qregexp.h \
+		../../../../Qt5.10.1/5.10.1/gcc_64/include/QtCore/qstringmatcher.h \
+		../../../../Qt5.10.1/5.10.1/gcc_64/include/QtCore/qcoreevent.h \
+		../../../../Qt5.10.1/5.10.1/gcc_64/include/QtCore/qscopedpointer.h \
+		../../../../Qt5.10.1/5.10.1/gcc_64/include/QtCore/qmetatype.h \
+		../../../../Qt5.10.1/5.10.1/gcc_64/include/QtCore/qvarlengtharray.h \
+		../../../../Qt5.10.1/5.10.1/gcc_64/include/QtCore/qcontainerfwd.h \
+		../../../../Qt5.10.1/5.10.1/gcc_64/include/QtCore/qobject_impl.h \
+		../../../../Qt5.10.1/5.10.1/gcc_64/include/QtCore/qmargins.h \
+		../../../../Qt5.10.1/5.10.1/gcc_64/include/QtGui/qpaintdevice.h \
+		../../../../Qt5.10.1/5.10.1/gcc_64/include/QtCore/qrect.h \
+		../../../../Qt5.10.1/5.10.1/gcc_64/include/QtCore/qsize.h \
+		../../../../Qt5.10.1/5.10.1/gcc_64/include/QtCore/qpoint.h \
+		../../../../Qt5.10.1/5.10.1/gcc_64/include/QtGui/qpalette.h \
+		../../../../Qt5.10.1/5.10.1/gcc_64/include/QtGui/qcolor.h \
+		../../../../Qt5.10.1/5.10.1/gcc_64/include/QtGui/qrgb.h \
+		../../../../Qt5.10.1/5.10.1/gcc_64/include/QtGui/qrgba64.h \
+		../../../../Qt5.10.1/5.10.1/gcc_64/include/QtGui/qbrush.h \
+		../../../../Qt5.10.1/5.10.1/gcc_64/include/QtCore/qvector.h \
+		../../../../Qt5.10.1/5.10.1/gcc_64/include/QtGui/qmatrix.h \
+		../../../../Qt5.10.1/5.10.1/gcc_64/include/QtGui/qpolygon.h \
+		../../../../Qt5.10.1/5.10.1/gcc_64/include/QtGui/qregion.h \
+		../../../../Qt5.10.1/5.10.1/gcc_64/include/QtCore/qdatastream.h \
+		../../../../Qt5.10.1/5.10.1/gcc_64/include/QtCore/qiodevice.h \
+		../../../../Qt5.10.1/5.10.1/gcc_64/include/QtCore/qline.h \
+		../../../../Qt5.10.1/5.10.1/gcc_64/include/QtGui/qtransform.h \
+		../../../../Qt5.10.1/5.10.1/gcc_64/include/QtGui/qpainterpath.h \
+		../../../../Qt5.10.1/5.10.1/gcc_64/include/QtGui/qimage.h \
+		../../../../Qt5.10.1/5.10.1/gcc_64/include/QtGui/qpixelformat.h \
+		../../../../Qt5.10.1/5.10.1/gcc_64/include/QtGui/qpixmap.h \
+		../../../../Qt5.10.1/5.10.1/gcc_64/include/QtCore/qsharedpointer.h \
+		../../../../Qt5.10.1/5.10.1/gcc_64/include/QtCore/qshareddata.h \
+		../../../../Qt5.10.1/5.10.1/gcc_64/include/QtCore/qhash.h \
+		../../../../Qt5.10.1/5.10.1/gcc_64/include/QtCore/qsharedpointer_impl.h \
+		../../../../Qt5.10.1/5.10.1/gcc_64/include/QtGui/qfont.h \
+		../../../../Qt5.10.1/5.10.1/gcc_64/include/QtGui/qfontmetrics.h \
+		../../../../Qt5.10.1/5.10.1/gcc_64/include/QtGui/qfontinfo.h \
+		../../../../Qt5.10.1/5.10.1/gcc_64/include/QtWidgets/qsizepolicy.h \
+		../../../../Qt5.10.1/5.10.1/gcc_64/include/QtGui/qcursor.h \
+		../../../../Qt5.10.1/5.10.1/gcc_64/include/QtGui/qkeysequence.h \
+		../../../../Qt5.10.1/5.10.1/gcc_64/include/QtGui/qevent.h \
+		../../../../Qt5.10.1/5.10.1/gcc_64/include/QtCore/qvariant.h \
+		../../../../Qt5.10.1/5.10.1/gcc_64/include/QtCore/qmap.h \
+		../../../../Qt5.10.1/5.10.1/gcc_64/include/QtCore/qdebug.h \
+		../../../../Qt5.10.1/5.10.1/gcc_64/include/QtCore/qtextstream.h \
+		../../../../Qt5.10.1/5.10.1/gcc_64/include/QtCore/qlocale.h \
+		../../../../Qt5.10.1/5.10.1/gcc_64/include/QtCore/qset.h \
+		../../../../Qt5.10.1/5.10.1/gcc_64/include/QtCore/qcontiguouscache.h \
+		../../../../Qt5.10.1/5.10.1/gcc_64/include/QtCore/qurl.h \
+		../../../../Qt5.10.1/5.10.1/gcc_64/include/QtCore/qurlquery.h \
+		../../../../Qt5.10.1/5.10.1/gcc_64/include/QtCore/qfile.h \
+		../../../../Qt5.10.1/5.10.1/gcc_64/include/QtCore/qfiledevice.h \
+		../../../../Qt5.10.1/5.10.1/gcc_64/include/QtGui/qvector2d.h \
+		../../../../Qt5.10.1/5.10.1/gcc_64/include/QtGui/qtouchdevice.h \
+		../../../../Qt5.10.1/5.10.1/gcc_64/include/QtCore/QObject \
+		../../../../Qt5.10.1/5.10.1/gcc_64/include/QtGui/QMouseEvent \
+		../../../../Qt5.10.1/5.10.1/gcc_64/include/QtCore/QMetaType
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o maplabel.o ../Map2d/maplabel.cpp
+
 moc_mainwindow.o: moc_mainwindow.cpp 
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o moc_mainwindow.o moc_mainwindow.cpp
 
 moc_mapmanager.o: moc_mapmanager.cpp 
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o moc_mapmanager.o moc_mapmanager.cpp
+
+moc_maplabel.o: moc_maplabel.cpp 
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o moc_maplabel.o moc_maplabel.cpp
 
 ####### Install
 

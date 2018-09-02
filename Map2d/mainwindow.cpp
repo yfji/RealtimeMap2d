@@ -12,8 +12,10 @@ MainWindow::MainWindow(QWidget *parent) :
     _mapManager.reset(new MapManager());
     map_callback callback=std::bind(&MainWindow::drawImages,this,std::placeholders::_1,std::placeholders::_2);
     _mapManager->callbackFunction=callback;
+    _mapLabel=ui->label_map;
     QObject::connect(_mapManager.get(), SIGNAL(publishFrames(cv::Mat&,cv::Mat&)), SLOT(onUpdateFrames(cv::Mat&,cv::Mat&)));
     QObject::connect(_mapManager.get(), SIGNAL(publishStates(std::string&)), SLOT(onUpdateStates(std::string&)));
+    QObject::connect(_mapLabel, SIGNAL(publishClickedPoint(cv::Point2f&)), SLOT(onUpdateClickedPoint(cv::Point2f&)));
 }
 
 MainWindow::~MainWindow()
@@ -141,11 +143,12 @@ void MainWindow::drawImages(cv::Mat& map, cv::Mat& curFrame){
         cv::resize(curFrame, curFrame, cv::Size(0,0), ratio, ratio, cv::INTER_LINEAR);
         ratio=MIN(map_h*1.0/map.rows, map_w*1.0/map.cols);
         cv::resize(map, map, cv::Size(0,0), ratio, ratio, cv::INTER_LINEAR);
-        cv::Mat canvas=cv::Mat::zeros(map_h, map_w, CV_8UC3);
-        int start_y=MAX(0,std::floor((map_h-map.rows)/2));
-        int start_x=MAX(0,std::floor((map_w-map.cols)/2));
-        cv::Mat img_part=map(cv::Rect(0,0,MIN(map.cols, map_w), MIN(map.rows, map_h)));
-        img_part.copyTo(canvas(cv::Rect(start_x, start_y, MIN(map.cols, map_w), MIN(map.rows, map_h))));
+        _mapScale=ratio;
+        //cv::Mat canvas=cv::Mat::zeros(map_h, map_w, CV_8UC3);
+        //int start_y=MAX(0,std::floor((map_h-map.rows)/2));
+        //int start_x=MAX(0,std::floor((map_w-map.cols)/2));
+        //cv::Mat img_part=map(cv::Rect(0,0,MIN(map.cols, map_w), MIN(map.rows, map_h)));
+        //img_part.copyTo(canvas(cv::Rect(start_x, start_y, MIN(map.cols, map_w), MIN(map.rows, map_h))));
 
         //cv::cvtColor(canvas, canvas, cv::COLOR_BGR2RGB);
         cv::Mat tmp1, tmp2;
@@ -161,6 +164,7 @@ void MainWindow::drawImages(cv::Mat& map, cv::Mat& curFrame){
     }
     else if(_mapManager->getCurState()==PREVIEW){
         float ratio=MIN(map_h*1.0/curFrame.rows, map_w*1.0/curFrame.cols);
+        _mapScale=ratio;
         cv::resize(curFrame, curFrame, cv::Size(0,0), ratio, ratio, cv::INTER_LINEAR);
         cv::cvtColor(curFrame, curFrame, cv::COLOR_BGR2RGB);
         QImage q_frame=QImage((const unsigned char*)(curFrame.data), curFrame.cols, curFrame.rows, curFrame.cols*curFrame.channels(), QImage::Format_RGB888);
@@ -240,5 +244,14 @@ void MainWindow::onUpdateStates(std::string & s){
     if (scrollbar)
     {
         scrollbar->setSliderPosition(scrollbar->maximum());
+    }
+}
+void MainWindow::onUpdateClickedPoint(cv::Point2f & point){
+    if(_mapManager->getCurState()==BUILD){
+        point.x/=_mapScale;
+        point.y/=_mapScale;
+        _mapManager->updateClickedPoint(point);
+        std::string str="Update match center manually";
+        onUpdateStates(str);
     }
 }

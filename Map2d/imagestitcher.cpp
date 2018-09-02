@@ -8,7 +8,7 @@ ImageStitcher::ImageStitcher(int w, int h)
     height = h;
     ptrFeature.reset(new OrbFeature());
     ptrFeature->setAlignHeight(height);
-    ptrFeature->setMatchNumber(1600);
+    ptrFeature->setMatchNumber(1200);
 
     dist_max=sqrt(pad_x*pad_x+pad_y*pad_y);
 
@@ -30,6 +30,14 @@ ImageStitcher::~ImageStitcher()
 {
 }
 
+void ImageStitcher::updateManual(cv::Point2f &point){
+    match_center.x=point.x;
+    match_center.y=point.y;
+    speed_x=0;
+    speed_y=0;
+    box_area=cv::Rect(0,0,0,0);
+    offset=cv::Point2i(0,0);
+}
 cv::Mat ImageStitcher::getPatch() {
     if (firstImg) {
         firstImg = 0;
@@ -114,14 +122,14 @@ void ImageStitcher::optimize(cv::Mat& patch, cv::Mat& ref, cv::Mat& trans) {
     int W=end_x-start_x+1;
     int H=end_y-start_y+1;
 
-    int pad=0;
+    int pad=5;
     //float _alpha=0.6;
     float _alpha=_alpha_optim;
-    for(int i=start_y-pad;i<end_y+pad;++i){
+    for(int i=MAX(0,start_y-pad);i<MIN(pad_y+height,end_y+pad);++i){
         uchar* patch_data=patch.ptr(i);
         uchar* ref_data=ref.ptr(i);
         uchar* trans_data=trans.ptr(i);
-        for(int j=start_x-pad;j<end_x+pad;++j){
+        for(int j=MAX(0,start_x-pad);j<MIN(pad_x+width,end_x+pad);++j){
             int ind=j*3;
             float alpha=0.;
             if(ref_data[ind]<=pix_thresh && ref_data[ind+1]<=pix_thresh && ref_data[ind+2]<=pix_thresh){
@@ -193,7 +201,7 @@ void ImageStitcher::applyOffset(){
         else{
             //std::cout<<"Repaint old land!"<<std::endl;
             state="Repainting...";
-            _alpha=0.95;
+            _alpha=0.99;
         }
         max_roi_offset.x=MAX(max_roi_offset.x, roi_offset_x);
         max_roi_offset.y=MAX(max_roi_offset.y, roi_offset_y);

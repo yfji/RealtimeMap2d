@@ -27,6 +27,7 @@
 #include <QtWidgets/QTextEdit>
 #include <QtWidgets/QToolBar>
 #include <QtWidgets/QWidget>
+#include "maplabel.h"
 
 QT_BEGIN_NAMESPACE
 
@@ -35,7 +36,7 @@ class Ui_MainWindow
 public:
     QWidget *centralWidget;
     QGroupBox *groupBox;
-    QLabel *label_map;
+    MapLabel *label_map;
     QGroupBox *groupBox_2;
     QPushButton *btn_open_cam;
     QPushButton *btn_open_video;
@@ -85,9 +86,10 @@ public:
         groupBox = new QGroupBox(centralWidget);
         groupBox->setObjectName(QStringLiteral("groupBox"));
         groupBox->setGeometry(QRect(10, 0, 751, 781));
-        label_map = new QLabel(groupBox);
+        label_map = new MapLabel(groupBox);
         label_map->setObjectName(QStringLiteral("label_map"));
         label_map->setGeometry(QRect(10, 30, 731, 741));
+        label_map->setAlignment(Qt::AlignLeading|Qt::AlignLeft|Qt::AlignTop);
         groupBox_2 = new QGroupBox(centralWidget);
         groupBox_2->setObjectName(QStringLiteral("groupBox_2"));
         groupBox_2->setGeometry(QRect(790, 0, 511, 131));

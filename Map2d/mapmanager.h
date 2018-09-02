@@ -58,6 +58,9 @@ public:
     inline void updatePeriod(float p){
         period=p;
     }
+    inline void updateClickedPoint(cv::Point2f& point){
+        _stitcher->updateManual(point);
+    }
     inline bool isFinished(){
         //if(!_input->isFrameFinite())
         //    return false;
@@ -94,8 +97,8 @@ private:
     float period = {1};
     float micro_seconds;
 
-    const int frame_h= {360};
-    const int frame_w= {640};
+    const int frame_h= {540};
+    const int frame_w= {960};
 
     std::thread _thread;
 

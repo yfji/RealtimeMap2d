@@ -34,6 +34,8 @@ public:
     inline void updateAlphaOptim(float _a){
         _alpha_optim=_a;
     }
+    void updateManual(cv::Point2f& point);
+
     bool showORB= {false};
     void reset();
 
@@ -43,7 +45,7 @@ private:
     int height;
     const int pad_x={400};
     const int pad_y={400};
-    const int pix_thresh=50;//80
+    const int pix_thresh=70;//80
     const int MIN_MATCH_SIZE = {10};
 
     float speed_x={0.};
