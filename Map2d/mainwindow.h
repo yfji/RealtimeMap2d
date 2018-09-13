@@ -53,6 +53,8 @@ private slots:
 
     void on_btn_open_ipcam_clicked();
 
+    void on_slide_ignore_actionTriggered(int action);
+
 private:
     Ui::MainWindow *ui;
     bool _requestStop = {false};

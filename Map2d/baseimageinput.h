@@ -3,6 +3,7 @@
 
 #include <opencv2/opencv.hpp>
 #include <iostream>
+#include "cameracalibration.h"
 
 class BaseImageInput
 {
@@ -32,9 +33,12 @@ protected:
     int curFrameIndex ={0};
     bool isFinite;
     bool opened;
+    bool calib = {false};
 
     int digitSource;
     std::string strSource;
+
+    CameraCalibration cam;
 };
 
 #endif // BASEIMAGEINPUT_H

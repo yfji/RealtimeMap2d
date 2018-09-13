@@ -61,7 +61,8 @@ SOURCES       = ../Map2d/main.cpp \
 		../Map2d/cameraimageinput.cpp \
 		../Map2d/filelistimageinput.cpp \
 		../Map2d/ipcamimageinput.cpp \
-		../Map2d/maplabel.cpp moc_mainwindow.cpp \
+		../Map2d/maplabel.cpp \
+		../Map2d/cameracalibration.cpp moc_mainwindow.cpp \
 		moc_mapmanager.cpp \
 		moc_maplabel.cpp
 OBJECTS       = main.o \
@@ -76,6 +77,7 @@ OBJECTS       = main.o \
 		filelistimageinput.o \
 		ipcamimageinput.o \
 		maplabel.o \
+		cameracalibration.o \
 		moc_mainwindow.o \
 		moc_mapmanager.o \
 		moc_maplabel.o
@@ -271,7 +273,8 @@ DIST          = ../../../../Qt5.10.1/5.10.1/gcc_64/mkspecs/features/spec_pre.prf
 		../Map2d/cameraimageinput.h \
 		../Map2d/filelistimageinput.h \
 		../Map2d/ipcamimageinput.h \
-		../Map2d/maplabel.h ../Map2d/main.cpp \
+		../Map2d/maplabel.h \
+		../Map2d/cameracalibration.h ../Map2d/main.cpp \
 		../Map2d/mainwindow.cpp \
 		../Map2d/imagestitcher.cpp \
 		../Map2d/feature.cpp \
@@ -282,7 +285,8 @@ DIST          = ../../../../Qt5.10.1/5.10.1/gcc_64/mkspecs/features/spec_pre.prf
 		../Map2d/cameraimageinput.cpp \
 		../Map2d/filelistimageinput.cpp \
 		../Map2d/ipcamimageinput.cpp \
-		../Map2d/maplabel.cpp
+		../Map2d/maplabel.cpp \
+		../Map2d/cameracalibration.cpp
 QMAKE_TARGET  = Map2d
 DESTDIR       = 
 TARGET        = Map2d
@@ -678,8 +682,8 @@ distdir: FORCE
 	@test -d $(DISTDIR) || mkdir -p $(DISTDIR)
 	$(COPY_FILE) --parents $(DIST) $(DISTDIR)/
 	$(COPY_FILE) --parents ../../../../Qt5.10.1/5.10.1/gcc_64/mkspecs/features/data/dummy.cpp $(DISTDIR)/
-	$(COPY_FILE) --parents ../Map2d/mainwindow.h ../Map2d/imagestitcher.h ../Map2d/feature.h ../Map2d/orb_feature.h ../Map2d/gms_matcher.h ../Map2d/Header.h ../Map2d/mapmanager.h ../Map2d/baseimageinput.h ../Map2d/videoimageinput.h ../Map2d/cameraimageinput.h ../Map2d/filelistimageinput.h ../Map2d/ipcamimageinput.h ../Map2d/maplabel.h $(DISTDIR)/
-	$(COPY_FILE) --parents ../Map2d/main.cpp ../Map2d/mainwindow.cpp ../Map2d/imagestitcher.cpp ../Map2d/feature.cpp ../Map2d/orb_feature.cpp ../Map2d/mapmanager.cpp ../Map2d/baseimageinput.cpp ../Map2d/videoimageinput.cpp ../Map2d/cameraimageinput.cpp ../Map2d/filelistimageinput.cpp ../Map2d/ipcamimageinput.cpp ../Map2d/maplabel.cpp $(DISTDIR)/
+	$(COPY_FILE) --parents ../Map2d/mainwindow.h ../Map2d/imagestitcher.h ../Map2d/feature.h ../Map2d/orb_feature.h ../Map2d/gms_matcher.h ../Map2d/Header.h ../Map2d/mapmanager.h ../Map2d/baseimageinput.h ../Map2d/videoimageinput.h ../Map2d/cameraimageinput.h ../Map2d/filelistimageinput.h ../Map2d/ipcamimageinput.h ../Map2d/maplabel.h ../Map2d/cameracalibration.h $(DISTDIR)/
+	$(COPY_FILE) --parents ../Map2d/main.cpp ../Map2d/mainwindow.cpp ../Map2d/imagestitcher.cpp ../Map2d/feature.cpp ../Map2d/orb_feature.cpp ../Map2d/mapmanager.cpp ../Map2d/baseimageinput.cpp ../Map2d/videoimageinput.cpp ../Map2d/cameraimageinput.cpp ../Map2d/filelistimageinput.cpp ../Map2d/ipcamimageinput.cpp ../Map2d/maplabel.cpp ../Map2d/cameracalibration.cpp $(DISTDIR)/
 	$(COPY_FILE) --parents ../Map2d/mainwindow.ui $(DISTDIR)/
 
 
@@ -832,6 +836,7 @@ moc_mainwindow.cpp: ../../../../Qt5.10.1/5.10.1/gcc_64/include/QtWidgets/QMainWi
 		../Map2d/baseimageinput.h \
 		../Map2d/videoimageinput.h \
 		../Map2d/cameraimageinput.h \
+		../Map2d/cameracalibration.h \
 		../Map2d/filelistimageinput.h \
 		../Map2d/ipcamimageinput.h \
 		../Map2d/maplabel.h \
@@ -903,6 +908,7 @@ moc_mapmanager.cpp: ../../../../Qt5.10.1/5.10.1/gcc_64/include/QtCore/QObject \
 		../Map2d/baseimageinput.h \
 		../Map2d/videoimageinput.h \
 		../Map2d/cameraimageinput.h \
+		../Map2d/cameracalibration.h \
 		../Map2d/filelistimageinput.h \
 		../Map2d/ipcamimageinput.h \
 		../Map2d/mapmanager.h \
@@ -1269,6 +1275,7 @@ main.o: ../Map2d/main.cpp ../Map2d/mainwindow.h \
 		../Map2d/baseimageinput.h \
 		../Map2d/videoimageinput.h \
 		../Map2d/cameraimageinput.h \
+		../Map2d/cameracalibration.h \
 		../Map2d/filelistimageinput.h \
 		../Map2d/ipcamimageinput.h \
 		../Map2d/maplabel.h \
@@ -1403,6 +1410,7 @@ mainwindow.o: ../Map2d/mainwindow.cpp ../Map2d/mainwindow.h \
 		../Map2d/baseimageinput.h \
 		../Map2d/videoimageinput.h \
 		../Map2d/cameraimageinput.h \
+		../Map2d/cameracalibration.h \
 		../Map2d/filelistimageinput.h \
 		../Map2d/ipcamimageinput.h \
 		../Map2d/maplabel.h \
@@ -1424,9 +1432,6 @@ mainwindow.o: ../Map2d/mainwindow.cpp ../Map2d/mainwindow.h \
 		../../../../Qt5.10.1/5.10.1/gcc_64/include/QtGui/qinputmethod.h \
 		../../../../Qt5.10.1/5.10.1/gcc_64/include/QtWidgets/QButtonGroup \
 		../../../../Qt5.10.1/5.10.1/gcc_64/include/QtWidgets/qbuttongroup.h \
-		../../../../Qt5.10.1/5.10.1/gcc_64/include/QtWidgets/QCheckBox \
-		../../../../Qt5.10.1/5.10.1/gcc_64/include/QtWidgets/qcheckbox.h \
-		../../../../Qt5.10.1/5.10.1/gcc_64/include/QtWidgets/qabstractbutton.h \
 		../../../../Qt5.10.1/5.10.1/gcc_64/include/QtWidgets/QComboBox \
 		../../../../Qt5.10.1/5.10.1/gcc_64/include/QtWidgets/qcombobox.h \
 		../../../../Qt5.10.1/5.10.1/gcc_64/include/QtWidgets/qabstractitemdelegate.h \
@@ -1458,6 +1463,7 @@ mainwindow.o: ../Map2d/mainwindow.cpp ../Map2d/mainwindow.h \
 		../../../../Qt5.10.1/5.10.1/gcc_64/include/QtWidgets/qmenu.h \
 		../../../../Qt5.10.1/5.10.1/gcc_64/include/QtWidgets/QPushButton \
 		../../../../Qt5.10.1/5.10.1/gcc_64/include/QtWidgets/qpushbutton.h \
+		../../../../Qt5.10.1/5.10.1/gcc_64/include/QtWidgets/qabstractbutton.h \
 		../../../../Qt5.10.1/5.10.1/gcc_64/include/QtWidgets/QSlider \
 		../../../../Qt5.10.1/5.10.1/gcc_64/include/QtWidgets/QStatusBar \
 		../../../../Qt5.10.1/5.10.1/gcc_64/include/QtWidgets/qstatusbar.h \
@@ -1553,6 +1559,7 @@ mapmanager.o: ../Map2d/mapmanager.cpp ../Map2d/mapmanager.h \
 		../Map2d/baseimageinput.h \
 		../Map2d/videoimageinput.h \
 		../Map2d/cameraimageinput.h \
+		../Map2d/cameracalibration.h \
 		../Map2d/filelistimageinput.h \
 		../Map2d/ipcamimageinput.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o mapmanager.o ../Map2d/mapmanager.cpp
@@ -1565,7 +1572,8 @@ videoimageinput.o: ../Map2d/videoimageinput.cpp ../Map2d/videoimageinput.h \
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o videoimageinput.o ../Map2d/videoimageinput.cpp
 
 cameraimageinput.o: ../Map2d/cameraimageinput.cpp ../Map2d/cameraimageinput.h \
-		../Map2d/baseimageinput.h
+		../Map2d/baseimageinput.h \
+		../Map2d/cameracalibration.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o cameraimageinput.o ../Map2d/cameraimageinput.cpp
 
 filelistimageinput.o: ../Map2d/filelistimageinput.cpp ../Map2d/filelistimageinput.h \
@@ -1686,6 +1694,9 @@ maplabel.o: ../Map2d/maplabel.cpp ../Map2d/maplabel.h \
 		../../../../Qt5.10.1/5.10.1/gcc_64/include/QtGui/QMouseEvent \
 		../../../../Qt5.10.1/5.10.1/gcc_64/include/QtCore/QMetaType
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o maplabel.o ../Map2d/maplabel.cpp
+
+cameracalibration.o: ../Map2d/cameracalibration.cpp ../Map2d/cameracalibration.h
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o cameracalibration.o ../Map2d/cameracalibration.cpp
 
 moc_mainwindow.o: moc_mainwindow.cpp 
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o moc_mainwindow.o moc_mainwindow.cpp

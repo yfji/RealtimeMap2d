@@ -255,3 +255,11 @@ void MainWindow::onUpdateClickedPoint(cv::Point2f & point){
         onUpdateStates(str);
     }
 }
+
+void MainWindow::on_slide_ignore_actionTriggered(int action)
+{
+    float max_value=ui->slide_ignore->maximum();
+    float value=1.0*ui->slide_ignore->value()/max_value;
+    ui->txt_ignore->setText(QString::number(value));
+    _mapManager->updateIgnoreThreshold(value);
+}

@@ -13,7 +13,6 @@
 #include <QtWidgets/QAction>
 #include <QtWidgets/QApplication>
 #include <QtWidgets/QButtonGroup>
-#include <QtWidgets/QCheckBox>
 #include <QtWidgets/QComboBox>
 #include <QtWidgets/QGroupBox>
 #include <QtWidgets/QHeaderView>
@@ -65,11 +64,13 @@ public:
     QLabel *label_5;
     QLabel *label_6;
     QPushButton *btn_preview;
-    QCheckBox *check_orb;
     QTextEdit *txt_console;
     QLineEdit *txt_long;
     QLineEdit *txt_lat;
     QLineEdit *txt_alt;
+    QLabel *label_8;
+    QSlider *slide_ignore;
+    QLabel *txt_ignore;
     QGroupBox *groupBox_4;
     QLabel *label_frame;
     QMenuBar *menuBar;
@@ -189,9 +190,6 @@ public:
         btn_preview = new QPushButton(groupBox_3);
         btn_preview->setObjectName(QStringLiteral("btn_preview"));
         btn_preview->setGeometry(QRect(20, 30, 141, 41));
-        check_orb = new QCheckBox(groupBox_3);
-        check_orb->setObjectName(QStringLiteral("check_orb"));
-        check_orb->setGeometry(QRect(20, 280, 92, 23));
         txt_console = new QTextEdit(groupBox_3);
         txt_console->setObjectName(QStringLiteral("txt_console"));
         txt_console->setGeometry(QRect(330, 80, 171, 221));
@@ -217,6 +215,17 @@ public:
         txt_alt->setFont(font);
         txt_alt->setAlignment(Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter);
         txt_alt->setReadOnly(true);
+        label_8 = new QLabel(groupBox_3);
+        label_8->setObjectName(QStringLiteral("label_8"));
+        label_8->setGeometry(QRect(20, 270, 67, 17));
+        slide_ignore = new QSlider(groupBox_3);
+        slide_ignore->setObjectName(QStringLiteral("slide_ignore"));
+        slide_ignore->setGeometry(QRect(80, 270, 191, 16));
+        slide_ignore->setValue(33);
+        slide_ignore->setOrientation(Qt::Horizontal);
+        txt_ignore = new QLabel(groupBox_3);
+        txt_ignore->setObjectName(QStringLiteral("txt_ignore"));
+        txt_ignore->setGeometry(QRect(280, 270, 41, 16));
         groupBox_4 = new QGroupBox(centralWidget);
         groupBox_4->setObjectName(QStringLiteral("groupBox_4"));
         groupBox_4->setGeometry(QRect(790, 460, 511, 321));
@@ -279,10 +288,11 @@ public:
         label_5->setText(QApplication::translate("MainWindow", "offset", nullptr));
         label_6->setText(QApplication::translate("MainWindow", "optimize", nullptr));
         btn_preview->setText(QApplication::translate("MainWindow", "Start Preview", nullptr));
-        check_orb->setText(QApplication::translate("MainWindow", "Show ORB", nullptr));
         txt_long->setText(QApplication::translate("MainWindow", "0", nullptr));
         txt_lat->setText(QApplication::translate("MainWindow", "0", nullptr));
         txt_alt->setText(QApplication::translate("MainWindow", "0", nullptr));
+        label_8->setText(QApplication::translate("MainWindow", "ignore", nullptr));
+        txt_ignore->setText(QString());
         groupBox_4->setTitle(QApplication::translate("MainWindow", "Current Frame", nullptr));
         label_frame->setText(QString());
     } // retranslateUi

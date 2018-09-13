@@ -34,6 +34,9 @@ public:
     inline void updateAlphaOptim(float _a){
         _alpha_optim=_a;
     }
+    inline void updateIgnoreThresh(float v){
+        _ignore_thresh=v;
+    }
     void updateManual(cv::Point2f& point);
 
     bool showORB= {false};
@@ -53,6 +56,7 @@ private:
 
     float _alpha_offset = {0.3};
     float _alpha_optim = {0.6};
+    float _ignore_thresh = {0.33};
 
     float dist_max=0.0;
 

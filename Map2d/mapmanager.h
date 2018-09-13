@@ -75,6 +75,9 @@ public:
             _stitcher->updateAlphaOptim(_a);
         }
     }
+    inline void updateIgnoreThreshold(float thresh){
+        _stitcher->updateIgnoreThresh(thresh);
+    }
     State getCurState(){
         return curState;
     }
@@ -97,8 +100,8 @@ private:
     float period = {1};
     float micro_seconds;
 
-    const int frame_h= {540};
-    const int frame_w= {960};
+    const int frame_h= {480};
+    const int frame_w= {640};
 
     std::thread _thread;
 

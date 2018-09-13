@@ -66,7 +66,7 @@ void ImageStitcher::checkIfStitchable(){
         corner_dist+=dist;
     }
     float eps=corner_dist/(4*dist_max);
-    if(eps>0.25){
+    if(eps>_ignore_thresh){
         ignore=1;
     }
 }
@@ -201,7 +201,7 @@ void ImageStitcher::applyOffset(){
         else{
             //std::cout<<"Repaint old land!"<<std::endl;
             state="Repainting...";
-            _alpha=0.99;
+            _alpha=0.96;
         }
         max_roi_offset.x=MAX(max_roi_offset.x, roi_offset_x);
         max_roi_offset.y=MAX(max_roi_offset.y, roi_offset_y);
