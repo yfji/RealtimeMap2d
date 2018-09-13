@@ -100,7 +100,7 @@ private:
     float period = {1};
     float micro_seconds;
 
-    const int frame_h= {480};
+    const int frame_h= {360};
     const int frame_w= {640};
 
     std::thread _thread;

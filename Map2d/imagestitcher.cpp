@@ -37,6 +37,7 @@ void ImageStitcher::updateManual(cv::Point2f &point){
     speed_y=0;
     box_area=cv::Rect(0,0,0,0);
     offset=cv::Point2i(0,0);
+    manualUpdate=1;
 }
 cv::Mat ImageStitcher::getPatch() {
     if (firstImg) {
@@ -105,8 +106,8 @@ void ImageStitcher::calcWarpCorners(cv::Mat& warpMatrix) {
     }
     box_area.x=MIN(pad_x, min_x);
     box_area.y=MIN(pad_y, min_y);
-    box_area.width=MAX(pad_x+width,max_x+1)-box_area.x;
-    box_area.height=MAX(pad_y+height,max_y+1)-box_area.y;
+    box_area.width=MAX(pad_x+width,max_x)-box_area.x;
+    box_area.height=MAX(pad_y+height,max_y)-box_area.y;
 }
 
 void ImageStitcher::optimize(cv::Mat& patch, cv::Mat& ref, cv::Mat& trans) {
@@ -122,7 +123,7 @@ void ImageStitcher::optimize(cv::Mat& patch, cv::Mat& ref, cv::Mat& trans) {
     int W=end_x-start_x+1;
     int H=end_y-start_y+1;
 
-    int pad=5;
+    int pad=0;
     //float _alpha=0.6;
     float _alpha=_alpha_optim;
     for(int i=MAX(0,start_y-pad);i<MIN(pad_y+height,end_y+pad);++i){
@@ -152,8 +153,8 @@ void ImageStitcher::optimize(cv::Mat& patch, cv::Mat& ref, cv::Mat& trans) {
 }
 
 void ImageStitcher::applyOffset(){
+    std::cout<<box_area.x<<' '<<box_area.y<<' '<<box_area.width<<' '<<box_area.height<<std::endl;
     cv::Mat roi=stitchImage(box_area);
-
     //cv::imshow("roi", roi);
     if(map2d.empty()){
         map2d=roi.clone();
@@ -258,6 +259,7 @@ void ImageStitcher::stitch(cv::Mat& img) {
     img.copyTo(canvas_img(cv::Rect(pad_x, pad_y, img.cols, img.rows)));
     patch.copyTo(canvas_patch(cv::Rect(pad_x, pad_y, patch.cols, patch.rows)));
 
+    std::cout<<"Copy patch"<<std::endl;
     ptrFeature->image1 = patch;
     ptrFeature->image2 = img;
 
@@ -278,11 +280,14 @@ void ImageStitcher::stitch(cv::Mat& img) {
     //match_center.y+=offset.y;
 
     if(pt_left.size()>MIN_MATCH_SIZE){
-        match_center.x=(int)(c_x/pt_left.size());
-        match_center.y=(int)(c_y/pt_left.size());
-        match_center.x+=offset.x;
-        match_center.y+=offset.y;
-
+        if(!manualUpdate){
+            match_center.x=(int)(c_x/pt_left.size());
+            match_center.y=(int)(c_y/pt_left.size());
+            match_center.x+=offset.x;
+            match_center.y+=offset.y;
+        }
+        else
+            manualUpdate=0;
         cv::Mat warpMatrix = cv::findHomography(pt_right, pt_left, CV_RANSAC);
         if(warpMatrix.cols==0 || warpMatrix.rows==0){
             std::cout<<"Warp matrix error!"<<std::endl;
@@ -291,19 +296,24 @@ void ImageStitcher::stitch(cv::Mat& img) {
         warpMatrix.convertTo(warpMatrix, CV_32F, 1.0);
         calcWarpCorners(warpMatrix);
         checkIfStitchable();
+
+        std::cout<<"Calc corners"<<std::endl;
         if(!ignore){
             //canvas_img, canvas_patch have the same size if using camera
             stitch_size.width=MAX(canvas_img.cols, canvas_patch.cols);
             stitch_size.height=MAX(canvas_img.rows, canvas_patch.rows);
 
             warpPerspective(canvas_img, stitchImage, warpMatrix, stitch_size);
+            std::cout<<"Calc warp"<<std::endl;
             cv::Mat refImage=stitchImage.clone();
             //patch.copyTo(stitchImage(cv::Rect(pad_x, pad_y, patch.cols, patch.rows)));
             optimize(canvas_patch, refImage, stitchImage);
+            std::cout<<"optimized"<<std::endl;
             //cv::imshow("warp", stitchImage);
             //cv::waitKey(1);
             //cv::imwrite("warp.jpg", stitchImage);
             applyOffset();
+            std::cout<<"Apply offset"<<std::endl;
         }
         else{
             //std::cout<<"Frame ignored"<<std::endl;
@@ -360,10 +370,14 @@ void ImageStitcher::matchNoStitch(cv::Mat& img){
     int start_x = MAX(0, MIN(map2dNoStitch.cols - width, match_center.x - width / 2 - 1));
     int start_y = MAX(0, MIN(map2dNoStitch.rows - height, match_center.y - height / 2 - 1));
     if(pt_left.size()>MIN_MATCH_SIZE){
-        match_center.x=(int)(c_x/pt_left.size());
-        match_center.y=(int)(c_y/pt_left.size());
-        match_center.x+=offset.x;
-        match_center.y+=offset.y;
+        if(!manualUpdate){
+            match_center.x=(int)(c_x/pt_left.size());
+            match_center.y=(int)(c_y/pt_left.size());
+            match_center.x+=offset.x;
+            match_center.y+=offset.y;
+        }
+        else
+            manualUpdate=0;
         offset.x = start_x;
         offset.y = start_y;
         if((offset.x<min_roi_offset.x || offset.y<min_roi_offset.y) || (offset.x>max_roi_offset.x || offset.y>max_roi_offset.y)){

@@ -46,9 +46,9 @@ private:
     char firstImg = { 1 };
     int width;
     int height;
-    const int pad_x={400};
-    const int pad_y={400};
-    const int pix_thresh=70;//80
+    const int pad_x={500};
+    const int pad_y={500};
+    const int pix_thresh=60;//80
     const int MIN_MATCH_SIZE = {10};
 
     float speed_x={0.};
@@ -61,6 +61,7 @@ private:
     float dist_max=0.0;
 
     char ignore = {0};
+    char manualUpdate= {0};
     std::string state;
 
     std::shared_ptr<Feature> ptrFeature;
