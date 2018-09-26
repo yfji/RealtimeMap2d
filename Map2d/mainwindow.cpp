@@ -51,6 +51,7 @@ void MainWindow::on_btn_open_list_clicked()
 void MainWindow::on_btn_open_ipcam_clicked()
 {
     std::string ipAddr=ui->txt_ip_addr->text().toStdString();
+    std::cout<<ipAddr<<std::endl;
     _mapManager->camIP=ipAddr;
     _mapManager->open(IPCAMERA);
 }

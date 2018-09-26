@@ -6,6 +6,7 @@ class CameraImageInput : public BaseImageInput
 {
 public:
     CameraImageInput(int d);
+    CameraImageInput(const std::string& s);
 
     virtual cv::Mat getRawImage();
 

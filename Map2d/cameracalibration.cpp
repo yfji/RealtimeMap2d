@@ -13,10 +13,15 @@ void CameraCalibration::initMatrix(){
 	innerMatrix = cv::Mat::zeros(cv::Size(3, 3), CV_32FC1);
 	distortCoeffMatrix = cv::Mat::zeros(cv::Size(5,1), CV_32FC1);
 
-	string mat_file="./matrix.txt";
+#ifdef _1080P
+    string mat_file="/home/yfji/Workspace/Qt/Map2d/build-Map2d-Desktop_Qt_5_10_1_GCC_64bit-Release/matrix_540.txt";
+#else
+    string mat_file="/home/yfji/Workspace/Qt/Map2d/build-Map2d-Desktop_Qt_5_10_1_GCC_64bit-Release/matrix_540.txt";
+#endif
 	ifstream in;
 	in.open(mat_file.c_str(), ios::in);
 	if(in){
+        std::cout<<"Loading inner matrix"<<std::endl;
 		for(int i=0;i<3;++i){
 			float* ptr=innerMatrix.ptr<float>(i);
 			in>>ptr[0]>>ptr[1]>>ptr[2];

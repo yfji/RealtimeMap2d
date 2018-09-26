@@ -38,7 +38,6 @@ void MapManager::threadFunction(){
     char time_reached=true;
     float duration=0;
     while(curState!=STOP){
-
         auto start=std::chrono::high_resolution_clock::now();
         curFrame=_input->getRawImage();
 
@@ -50,6 +49,8 @@ void MapManager::threadFunction(){
             emit publishFrames(map2d, curFrame);
             break;
         }
+        //curFrame=equalize(curFrame);
+
         if(curState==PREVIEW){
             //callbackFunction(map2d, curFrame);
             emit publishFrames(map2d, curFrame);
@@ -114,4 +115,15 @@ cv::Mat MapManager::getImage(bool withRect){
         image=_stitcher->getMatchedImage(withRect);
     }
     return image;
+}
+
+cv::Mat MapManager::equalize(cv::Mat& image){
+    std::vector<cv::Mat> planes;
+    cv::split(image, planes);
+    for(int i=0;i<3;++i){
+        cv::equalizeHist(planes[i],planes[i]);
+    }
+    cv::Mat out;
+    cv::merge(planes, out);
+    return out;
 }

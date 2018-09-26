@@ -4,16 +4,46 @@ IPCamImageInput::IPCamImageInput(const std::string& s):
     BaseImageInput(s)
 {
     cap.open(strSource);
+    //cap.open("rtsp://192.168.2.220:554/stream/0");
     opened=cap.isOpened();
     numFrames=-1;
     isFinite=false;
+    calib=true;
+    cam.initMatrix();
+
+    _thread=std::thread(&IPCamImageInput::previewFunction,this);
+    _thread.detach();
+}
+
+void IPCamImageInput::previewFunction(){
+    if(opened){
+        cap.read(previewImage);
+        usleep(1000);
+    }
 }
 
 cv::Mat IPCamImageInput::getRawImage(){
-    cv::Mat image;
+    cv::Mat image, correctedImage;
     if(opened){
-        cap.read(image);
+//        cap.read(image);
+//        if(image.empty())
+//            return image;
+        if(calib){
+#ifdef _1080P
+            cv::resize(previewImage, previewImage, cv::Size(960,540), cv::INTER_LINEAR);
+#else
+            int start_y=(previewImage.rows-im_h)/2;
+            int start_x=(previewImage.cols-im_w)/2;
+            image=previewImage(cv::Rect(start_x, start_y, im_w, im_h));
+#endif
+            if (correctedImage.empty())
+                correctedImage = cv::Mat::zeros(image.size(), image.type());
+            cam.getInterpImage(image, correctedImage);
+        }
+        else{
+            correctedImage=image;
+        }
         curFrameIndex++;
     }
-    return image;
+    return correctedImage;
 }

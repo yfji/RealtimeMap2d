@@ -110,6 +110,8 @@ private:
 
     std::shared_ptr<ImageStitcher> _stitcher;
     std::shared_ptr<BaseImageInput> _input;
+
+    cv::Mat equalize(cv::Mat& image);
 };
 
 #endif // MAPMANAGER_H

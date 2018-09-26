@@ -4,6 +4,9 @@
 #include <iostream>
 #include <fstream>
 #include <vector>
+
+//#define _1080P
+
 using namespace std;
 
 class CameraCalibration

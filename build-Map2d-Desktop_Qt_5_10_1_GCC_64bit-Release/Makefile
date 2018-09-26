@@ -834,9 +834,9 @@ moc_mainwindow.cpp: ../../../../Qt5.10.1/5.10.1/gcc_64/include/QtWidgets/QMainWi
 		../Map2d/gms_matcher.h \
 		../Map2d/Header.h \
 		../Map2d/baseimageinput.h \
+		../Map2d/cameracalibration.h \
 		../Map2d/videoimageinput.h \
 		../Map2d/cameraimageinput.h \
-		../Map2d/cameracalibration.h \
 		../Map2d/filelistimageinput.h \
 		../Map2d/ipcamimageinput.h \
 		../Map2d/maplabel.h \
@@ -906,9 +906,9 @@ moc_mapmanager.cpp: ../../../../Qt5.10.1/5.10.1/gcc_64/include/QtCore/QObject \
 		../Map2d/gms_matcher.h \
 		../Map2d/Header.h \
 		../Map2d/baseimageinput.h \
+		../Map2d/cameracalibration.h \
 		../Map2d/videoimageinput.h \
 		../Map2d/cameraimageinput.h \
-		../Map2d/cameracalibration.h \
 		../Map2d/filelistimageinput.h \
 		../Map2d/ipcamimageinput.h \
 		../Map2d/mapmanager.h \
@@ -1273,9 +1273,9 @@ main.o: ../Map2d/main.cpp ../Map2d/mainwindow.h \
 		../Map2d/gms_matcher.h \
 		../Map2d/Header.h \
 		../Map2d/baseimageinput.h \
+		../Map2d/cameracalibration.h \
 		../Map2d/videoimageinput.h \
 		../Map2d/cameraimageinput.h \
-		../Map2d/cameracalibration.h \
 		../Map2d/filelistimageinput.h \
 		../Map2d/ipcamimageinput.h \
 		../Map2d/maplabel.h \
@@ -1408,9 +1408,9 @@ mainwindow.o: ../Map2d/mainwindow.cpp ../Map2d/mainwindow.h \
 		../Map2d/gms_matcher.h \
 		../Map2d/Header.h \
 		../Map2d/baseimageinput.h \
+		../Map2d/cameracalibration.h \
 		../Map2d/videoimageinput.h \
 		../Map2d/cameraimageinput.h \
-		../Map2d/cameracalibration.h \
 		../Map2d/filelistimageinput.h \
 		../Map2d/ipcamimageinput.h \
 		../Map2d/maplabel.h \
@@ -1557,18 +1557,20 @@ mapmanager.o: ../Map2d/mapmanager.cpp ../Map2d/mapmanager.h \
 		../Map2d/gms_matcher.h \
 		../Map2d/Header.h \
 		../Map2d/baseimageinput.h \
+		../Map2d/cameracalibration.h \
 		../Map2d/videoimageinput.h \
 		../Map2d/cameraimageinput.h \
-		../Map2d/cameracalibration.h \
 		../Map2d/filelistimageinput.h \
 		../Map2d/ipcamimageinput.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o mapmanager.o ../Map2d/mapmanager.cpp
 
-baseimageinput.o: ../Map2d/baseimageinput.cpp ../Map2d/baseimageinput.h
+baseimageinput.o: ../Map2d/baseimageinput.cpp ../Map2d/baseimageinput.h \
+		../Map2d/cameracalibration.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o baseimageinput.o ../Map2d/baseimageinput.cpp
 
 videoimageinput.o: ../Map2d/videoimageinput.cpp ../Map2d/videoimageinput.h \
-		../Map2d/baseimageinput.h
+		../Map2d/baseimageinput.h \
+		../Map2d/cameracalibration.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o videoimageinput.o ../Map2d/videoimageinput.cpp
 
 cameraimageinput.o: ../Map2d/cameraimageinput.cpp ../Map2d/cameraimageinput.h \
@@ -1577,11 +1579,13 @@ cameraimageinput.o: ../Map2d/cameraimageinput.cpp ../Map2d/cameraimageinput.h \
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o cameraimageinput.o ../Map2d/cameraimageinput.cpp
 
 filelistimageinput.o: ../Map2d/filelistimageinput.cpp ../Map2d/filelistimageinput.h \
-		../Map2d/baseimageinput.h
+		../Map2d/baseimageinput.h \
+		../Map2d/cameracalibration.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o filelistimageinput.o ../Map2d/filelistimageinput.cpp
 
 ipcamimageinput.o: ../Map2d/ipcamimageinput.cpp ../Map2d/ipcamimageinput.h \
-		../Map2d/baseimageinput.h
+		../Map2d/baseimageinput.h \
+		../Map2d/cameracalibration.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o ipcamimageinput.o ../Map2d/ipcamimageinput.cpp
 
 maplabel.o: ../Map2d/maplabel.cpp ../Map2d/maplabel.h \

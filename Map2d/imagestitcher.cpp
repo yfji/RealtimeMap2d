@@ -8,7 +8,7 @@ ImageStitcher::ImageStitcher(int w, int h)
     height = h;
     ptrFeature.reset(new OrbFeature());
     ptrFeature->setAlignHeight(height);
-    ptrFeature->setMatchNumber(1200);
+    ptrFeature->setMatchNumber(1000);
 
     dist_max=sqrt(pad_x*pad_x+pad_y*pad_y);
 
@@ -153,7 +153,6 @@ void ImageStitcher::optimize(cv::Mat& patch, cv::Mat& ref, cv::Mat& trans) {
 }
 
 void ImageStitcher::applyOffset(){
-    std::cout<<box_area.x<<' '<<box_area.y<<' '<<box_area.width<<' '<<box_area.height<<std::endl;
     cv::Mat roi=stitchImage(box_area);
     //cv::imshow("roi", roi);
     if(map2d.empty()){
@@ -259,7 +258,6 @@ void ImageStitcher::stitch(cv::Mat& img) {
     img.copyTo(canvas_img(cv::Rect(pad_x, pad_y, img.cols, img.rows)));
     patch.copyTo(canvas_patch(cv::Rect(pad_x, pad_y, patch.cols, patch.rows)));
 
-    std::cout<<"Copy patch"<<std::endl;
     ptrFeature->image1 = patch;
     ptrFeature->image2 = img;
 
@@ -297,23 +295,19 @@ void ImageStitcher::stitch(cv::Mat& img) {
         calcWarpCorners(warpMatrix);
         checkIfStitchable();
 
-        std::cout<<"Calc corners"<<std::endl;
         if(!ignore){
             //canvas_img, canvas_patch have the same size if using camera
             stitch_size.width=MAX(canvas_img.cols, canvas_patch.cols);
             stitch_size.height=MAX(canvas_img.rows, canvas_patch.rows);
 
             warpPerspective(canvas_img, stitchImage, warpMatrix, stitch_size);
-            std::cout<<"Calc warp"<<std::endl;
             cv::Mat refImage=stitchImage.clone();
             //patch.copyTo(stitchImage(cv::Rect(pad_x, pad_y, patch.cols, patch.rows)));
             optimize(canvas_patch, refImage, stitchImage);
-            std::cout<<"optimized"<<std::endl;
             //cv::imshow("warp", stitchImage);
             //cv::waitKey(1);
             //cv::imwrite("warp.jpg", stitchImage);
             applyOffset();
-            std::cout<<"Apply offset"<<std::endl;
         }
         else{
             //std::cout<<"Frame ignored"<<std::endl;
