@@ -8,6 +8,10 @@ public:
     VideoImageInput(const std::string& s);
 
     virtual cv::Mat getRawImage();
+    virtual void release(){
+        if(opened)
+            cap.release();
+    }
 
 private:
     cv::VideoCapture cap;

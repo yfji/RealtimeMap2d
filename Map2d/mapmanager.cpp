@@ -101,6 +101,7 @@ void MapManager::threadFunction(){
         std::cout<<"Stitching frame "<<curIndex<<std::endl;
         curIndex++;
     }
+    _input->stop();
     _input->release();
     opened=false;
     cv::destroyAllWindows();

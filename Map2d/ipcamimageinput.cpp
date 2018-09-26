@@ -4,7 +4,6 @@ IPCamImageInput::IPCamImageInput(const std::string& s):
     BaseImageInput(s)
 {
     cap.open(strSource);
-    //cap.open("rtsp://192.168.2.220:554/stream/0");
     opened=cap.isOpened();
     numFrames=-1;
     isFinite=false;
@@ -16,18 +15,21 @@ IPCamImageInput::IPCamImageInput(const std::string& s):
 }
 
 void IPCamImageInput::previewFunction(){
-    if(opened){
+    std::cout<<"Start fetching IP stream"<<std::endl;
+    while(opened && !_requestStop){
         cap.read(previewImage);
-        usleep(1000);
+        usleep(100);
     }
+    std::cout<<"Finish fetching stream"<<std::endl;
 }
 
 cv::Mat IPCamImageInput::getRawImage(){
     cv::Mat image, correctedImage;
-    if(opened){
+    if(opened && !previewImage.empty()){
 //        cap.read(image);
 //        if(image.empty())
 //            return image;
+
         if(calib){
 #ifdef _1080P
             cv::resize(previewImage, previewImage, cv::Size(960,540), cv::INTER_LINEAR);

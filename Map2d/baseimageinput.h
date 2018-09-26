@@ -28,6 +28,8 @@ public:
 
     virtual void release(){}
 
+    virtual void stop(){}
+
 protected:
     int numFrames;
     int curFrameIndex ={0};

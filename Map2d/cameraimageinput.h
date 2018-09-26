@@ -11,7 +11,7 @@ public:
     virtual cv::Mat getRawImage();
 
     virtual void release(){
-        if(cap.isOpened()){
+        if(opened){
             cap.release();
         }
     }
