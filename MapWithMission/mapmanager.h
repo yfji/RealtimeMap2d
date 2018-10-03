@@ -100,13 +100,18 @@ private:
     InputMethod method;
     bool opened = {false};
     bool finished= {false};
+    bool use_image_thread ={false};
     float period = {1};
     float micro_seconds;
+
+    int frame_index= {0};
+    const int check_interval= {6};
 
     const int frame_h= {360};
     const int frame_w= {640};
 
     std::thread _thread;
+    std::thread _image_thread;
     std::thread _mission_thread;
 
     std::atomic_bool _mission_run ={false};
@@ -119,6 +124,8 @@ private:
     std::shared_ptr<Mission> _mission;
 
     cv::Mat equalize(cv::Mat& image);
+
+    void getImageFunction();
     void threadFunction();
     void missionFunction();
 

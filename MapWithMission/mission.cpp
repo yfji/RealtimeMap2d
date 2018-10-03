@@ -330,7 +330,11 @@ void Mission::saveTargets(){
                 name="barrel";
             else if(targets[i].type==CROCODILE)
                 name="crocodile";
-            out<<"["<<savedIndex<<"]:"<<name.c_str()<<"---->"<<targets[i].gpsLocation.lat<<','<<targets[i].gpsLocation.lon<<std::endl;
+            std::stringstream ss;
+            ss<<"["<<savedIndex<<"]:"<<name.c_str()<<"---->"<<targets[i].gpsLocation.lat<<','<<targets[i].gpsLocation.lon;
+            std::string s=ss.str();
+            std::cout<<s<<std::endl;
+            out<<s<<std::endl;
         }
     }
     std::stringstream ss;

@@ -28,12 +28,29 @@ void MapManager::open(InputMethod method){
     else if(method==IPCAMERA){
         _input.reset(new IPCamImageInput(camIP));
     }
+    if(method==IPCAMERA || method==CAMERA)
+        use_image_thread=true;
 }
 
 void MapManager::start(){
     _stitcher->reset();
     _thread=std::thread(&MapManager::threadFunction,this);
     _thread.detach();
+
+    if(use_image_thread){
+        _image_thread=std::thread(&MapManager::getImageFunction, this);
+        _mission_thread=std::thread(&MapManager::missionFunction, this);
+
+        _image_thread.detach();
+        _mission_thread.detach();
+    }
+}
+
+void MapManager::getImageFunction(){
+    while(curState!=STOP){
+        curFrame=_input->getRawImage();
+        usleep(1000);
+    }
 }
 
 void MapManager::threadFunction(){
@@ -41,24 +58,29 @@ void MapManager::threadFunction(){
     float duration=0;
     while(curState!=STOP){
         auto start=std::chrono::high_resolution_clock::now();
-        curFrame=_input->getRawImage();
+        if(!use_image_thread)
+            curFrame=_input->getRawImage();
 
-        curFrame=equalize(curFrame);
+        if(curFrame.empty()){
+            usleep(10e3);
+            continue;
+        }
+        cv::Mat stitchImage=equalize(curFrame);
         _mission_run=true;
 
         cv::Mat map2d;
-        if(curFrame.empty()){
+        if(stitchImage.empty()){
             finished=true;
             curState=STOP;
-            //callbackFunction(map2d, curFrame);
-            emit publishFrames(map2d, curFrame);
+            //callbackFunction(map2d, stitchImage);
+            emit publishFrames(map2d, stitchImage);
             break;
         }
         //curFrame=equalize(curFrame);
 
         if(curState==PREVIEW){
             //callbackFunction(map2d, curFrame);
-            emit publishFrames(map2d, curFrame);
+            emit publishFrames(map2d, stitchImage);
             auto now=std::chrono::high_resolution_clock::now();
             float duration_us=(float)std::chrono::duration_cast<std::chrono::microseconds>(now-start).count();
             micro_seconds=period*1e6;
@@ -71,7 +93,7 @@ void MapManager::threadFunction(){
         //int start_y=(curFrame.rows-frame_h)/2;
         //frame=curFrame(cv::Rect(start_x, start_y, frame_w, frame_h));
         cv::Mat frame;
-        cv::resize(curFrame, frame, cv::Size(frame_w, frame_h), cv::INTER_LINEAR);
+        cv::resize(stitchImage, frame, cv::Size(frame_w, frame_h), cv::INTER_LINEAR);
         if(curState==PAUSE){
             if(time_reached){
                 _stitcher->matchNoStitch(frame);
@@ -91,7 +113,7 @@ void MapManager::threadFunction(){
         //callbackFunction(map2d, curFrame);
         std::string state=_stitcher->getState();
         emit publishStates(state);
-        emit publishFrames(map2d, curFrame);
+        emit publishFrames(map2d, stitchImage);
 
         auto now=std::chrono::high_resolution_clock::now();
         float duration_us=(float)std::chrono::duration_cast<std::chrono::microseconds>(now-start).count();
@@ -114,11 +136,14 @@ void MapManager::threadFunction(){
 
 void MapManager::missionFunction(){
     while(curState!=STOP){
-        if(!_mission_run){
+        if(!use_image_thread && !_mission_run){
             usleep(30e3);
             continue;
         }
-
+        if(curFrame.empty()){
+            usleep(10e3);
+            continue;
+        }
         cv::Mat missionImage;
         cv::resize(curFrame, missionImage, cv::Size(), 0.5, 0.5, cv::INTER_LINEAR);
         auto rects=_mission->findTargets(missionImage);
@@ -129,6 +154,15 @@ void MapManager::missionFunction(){
         else{
             _mission->compareTargets(rects, targets, "iou", 0.5);
         }
+        /*
+         * Save targets here per 6 frames
+         *
+         */
+        if(frame_index==check_interval){
+            _mission->saveTargets();
+            frame_index=0;
+        }
+        ++frame_index;
         _mission_run=false;
     }
 }
