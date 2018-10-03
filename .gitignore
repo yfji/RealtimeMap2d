@@ -1,0 +1,11 @@
+#video files
+*.mp4
+*.avi
+
+#image files
+*.jpg
+*.png
+
+*compiled files
+*.o
+*.d
