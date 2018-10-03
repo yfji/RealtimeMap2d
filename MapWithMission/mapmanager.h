@@ -8,6 +8,7 @@
 #include <vector>
 #include <thread>
 #include <memory>
+#include <atomic>
 #include <chrono>
 #include <functional>
 #include <unistd.h>
@@ -17,6 +18,7 @@
 #include "cameraimageinput.h"
 #include "filelistimageinput.h"
 #include "ipcamimageinput.h"
+#include "mission.h"
 
 enum InputMethod{
     CAMERA,
@@ -45,7 +47,6 @@ public:
 
     void open(InputMethod method);
     void start();
-    void threadFunction();
 
     cv::Mat getImage(bool withRect=true);
 
@@ -88,6 +89,8 @@ public:
     std::string camIP;
     int cam_id;
 
+    GPS gps ={0,0};
+
 signals:
     void publishFrames(cv::Mat&, cv::Mat&);
     void publishStates(std::string&);
@@ -104,14 +107,21 @@ private:
     const int frame_w= {640};
 
     std::thread _thread;
+    std::thread _mission_thread;
+
+    std::atomic_bool _mission_run ={false};
 
     cv::Mat curFrame;
     int curIndex = {0};
 
     std::shared_ptr<ImageStitcher> _stitcher;
     std::shared_ptr<BaseImageInput> _input;
+    std::shared_ptr<Mission> _mission;
 
     cv::Mat equalize(cv::Mat& image);
+    void threadFunction();
+    void missionFunction();
+
 };
 
 #endif // MAPMANAGER_H

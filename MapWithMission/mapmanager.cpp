@@ -8,6 +8,8 @@ MapManager::MapManager(QObject* parent):
     qRegisterMetaType<cv::Mat>("cv::Mat&");
     qRegisterMetaType<std::string>("std::string");
     qRegisterMetaType<std::string>("std::string&");
+
+    _mission.reset(new Mission());
 }
 
 void MapManager::open(InputMethod method){
@@ -40,6 +42,9 @@ void MapManager::threadFunction(){
     while(curState!=STOP){
         auto start=std::chrono::high_resolution_clock::now();
         curFrame=_input->getRawImage();
+
+        curFrame=equalize(curFrame);
+        _mission_run=true;
 
         cv::Mat map2d;
         if(curFrame.empty()){
@@ -107,6 +112,27 @@ void MapManager::threadFunction(){
     //cv::destroyAllWindows();
 }
 
+void MapManager::missionFunction(){
+    while(curState!=STOP){
+        if(!_mission_run){
+            usleep(30e3);
+            continue;
+        }
+
+        cv::Mat missionImage;
+        cv::resize(curFrame, missionImage, cv::Size(), 0.5, 0.5, cv::INTER_LINEAR);
+        auto rects=_mission->findTargets(missionImage);
+        auto& targets=_mission->targets;
+        if(targets.size()==0){
+            _mission->compareTargetsWithGps(rects, targets, gps, "iou", 0.5);
+        }
+        else{
+            _mission->compareTargets(rects, targets, "iou", 0.5);
+        }
+        _mission_run=false;
+    }
+}
+
 cv::Mat MapManager::getImage(bool withRect){
     cv::Mat image;
     if(curState==BUILD){
@@ -119,12 +145,7 @@ cv::Mat MapManager::getImage(bool withRect){
 }
 
 cv::Mat MapManager::equalize(cv::Mat& image){
-    std::vector<cv::Mat> planes;
-    cv::split(image, planes);
-    for(int i=0;i<3;++i){
-        cv::equalizeHist(planes[i],planes[i]);
-    }
     cv::Mat out;
-    cv::merge(planes, out);
+    cv::normalize(image, out, 0, 255, cv::NORM_MINMAX);
     return out;
 }

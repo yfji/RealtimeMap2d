@@ -3,9 +3,12 @@
 
 Mission::Mission()
 {
-
+    out.open("./maps/mission.log", std::ios::out);
 }
 
+Mission::~Mission(){
+    out.close();
+}
 
 std::vector<std::pair<cv::Rect, TYPE> > Mission::findBoundingBoxes(cv::Mat& rgbImg, cv::Mat& biImg, int min_area, int max_area){
     std::vector<std::pair<cv::Rect, TYPE> > boxes;
@@ -13,6 +16,8 @@ std::vector<std::pair<cv::Rect, TYPE> > Mission::findBoundingBoxes(cv::Mat& rgbI
     CvMemStorage* pStorage = cvCreateMemStorage(0);
     CvSeq* pContour = NULL;
     cvFindContours(&ipl, pStorage, &pContour, sizeof(CvContour), CV_RETR_CCOMP, CV_CHAIN_APPROX_SIMPLE);
+
+    currentImage=rgbImg.clone();
 
     for (; pContour; pContour = pContour->h_next) {
         float true_area = fabs(cvContourArea(pContour));
@@ -186,14 +191,10 @@ void Mission::compareTargets(std::vector<std::pair<cv::Rect, TYPE> >& locations,
             assert(0);
     }
 
-    GPS currentGps{0,0};
-    if(targets.size()>0){
-        currentGps=targets[0].gpsLocation;
-    }
     for(int i=0;i<nLocations;++i){
         if(!matched[i]){
             int max_id=targets.size()>0?targets[nTargets-1].id:0;
-            targets.push_back(Target{currentGps, locations[i].first, max_id, 0, 0, locations[i].second});
+            targets.push_back(Target{currentGPS, locations[i].first, max_id, 0, 0, locations[i].second});
         }
     }
 }
@@ -291,6 +292,8 @@ void Mission::compareTargetsWithGps(std::vector<std::pair<cv::Rect, TYPE> >& loc
             targets.push_back(Target{currentGps, locations[i].first, max_id, 0, 0, locations[i].second});
         }
     }
+    currentGPS=currentGps;
+    updateGPS(currentGPS);
 }
 
 std::vector<std::pair<cv::Rect, TYPE> > Mission::findTargets(cv::Mat& oriImg){
@@ -301,4 +304,37 @@ std::vector<std::pair<cv::Rect, TYPE> > Mission::findTargets(cv::Mat& oriImg){
     cv::imshow("bi", biImg);
     auto locations=findBoundingBoxes(oriImg, biImg, 100, 400000);
     return locations;
+}
+
+void Mission::updateGPS(const GPS& g){
+    int len=historyGps.size();
+    float min_dist=1e7;
+    for(int i=0;i<len;++i){
+        GPS& gps=historyGps[i];
+        float dist_lat=gps.lat-g.lat;
+        float dist_lon=gps.lon-g.lon;
+        float dist=sqrt(dist_lat*dist_lat+dist_lon*dist_lon);
+        min_dist=MIN(min_dist, dist);
+    }
+    if(min_dist<gps_dist_thresh){
+        historyGps.push_back(g);
+    }
+}
+
+void Mission::saveTargets(){
+    for(int i=0;i<targets.size();++i){
+        if(targets[i].life>3 && targets[i].forgot<3){
+            cv::rectangle(currentImage, targets[i].location, cv::Scalar(0,0,255), 2);
+            std::string name="";
+            if(targets[i].type==BARREL)
+                name="barrel";
+            else if(targets[i].type==CROCODILE)
+                name="crocodile";
+            out<<"["<<savedIndex<<"]:"<<name.c_str()<<"---->"<<targets[i].gpsLocation.lat<<','<<targets[i].gpsLocation.lon<<std::endl;
+        }
+    }
+    std::stringstream ss;
+    ss<<"./maps/target_"<<savedIndex<<".jpg";
+    cv::imwrite(ss.str(), currentImage);
+    ++savedIndex;
 }

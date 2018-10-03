@@ -5,7 +5,6 @@
 #include "mapmanager.h"
 #include "maplabel.h"
 #include "gpsclient.h"
-#include "mission.h"
 #include <memory>
 #include <map>
 
@@ -66,7 +65,6 @@ private:
 
     std::shared_ptr<MapManager> _mapManager;
     std::shared_ptr<GPSClient> _gpsClient;
-    std::shared_ptr<Mission> _mission;
 
     MapLabel* _mapLabel;
 

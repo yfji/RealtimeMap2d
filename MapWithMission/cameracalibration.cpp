@@ -14,9 +14,9 @@ void CameraCalibration::initMatrix(){
 	distortCoeffMatrix = cv::Mat::zeros(cv::Size(5,1), CV_32FC1);
 
 #ifdef _1080P
-    string mat_file="/home/yfji/Workspace/Qt/Map2d/build-Map2d-Desktop_Qt_5_10_1_GCC_64bit-Release/matrix_540.txt";
+    string mat_file="./matrix_1080p.txt";
 #else
-    string mat_file="/home/yfji/Workspace/Qt/Map2d/build-Map2d-Desktop_Qt_5_10_1_GCC_64bit-Release/matrix_540.txt";
+    string mat_file="./matrix_540.txt";
 #endif
 	ifstream in;
 	in.open(mat_file.c_str(), ios::in);

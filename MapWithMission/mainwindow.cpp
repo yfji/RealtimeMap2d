@@ -11,7 +11,6 @@ MainWindow::MainWindow(QWidget *parent) :
     ui->setupUi(this);
     _mapManager.reset(new MapManager());
     _gpsClient.reset(new GPSClient());
-    _mission.reset(new Mission());
 
     map_callback callback=std::bind(&MainWindow::drawImages,this,std::placeholders::_1,std::placeholders::_2);
     _mapManager->callbackFunction=callback;
@@ -20,12 +19,15 @@ MainWindow::MainWindow(QWidget *parent) :
     QObject::connect(_mapManager.get(), SIGNAL(publishFrames(cv::Mat&,cv::Mat&)), SLOT(onUpdateFrames(cv::Mat&,cv::Mat&)));
     QObject::connect(_mapManager.get(), SIGNAL(publishStates(std::string&)), SLOT(onUpdateStates(std::string&)));
     QObject::connect(_mapLabel, SIGNAL(publishClickedPoint(cv::Point2f&)), SLOT(onUpdateClickedPoint(cv::Point2f&)));
+    QObject::connect(&(_gpsClient->publisher), SIGNAL(publishGPSMessage(std::string)), SLOT(onGPSUpdate(std::string)));
 
-    _gpsClient->startConnect(50);
+    _gpsClient->startConnect(10);
 }
 
 MainWindow::~MainWindow()
 {
+    _gpsClient->stopConnect();
+    usleep(30e3);
     delete ui;
 }
 
@@ -266,13 +268,19 @@ void MainWindow::onUpdateClickedPoint(cv::Point2f & point){
 
 void MainWindow::onGPSUpdate(std::string msg){
     decodeGPSMessage(msg);
+    char data_lat[20], data_lon[20];
     int count=(int)gpsDataMap["count"];
+
     float lat=gpsDataMap["lat"];
     float lon=gpsDataMap["lon"];
 
+    sprintf(data_lat, "%.2f", lat);
+    sprintf(data_lon, "%.2f", lon);
     ui->txt_count->setText(QString::number(count));
-    ui->txt_lat->setText(QString::number(lat));
-    ui->txt_lon->setText(QString::number(lon));
+    ui->txt_lat->setText(QString(data_lat));
+    ui->txt_lon->setText(QString(data_lon));
+
+    _mapManager->gps=GPS{lat, lon};
 }
 
 void MainWindow::on_slide_ignore_actionTriggered(int action)
