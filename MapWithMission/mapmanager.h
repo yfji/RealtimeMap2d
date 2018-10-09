@@ -8,6 +8,7 @@
 #include <vector>
 #include <thread>
 #include <memory>
+#include <mutex>
 #include <atomic>
 #include <chrono>
 #include <functional>
@@ -89,7 +90,7 @@ public:
     std::string camIP;
     int cam_id;
 
-    GPS gps ={0,0};
+    GPS gps ={30,160};
 
 signals:
     void publishFrames(cv::Mat&, cv::Mat&);
@@ -105,7 +106,7 @@ private:
     float micro_seconds;
 
     int frame_index= {0};
-    const int check_interval= {6};
+    const int check_interval= {4};
 
     const int frame_h= {360};
     const int frame_w= {640};
@@ -115,6 +116,7 @@ private:
     std::thread _mission_thread;
 
     std::atomic_bool _mission_run ={false};
+    std::mutex img_mutex;
 
     cv::Mat curFrame;
     int curIndex = {0};

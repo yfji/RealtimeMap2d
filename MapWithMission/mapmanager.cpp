@@ -39,16 +39,18 @@ void MapManager::start(){
 
     if(use_image_thread){
         _image_thread=std::thread(&MapManager::getImageFunction, this);
-        _mission_thread=std::thread(&MapManager::missionFunction, this);
-
         _image_thread.detach();
-        _mission_thread.detach();
+
     }
+    _mission_thread=std::thread(&MapManager::missionFunction, this);
+    _mission_thread.detach();
 }
 
 void MapManager::getImageFunction(){
     while(curState!=STOP){
+        img_mutex.lock();
         curFrame=_input->getRawImage();
+        img_mutex.unlock();
         usleep(1000);
     }
 }
@@ -58,8 +60,11 @@ void MapManager::threadFunction(){
     float duration=0;
     while(curState!=STOP){
         auto start=std::chrono::high_resolution_clock::now();
-        if(!use_image_thread)
+        if(!use_image_thread){
+            img_mutex.lock();
             curFrame=_input->getRawImage();
+            img_mutex.unlock();
+        }
 
         if(curFrame.empty()){
             usleep(10e3);
@@ -145,14 +150,17 @@ void MapManager::missionFunction(){
             continue;
         }
         cv::Mat missionImage;
+        img_mutex.lock();
         cv::resize(curFrame, missionImage, cv::Size(), 0.5, 0.5, cv::INTER_LINEAR);
+        img_mutex.unlock();
         auto rects=_mission->findTargets(missionImage);
         auto& targets=_mission->targets;
         if(targets.size()==0){
-            _mission->compareTargetsWithGps(rects, targets, gps, "iou", 0.5);
+            if(!_mission->isGpsInHistory(gps))
+                _mission->compareTargetsWithGps(rects, targets, gps, "iou", 0.3);
         }
         else{
-            _mission->compareTargets(rects, targets, "iou", 0.5);
+            _mission->compareTargets(rects, targets, "iou", 0.3);
         }
         /*
          * Save targets here per 6 frames

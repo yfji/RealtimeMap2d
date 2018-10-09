@@ -489,7 +489,7 @@ IP Camera</string>
       <bool>true</bool>
      </property>
     </widget>
-    <widget class="QLineEdit" name="txt_lat">
+    <widget class="QLineEdit" name="txt_lon">
      <property name="geometry">
       <rect>
        <x>390</x>
@@ -513,7 +513,7 @@ IP Camera</string>
       <bool>true</bool>
      </property>
     </widget>
-    <widget class="QLineEdit" name="txt_lon">
+    <widget class="QLineEdit" name="txt_lat">
      <property name="geometry">
       <rect>
        <x>450</x>

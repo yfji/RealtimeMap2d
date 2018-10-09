@@ -35,9 +35,9 @@ std::vector<std::pair<cv::Rect, TYPE> > Mission::findBoundingBoxes(cv::Mat& rgbI
             cvSeqRemove(pContour, 0);
             continue;
         }
-        int barrel_g=0, barrel_b=0, barrel_r=0;
-        int croco_g=0, croco_b=0, croco_r=0;
-        cv::Mat patch=rgbImg(bbox);
+        int barrel_b=0, barrel_g=0, barrel_r=0;
+        int croco_b=0, croco_g=0, croco_r=0;
+        cv::Mat patch=rgbImg(bbox).clone(); //must clone!!!
         uchar* data=patch.data;
         int size=bbox.width*bbox.height;
         for(int i=0;i<size;++i){
@@ -76,13 +76,14 @@ bool Mission::isBarrel(std::tuple<int,int,int>& count, cv::Rect& rect, float min
     //red
     if(rect.width<min_ratio*rect.height || rect.width>max_ratio*rect.height)
         return false;
-    const int cnt_thresh=MIN(rect.width, rect.height);
+    //const int cnt_thresh=MIN(rect.width, rect.height);
+    const int cnt_thresh = rect.width*rect.height/4;
     int b_cnt=std::get<0>(count);
     int g_cnt=std::get<1>(count);
     int r_cnt=std::get<2>(count);
 
     if(r_cnt>cnt_thresh && r_cnt>g_cnt && r_cnt>b_cnt){
-        std::cout<<"Barrel: "<<b_cnt<<','<<g_cnt<<','<<r_cnt<<std::endl;
+        //std::cout<<"Barrel: "<<b_cnt<<','<<g_cnt<<','<<r_cnt<<std::endl;
         return true;
     }
     return false;
@@ -92,14 +93,14 @@ bool Mission::isCrocodile(std::tuple<int,int,int>& count, cv::Rect& rect, float 
     //green-->white
     if(rect.width<min_ratio*rect.height || rect.width>max_ratio*rect.height)
         return false;
-    const int cnt_thresh=MIN(rect.width, rect.height);
-
+    //const int cnt_thresh=MIN(rect.width, rect.height);
+    const int cnt_thresh = rect.width*rect.height/4;
     int r_cnt=std::get<0>(count);
     int g_cnt=std::get<1>(count);
     int b_cnt=std::get<2>(count);
 
     if(g_cnt>cnt_thresh && g_cnt>r_cnt && g_cnt>b_cnt){
-        std::cout<<"Crocodile: "<<b_cnt<<','<<g_cnt<<','<<r_cnt<<std::endl;
+        //std::cout<<"Crocodile: "<<b_cnt<<','<<g_cnt<<','<<r_cnt<<std::endl;
         return true;
     }
     return false;
@@ -197,6 +198,7 @@ void Mission::compareTargets(std::vector<std::pair<cv::Rect, TYPE> >& locations,
             targets.push_back(Target{currentGPS, locations[i].first, max_id, 0, 0, locations[i].second});
         }
     }
+    gpsInHistory=true;
 }
 
 void Mission::compareTargetsWithGps(std::vector<std::pair<cv::Rect, TYPE> >& locations, \
@@ -293,7 +295,8 @@ void Mission::compareTargetsWithGps(std::vector<std::pair<cv::Rect, TYPE> >& loc
         }
     }
     currentGPS=currentGps;
-    updateGPS(currentGPS);
+    if(targets.size()>0)
+        updateGPS(currentGPS);
 }
 
 std::vector<std::pair<cv::Rect, TYPE> > Mission::findTargets(cv::Mat& oriImg){
@@ -301,27 +304,40 @@ std::vector<std::pair<cv::Rect, TYPE> > Mission::findTargets(cv::Mat& oriImg){
     //cv::Mat biImg=adaBinarize(salientMap);
     cv::Mat biImg;
     cv::threshold(salientMap, biImg, 180, 255, cv::THRESH_OTSU);
-    cv::imshow("bi", biImg);
-    auto locations=findBoundingBoxes(oriImg, biImg, 100, 400000);
+    //cv::imshow("bi", biImg);
+    auto locations=findBoundingBoxes(oriImg, biImg, 300, 400000);
     return locations;
 }
 
 void Mission::updateGPS(const GPS& g){
+    if(!gpsInHistory)
+        historyGps.push_back(g);
+}
+
+bool Mission::isGpsInHistory(GPS &curGps){
     int len=historyGps.size();
+    if(len==0)
+        return false;
     float min_dist=1e7;
     for(int i=0;i<len;++i){
         GPS& gps=historyGps[i];
-        float dist_lat=gps.lat-g.lat;
-        float dist_lon=gps.lon-g.lon;
-        float dist=sqrt(dist_lat*dist_lat+dist_lon*dist_lon);
-        min_dist=MIN(min_dist, dist);
+        //float dist_lat=curGps.lat-gps.lat;
+        //float dist_lon=curGps.lon-gps.lon;
+        //float dist=sqrt(dist_lat*dist_lat+dist_lon*dist_lon);
+        float direct_dist=GetDirectDistance(gps.lat, gps.lon, curGps.lat, curGps.lon);
+        min_dist=MIN(min_dist, direct_dist);
     }
     if(min_dist<gps_dist_thresh){
-        historyGps.push_back(g);
+        gpsInHistory=true;
     }
+    else{
+        gpsInHistory=false;
+    }
+    return gpsInHistory;
 }
 
 void Mission::saveTargets(){
+    bool has_target=false;
     for(int i=0;i<targets.size();++i){
         if(targets[i].life>3 && targets[i].forgot<3){
             cv::rectangle(currentImage, targets[i].location, cv::Scalar(0,0,255), 2);
@@ -335,10 +351,14 @@ void Mission::saveTargets(){
             std::string s=ss.str();
             std::cout<<s<<std::endl;
             out<<s<<std::endl;
+            has_target=true;
         }
     }
-    std::stringstream ss;
-    ss<<"./maps/target_"<<savedIndex<<".jpg";
-    cv::imwrite(ss.str(), currentImage);
-    ++savedIndex;
+    //if(has_target && !gpsInHistory){
+    if(has_target){
+        std::stringstream ss;
+        ss<<"./maps/target_"<<savedIndex<<".jpg";
+        cv::imwrite(ss.str(), currentImage);
+        ++savedIndex;
+    }
 }

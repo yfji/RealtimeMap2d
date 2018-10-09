@@ -853,6 +853,8 @@ moc_mainwindow.cpp: ../../../../Qt5.10.1/5.10.1/gcc_64/include/QtWidgets/QMainWi
 		../MapWithMission/cameraimageinput.h \
 		../MapWithMission/filelistimageinput.h \
 		../MapWithMission/ipcamimageinput.h \
+		../MapWithMission/mission.h \
+		../MapWithMission/salient.h \
 		../MapWithMission/maplabel.h \
 		../../../../Qt5.10.1/5.10.1/gcc_64/include/QtWidgets/QLabel \
 		../../../../Qt5.10.1/5.10.1/gcc_64/include/QtWidgets/qlabel.h \
@@ -928,6 +930,8 @@ moc_mapmanager.cpp: ../../../../Qt5.10.1/5.10.1/gcc_64/include/QtCore/QObject \
 		../MapWithMission/cameraimageinput.h \
 		../MapWithMission/filelistimageinput.h \
 		../MapWithMission/ipcamimageinput.h \
+		../MapWithMission/mission.h \
+		../MapWithMission/salient.h \
 		../MapWithMission/mapmanager.h \
 		moc_predefs.h \
 		../../../../Qt5.10.1/5.10.1/gcc_64/bin/moc
@@ -1352,6 +1356,8 @@ main.o: ../MapWithMission/main.cpp ../MapWithMission/mainwindow.h \
 		../MapWithMission/cameraimageinput.h \
 		../MapWithMission/filelistimageinput.h \
 		../MapWithMission/ipcamimageinput.h \
+		../MapWithMission/mission.h \
+		../MapWithMission/salient.h \
 		../MapWithMission/maplabel.h \
 		../../../../Qt5.10.1/5.10.1/gcc_64/include/QtWidgets/QLabel \
 		../../../../Qt5.10.1/5.10.1/gcc_64/include/QtWidgets/qlabel.h \
@@ -1490,6 +1496,8 @@ mainwindow.o: ../MapWithMission/mainwindow.cpp ../MapWithMission/mainwindow.h \
 		../MapWithMission/cameraimageinput.h \
 		../MapWithMission/filelistimageinput.h \
 		../MapWithMission/ipcamimageinput.h \
+		../MapWithMission/mission.h \
+		../MapWithMission/salient.h \
 		../MapWithMission/maplabel.h \
 		../../../../Qt5.10.1/5.10.1/gcc_64/include/QtWidgets/QLabel \
 		../../../../Qt5.10.1/5.10.1/gcc_64/include/QtWidgets/qlabel.h \
@@ -1641,7 +1649,9 @@ mapmanager.o: ../MapWithMission/mapmanager.cpp ../MapWithMission/mapmanager.h \
 		../MapWithMission/videoimageinput.h \
 		../MapWithMission/cameraimageinput.h \
 		../MapWithMission/filelistimageinput.h \
-		../MapWithMission/ipcamimageinput.h
+		../MapWithMission/ipcamimageinput.h \
+		../MapWithMission/mission.h \
+		../MapWithMission/salient.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o mapmanager.o ../MapWithMission/mapmanager.cpp
 
 baseimageinput.o: ../MapWithMission/baseimageinput.cpp ../MapWithMission/baseimageinput.h \

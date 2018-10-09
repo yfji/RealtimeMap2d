@@ -271,8 +271,8 @@ void MainWindow::onGPSUpdate(std::string msg){
     char data_lat[20], data_lon[20];
     int count=(int)gpsDataMap["count"];
 
-    float lat=gpsDataMap["lat"];
     float lon=gpsDataMap["lon"];
+    float lat=gpsDataMap["lat"];
 
     sprintf(data_lat, "%.2f", lat);
     sprintf(data_lon, "%.2f", lon);
@@ -280,7 +280,7 @@ void MainWindow::onGPSUpdate(std::string msg){
     ui->txt_lat->setText(QString(data_lat));
     ui->txt_lon->setText(QString(data_lon));
 
-    _mapManager->gps=GPS{lat, lon};
+    _mapManager->gps=GPS{lon, lat};
 }
 
 void MainWindow::on_slide_ignore_actionTriggered(int action)

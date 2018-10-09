@@ -46,6 +46,7 @@ cv::Mat IPCamImageInput::getRawImage(){
             if (correctedImage.empty())
                 correctedImage = cv::Mat::zeros(image.size(), image.type());
             cam.getInterpImage(image, correctedImage);
+            cv::resize(correctedImage, correctedImage, cv::Size(960, 640), cv::INTER_LINEAR);
         }
         else{
             correctedImage=image;
