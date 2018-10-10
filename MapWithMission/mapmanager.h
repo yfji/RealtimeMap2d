@@ -90,7 +90,7 @@ public:
     std::string camIP;
     int cam_id;
 
-    GPS gps ={30,160};
+    GPS gps ={30,16};
 
 signals:
     void publishFrames(cv::Mat&, cv::Mat&);
@@ -110,6 +110,8 @@ private:
 
     const int frame_h= {360};
     const int frame_w= {640};
+    //const int frame_h= {426};
+    //const int frame_w= {640};
 
     std::thread _thread;
     std::thread _image_thread;

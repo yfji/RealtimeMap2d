@@ -112,8 +112,8 @@ private:
 
     cv::Mat currentImage;
 
-    const int barrel_thresh = {90};
-    const int barrel_diff_thresh ={30};
+    const int barrel_thresh = {80};
+    const int barrel_diff_thresh ={20};
     const int croco_thresh = {120};
     const int croco_diff_thresh = {20};
 

@@ -9,7 +9,6 @@ MapManager::MapManager(QObject* parent):
     qRegisterMetaType<std::string>("std::string");
     qRegisterMetaType<std::string>("std::string&");
 
-    _mission.reset(new Mission());
 }
 
 void MapManager::open(InputMethod method){
@@ -30,6 +29,8 @@ void MapManager::open(InputMethod method){
     }
     if(method==IPCAMERA || method==CAMERA)
         use_image_thread=true;
+
+    _mission.reset(new Mission());
 }
 
 void MapManager::start(){
@@ -97,8 +98,10 @@ void MapManager::threadFunction(){
         //int start_x=(curFrame.cols-frame_w)/2;
         //int start_y=(curFrame.rows-frame_h)/2;
         //frame=curFrame(cv::Rect(start_x, start_y, frame_w, frame_h));
-        cv::Mat frame;
-        cv::resize(stitchImage, frame, cv::Size(frame_w, frame_h), cv::INTER_LINEAR);
+        cv::Mat frame = stitchImage;
+        if(stitchImage.cols!=frame_w || stitchImage.rows!=frame_h)
+            cv::resize(frame, frame, cv::Size(frame_w, frame_h), cv::INTER_LINEAR);
+
         if(curState==PAUSE){
             if(time_reached){
                 _stitcher->matchNoStitch(frame);
@@ -111,8 +114,18 @@ void MapManager::threadFunction(){
             }
             map2d = _stitcher->getStitchedImage();
         }
+        /*
+         *
+         * Determines the frequency to read frames
+         * Usually, the minimum stitching time is 0.2s
+         * If set the time interval less than 0.2s on the panel
+         * The fps gets slower as the reading and stitching is in the same thread
+         * If set the time interval more than 0.2s
+         * The fps is 1/10e3 according to the usleep below during (interval-stitching_time)
+         *
+        */
         if(!time_reached){
-            usleep(20e3);
+            usleep(10e3);
         }
         time_reached=false;
         //callbackFunction(map2d, curFrame);
@@ -155,15 +168,20 @@ void MapManager::missionFunction(){
         img_mutex.unlock();
         auto rects=_mission->findTargets(missionImage);
         auto& targets=_mission->targets;
+
+
         if(targets.size()==0){
             if(!_mission->isGpsInHistory(gps))
-                _mission->compareTargetsWithGps(rects, targets, gps, "iou", 0.3);
+                _mission->compareTargetsWithGps(rects, targets, gps, "iou", 0.1);
         }
         else{
-            _mission->compareTargets(rects, targets, "iou", 0.3);
+            //_mission->compareTargets(rects, targets, "iou", 0.1);
+            _mission->compareTargetsWithGps(rects, targets, gps, "iou", 0.1);
         }
+
+
         /*
-         * Save targets here per 6 frames
+         * Save targets here per (check_interval) frames
          *
          */
         if(frame_index==check_interval){

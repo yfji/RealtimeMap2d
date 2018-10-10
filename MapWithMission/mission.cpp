@@ -270,17 +270,25 @@ void Mission::compareTargetsWithGps(std::vector<std::pair<cv::Rect, TYPE> >& loc
         if(strcmp(mode, "dist")==0){
             if(min_dist<eps){
                 target.location=locations[min_ind].first;
+                float lon=0.5*(target.gpsLocation.lon+currentGps.lon);
+                float lat=0.5*(target.gpsLocation.lat+currentGps.lat);
                 target.life++;
                 target.forgot=0;
+                target.gpsLocation.lon=lon;
+                target.gpsLocation.lat=lat;
             }
             else
                 target.forgot++;
         }
         else if(strcmp(mode, "iou")==0){
             if(max_iou>overlap){
-                target.location=locations[max_ind].first;
+                target.location=locations[min_ind].first;
+                float lon=0.5*(target.gpsLocation.lon+currentGps.lon);
+                float lat=0.5*(target.gpsLocation.lat+currentGps.lat);
                 target.life++;
                 target.forgot=0;
+                target.gpsLocation.lon=lon;
+                target.gpsLocation.lat=lat;
             }
             else
                 target.forgot++;
@@ -291,7 +299,7 @@ void Mission::compareTargetsWithGps(std::vector<std::pair<cv::Rect, TYPE> >& loc
     for(int i=0;i<nLocations;++i){
         if(!matched[i]){
             int max_id=targets.size()>0?targets[nTargets-1].id:0;
-            targets.push_back(Target{currentGps, locations[i].first, max_id, 0, 0, locations[i].second});
+            targets.push_back(Target{currentGps, locations[i].first, max_id, 1, 0, locations[i].second});
         }
     }
     currentGPS=currentGps;
