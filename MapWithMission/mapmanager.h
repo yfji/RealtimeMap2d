@@ -83,6 +83,10 @@ public:
     State getCurState(){
         return curState;
     }
+
+    void record(bool flag);
+    void detect(bool flag);
+
     map_callback callbackFunction;
 
     std::string fileList;
@@ -100,6 +104,7 @@ private:
     State curState = {STOP};
     InputMethod method;
     bool opened = {false};
+    bool detecting = {false};
     bool finished= {false};
     bool use_image_thread ={false};
     float period = {1};
@@ -122,6 +127,7 @@ private:
 
     cv::Mat curFrame;
     int curIndex = {0};
+    int videoIndex= {0};
 
     std::shared_ptr<ImageStitcher> _stitcher;
     std::shared_ptr<BaseImageInput> _input;

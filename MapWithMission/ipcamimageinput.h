@@ -20,7 +20,7 @@ public:
     }
     virtual void stop(){
         _requestStop=true;
-        usleep(10000);
+        usleep(50e3);
     }
 
 private:
@@ -28,8 +28,8 @@ private:
 
     std::mutex _mutex;
 
-    const int im_h=540;
-    const int im_w=960;
+    //const int im_h=540;
+    //const int im_w=960;
 
     bool _requestStop= {false};
     cv::Mat previewImage;

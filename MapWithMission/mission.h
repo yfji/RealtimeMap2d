@@ -7,6 +7,7 @@
 #include <vector>
 #include <fstream>
 #include <sstream>
+#include <queue>
 
 #define RIGHT_ANGLE 90.0
 #define EARTH_RADIUS 6378.137
@@ -112,10 +113,10 @@ private:
 
     cv::Mat currentImage;
 
-    const int barrel_thresh = {80};
-    const int barrel_diff_thresh ={20};
+    const int barrel_thresh = {120};
+    const int barrel_diff_thresh ={30};
     const int croco_thresh = {120};
-    const int croco_diff_thresh = {20};
+    const int croco_diff_thresh = {30};
 
     const float gps_dist_thresh={20};
 

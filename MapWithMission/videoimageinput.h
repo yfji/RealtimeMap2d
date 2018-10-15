@@ -18,8 +18,8 @@ public:
 private:
     cv::VideoCapture cap;
 
-    const int im_h=540;
-    const int im_w=960;
+    //const int im_h=540;
+    //const int im_w=960;
 };
 
 #endif // VIDEOIMAGEINPUT_H

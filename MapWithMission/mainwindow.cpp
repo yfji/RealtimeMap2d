@@ -27,6 +27,7 @@ MainWindow::MainWindow(QWidget *parent) :
 MainWindow::~MainWindow()
 {
     _gpsClient->stopConnect();
+    _mapManager->updateState(STOP);
     usleep(30e3);
     delete ui;
 }
@@ -95,6 +96,7 @@ void MainWindow::on_btn_start_clicked()
     else{
         _mapManager->updateState(BUILD);
     }
+    detectMessage();
 }
 
 void MainWindow::on_btn_pause_clicked()
@@ -124,6 +126,8 @@ void MainWindow::on_btn_finish_clicked()
         return;
     }
     _mapManager->updateState(STOP);
+    _mapManager->record(false);
+    _mapManager->detect(false);
     QMessageBox::information(this,tr("Info"),tr("All frames stitched!"),QMessageBox::Ok);
 }
 
@@ -274,8 +278,8 @@ void MainWindow::onGPSUpdate(std::string msg){
     float lon=gpsDataMap["lon"];
     float lat=gpsDataMap["lat"];
 
-    sprintf(data_lat, "%.2f", lat);
-    sprintf(data_lon, "%.2f", lon);
+    sprintf(data_lat, "%.6f", lat);
+    sprintf(data_lon, "%.6f", lon);
     ui->txt_count->setText(QString::number(count));
     ui->txt_lat->setText(QString(data_lat));
     ui->txt_lon->setText(QString(data_lon));
@@ -323,4 +327,52 @@ void MainWindow::decodeGPSMessage(const std::string &msg){
         gpsData.insert(std::pair<std::string, float>(key, val));
     }
     gpsDataMap=gpsData;
+}
+
+void MainWindow::on_btn_record_clicked()
+{
+    std::string msg;
+    if(!_recording){
+        if(_mapManager->getCurState()==STOP){
+            QMessageBox::warning(this,tr("Warning"),tr("Please preview or build!"),QMessageBox::Ok);
+            return;
+        }
+        _recording=true;
+        ui->btn_record->setText(tr("Finish Record"));
+        _mapManager->record(true);
+        msg="Start recording...";
+    }
+    else{
+        _recording=false;
+        ui->btn_record->setText(tr("Start Record"));
+        _mapManager->record(false);
+        msg="Finish recording...";
+    }
+    onUpdateStates(msg);
+}
+
+void MainWindow::detectMessage(){
+    std::string msg;
+    if(!_detecting){
+        if(_mapManager->getCurState()==STOP){
+            QMessageBox::warning(this,tr("Warning"),tr("Please preview or build!"),QMessageBox::Ok);
+            return;
+        }
+        _detecting=true;
+        ui->btn_detect->setText(tr("Finish"));
+        _mapManager->detect(true);
+        msg="Start detecting...";
+    }
+    else{
+        _detecting=false;
+        ui->btn_detect->setText(tr("Detect"));
+        _mapManager->detect(false);
+        msg="Finish detecting...";
+    }
+    onUpdateStates(msg);
+}
+
+void MainWindow::on_btn_detect_clicked()
+{
+    detectMessage();
 }

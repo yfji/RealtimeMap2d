@@ -21,8 +21,8 @@ QT_BEGIN_MOC_NAMESPACE
 QT_WARNING_PUSH
 QT_WARNING_DISABLE_DEPRECATED
 struct qt_meta_stringdata_MainWindow_t {
-    QByteArrayData data[29];
-    char stringdata0[534];
+    QByteArrayData data[32];
+    char stringdata0[592];
 };
 #define QT_MOC_LITERAL(idx, ofs, len) \
     Q_STATIC_BYTE_ARRAY_DATA_HEADER_INITIALIZER_WITH_OFFSET(len, \
@@ -58,8 +58,11 @@ QT_MOC_LITERAL(23, 435, 12), // "cv::Point2f&"
 QT_MOC_LITERAL(24, 448, 11), // "onGPSUpdate"
 QT_MOC_LITERAL(25, 460, 11), // "std::string"
 QT_MOC_LITERAL(26, 472, 3), // "msg"
-QT_MOC_LITERAL(27, 476, 25), // "on_btn_open_ipcam_clicked"
-QT_MOC_LITERAL(28, 502, 31) // "on_slide_ignore_actionTriggered"
+QT_MOC_LITERAL(27, 476, 13), // "detectMessage"
+QT_MOC_LITERAL(28, 490, 25), // "on_btn_open_ipcam_clicked"
+QT_MOC_LITERAL(29, 516, 31), // "on_slide_ignore_actionTriggered"
+QT_MOC_LITERAL(30, 548, 21), // "on_btn_record_clicked"
+QT_MOC_LITERAL(31, 570, 21) // "on_btn_detect_clicked"
 
     },
     "MainWindow\0on_btn_open_cam_clicked\0\0"
@@ -75,8 +78,9 @@ QT_MOC_LITERAL(28, 502, 31) // "on_slide_ignore_actionTriggered"
     "onUpdateFrames\0cv::Mat&\0onUpdateStates\0"
     "std::string&\0onUpdateClickedPoint\0"
     "cv::Point2f&\0onGPSUpdate\0std::string\0"
-    "msg\0on_btn_open_ipcam_clicked\0"
-    "on_slide_ignore_actionTriggered"
+    "msg\0detectMessage\0on_btn_open_ipcam_clicked\0"
+    "on_slide_ignore_actionTriggered\0"
+    "on_btn_record_clicked\0on_btn_detect_clicked"
 };
 #undef QT_MOC_LITERAL
 
@@ -86,7 +90,7 @@ static const uint qt_meta_data_MainWindow[] = {
        7,       // revision
        0,       // classname
        0,    0, // classinfo
-      20,   14, // methods
+      23,   14, // methods
        0,    0, // properties
        0,    0, // enums/sets
        0,    0, // constructors
@@ -94,26 +98,29 @@ static const uint qt_meta_data_MainWindow[] = {
        0,       // signalCount
 
  // slots: name, argc, parameters, tag, flags
-       1,    0,  114,    2, 0x08 /* Private */,
-       3,    0,  115,    2, 0x08 /* Private */,
-       4,    0,  116,    2, 0x08 /* Private */,
-       5,    0,  117,    2, 0x08 /* Private */,
-       6,    0,  118,    2, 0x08 /* Private */,
-       7,    0,  119,    2, 0x08 /* Private */,
-       8,    0,  120,    2, 0x08 /* Private */,
-       9,    0,  121,    2, 0x08 /* Private */,
-      10,    1,  122,    2, 0x08 /* Private */,
-      12,    0,  125,    2, 0x08 /* Private */,
-      13,    0,  126,    2, 0x08 /* Private */,
-      14,    1,  127,    2, 0x08 /* Private */,
-      15,    1,  130,    2, 0x08 /* Private */,
-      16,    1,  133,    2, 0x08 /* Private */,
-      18,    2,  136,    2, 0x08 /* Private */,
-      20,    1,  141,    2, 0x08 /* Private */,
-      22,    1,  144,    2, 0x08 /* Private */,
-      24,    1,  147,    2, 0x08 /* Private */,
-      27,    0,  150,    2, 0x08 /* Private */,
-      28,    1,  151,    2, 0x08 /* Private */,
+       1,    0,  129,    2, 0x08 /* Private */,
+       3,    0,  130,    2, 0x08 /* Private */,
+       4,    0,  131,    2, 0x08 /* Private */,
+       5,    0,  132,    2, 0x08 /* Private */,
+       6,    0,  133,    2, 0x08 /* Private */,
+       7,    0,  134,    2, 0x08 /* Private */,
+       8,    0,  135,    2, 0x08 /* Private */,
+       9,    0,  136,    2, 0x08 /* Private */,
+      10,    1,  137,    2, 0x08 /* Private */,
+      12,    0,  140,    2, 0x08 /* Private */,
+      13,    0,  141,    2, 0x08 /* Private */,
+      14,    1,  142,    2, 0x08 /* Private */,
+      15,    1,  145,    2, 0x08 /* Private */,
+      16,    1,  148,    2, 0x08 /* Private */,
+      18,    2,  151,    2, 0x08 /* Private */,
+      20,    1,  156,    2, 0x08 /* Private */,
+      22,    1,  159,    2, 0x08 /* Private */,
+      24,    1,  162,    2, 0x08 /* Private */,
+      27,    0,  165,    2, 0x08 /* Private */,
+      28,    0,  166,    2, 0x08 /* Private */,
+      29,    1,  167,    2, 0x08 /* Private */,
+      30,    0,  170,    2, 0x08 /* Private */,
+      31,    0,  171,    2, 0x08 /* Private */,
 
  // slots: parameters
     QMetaType::Void,
@@ -135,7 +142,10 @@ static const uint qt_meta_data_MainWindow[] = {
     QMetaType::Void, 0x80000000 | 23,    2,
     QMetaType::Void, 0x80000000 | 25,   26,
     QMetaType::Void,
+    QMetaType::Void,
     QMetaType::Void, QMetaType::Int,   11,
+    QMetaType::Void,
+    QMetaType::Void,
 
        0        // eod
 };
@@ -164,8 +174,11 @@ void MainWindow::qt_static_metacall(QObject *_o, QMetaObject::Call _c, int _id, 
         case 15: _t->onUpdateStates((*reinterpret_cast< std::string(*)>(_a[1]))); break;
         case 16: _t->onUpdateClickedPoint((*reinterpret_cast< cv::Point2f(*)>(_a[1]))); break;
         case 17: _t->onGPSUpdate((*reinterpret_cast< std::string(*)>(_a[1]))); break;
-        case 18: _t->on_btn_open_ipcam_clicked(); break;
-        case 19: _t->on_slide_ignore_actionTriggered((*reinterpret_cast< int(*)>(_a[1]))); break;
+        case 18: _t->detectMessage(); break;
+        case 19: _t->on_btn_open_ipcam_clicked(); break;
+        case 20: _t->on_slide_ignore_actionTriggered((*reinterpret_cast< int(*)>(_a[1]))); break;
+        case 21: _t->on_btn_record_clicked(); break;
+        case 22: _t->on_btn_detect_clicked(); break;
         default: ;
         }
     }
@@ -196,13 +209,13 @@ int MainWindow::qt_metacall(QMetaObject::Call _c, int _id, void **_a)
     if (_id < 0)
         return _id;
     if (_c == QMetaObject::InvokeMetaMethod) {
-        if (_id < 20)
+        if (_id < 23)
             qt_static_metacall(this, _c, _id, _a);
-        _id -= 20;
+        _id -= 23;
     } else if (_c == QMetaObject::RegisterMethodArgumentMetaType) {
-        if (_id < 20)
+        if (_id < 23)
             *reinterpret_cast<int*>(_a[0]) = -1;
-        _id -= 20;
+        _id -= 23;
     }
     return _id;
 }

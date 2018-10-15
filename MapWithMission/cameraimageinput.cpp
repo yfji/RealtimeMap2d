@@ -9,6 +9,8 @@ CameraImageInput::CameraImageInput(int d):
     isFinite=false;
     calib=true;
     cam.initMatrix();
+    im_w=960;
+    im_h=540;
 }
 
 CameraImageInput::CameraImageInput(const std::string& s):
@@ -20,6 +22,8 @@ CameraImageInput::CameraImageInput(const std::string& s):
     isFinite=false;
     //calib=true;
     //cam.initMatrix();
+    im_w=960;
+    im_h=540;
 }
 
 cv::Mat CameraImageInput::getRawImage(){
@@ -32,7 +36,9 @@ cv::Mat CameraImageInput::getRawImage(){
 #ifdef _1080P
             cv::resize(image, image, cv::Size(960,540), cv::INTER_LINEAR);
 #else
-            cv::resize(image, image, cv::Size(960,540), cv::INTER_LINEAR);
+            cv::resize(image, image, cv::Size(im_w, im_h), cv::INTER_LINEAR);
+            if(bRecording)
+                writer<<image;
 #endif
             if (correctedImage.empty())
                 correctedImage = cv::Mat::zeros(image.size(), image.type());

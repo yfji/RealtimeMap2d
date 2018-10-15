@@ -19,6 +19,11 @@ std::vector<std::pair<cv::Rect, TYPE> > Mission::findBoundingBoxes(cv::Mat& rgbI
 
     currentImage=rgbImg.clone();
 
+    //if(pContour->total>50){ //more than 50
+    //    cvReleaseMemStorage(&pStorage);
+    //    return boxes;
+    //}
+
     for (; pContour; pContour = pContour->h_next) {
         float true_area = fabs(cvContourArea(pContour));
         cv::Rect bbox = cvBoundingRect(pContour, 0);
@@ -45,6 +50,7 @@ std::vector<std::pair<cv::Rect, TYPE> > Mission::findBoundingBoxes(cv::Mat& rgbI
             int b=data[ind];
             int g=data[ind+1];
             int r=data[ind+2];
+            /*
             if(b>barrel_thresh && b>g+barrel_diff_thresh && b>r+barrel_diff_thresh)
                 barrel_b++;
             if(g>barrel_thresh && g>b+barrel_diff_thresh && g>r+barrel_diff_thresh)
@@ -55,17 +61,22 @@ std::vector<std::pair<cv::Rect, TYPE> > Mission::findBoundingBoxes(cv::Mat& rgbI
                 croco_b++;
             if(g>croco_thresh && g>b+croco_diff_thresh && g>r+croco_diff_thresh)
                 croco_g++;
-            if(r>croco_thresh && r>b+croco_diff_thresh && r>g+croco_diff_thresh)
+            if(r>croco_thresh && r>g+croco_diff_thresh && r>b+croco_diff_thresh)
                 croco_r++;
+            */
+            if(r>barrel_thresh && r>g+barrel_diff_thresh)
+                barrel_r++;
+            if(g>croco_thresh && g>b+croco_diff_thresh)
+                croco_g++;
         }
         std::tuple<int,int,int> barrel_count=std::tuple<int,int,int>(barrel_b, barrel_g, barrel_r);
-        //std::tuple<int,int,int> croco_count=std::tuple<int,int,int>(croco_b, croco_g, croco_r);
+        std::tuple<int,int,int> croco_count=std::tuple<int,int,int>(croco_b, croco_g, croco_r);
         if(isBarrel(barrel_count, bbox)){
             boxes.push_back(std::pair<cv::Rect, TYPE>(bbox, BARREL));
         }
-        //else if(isCrocodile(croco_count, bbox)){
-        //	boxes.push_back(std::pair<cv::Rect, TYPE>(bbox, CROCODILE));
-        //}
+        else if(isCrocodile(croco_count, bbox)){
+            boxes.push_back(std::pair<cv::Rect, TYPE>(bbox, CROCODILE));
+        }
     }
     cvReleaseMemStorage(&pStorage);
     return boxes;
@@ -95,9 +106,9 @@ bool Mission::isCrocodile(std::tuple<int,int,int>& count, cv::Rect& rect, float 
         return false;
     //const int cnt_thresh=MIN(rect.width, rect.height);
     const int cnt_thresh = rect.width*rect.height/4;
-    int r_cnt=std::get<0>(count);
+    int b_cnt=std::get<0>(count);
     int g_cnt=std::get<1>(count);
-    int b_cnt=std::get<2>(count);
+    int r_cnt=std::get<2>(count);
 
     if(g_cnt>cnt_thresh && g_cnt>r_cnt && g_cnt>b_cnt){
         //std::cout<<"Crocodile: "<<b_cnt<<','<<g_cnt<<','<<r_cnt<<std::endl;
@@ -312,8 +323,8 @@ std::vector<std::pair<cv::Rect, TYPE> > Mission::findTargets(cv::Mat& oriImg){
     //cv::Mat biImg=adaBinarize(salientMap);
     cv::Mat biImg;
     cv::threshold(salientMap, biImg, 180, 255, cv::THRESH_OTSU);
-    //cv::imshow("bi", biImg);
-    auto locations=findBoundingBoxes(oriImg, biImg, 300, 400000);
+    cv::imshow("bi", biImg);
+    auto locations=findBoundingBoxes(oriImg, biImg, 100, 400000);
     return locations;
 }
 

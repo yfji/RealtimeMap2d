@@ -9,6 +9,8 @@ VideoImageInput::VideoImageInput(const std::string& s):
     isFinite=true;
     calib=true;
     cam.initMatrix();
+    im_w=960;
+    im_h=540;
 }
 
 cv::Mat VideoImageInput::getRawImage(){

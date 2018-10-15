@@ -9,6 +9,8 @@ IPCamImageInput::IPCamImageInput(const std::string& s):
     isFinite=false;
     calib=true;
     cam.initMatrix();
+    im_w=960;
+    im_h=540;
 
     _thread=std::thread(&IPCamImageInput::previewFunction,this);
     _thread.detach();
@@ -42,6 +44,8 @@ cv::Mat IPCamImageInput::getRawImage(){
             int start_y=(tempImg.rows-im_h)/2;
             int start_x=(tempImg.cols-im_w)/2;
             image=tempImg(cv::Rect(start_x, start_y, im_w, im_h));
+            if(bRecording)
+                writer<<image;
 #endif
             if (correctedImage.empty())
                 correctedImage = cv::Mat::zeros(image.size(), image.type());

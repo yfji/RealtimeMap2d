@@ -53,10 +53,15 @@ private slots:
     void onUpdateStates(std::string&);
     void onUpdateClickedPoint(cv::Point2f&);
     void onGPSUpdate(std::string msg);
+    void detectMessage();
 
     void on_btn_open_ipcam_clicked();
 
     void on_slide_ignore_actionTriggered(int action);
+
+    void on_btn_record_clicked();
+
+    void on_btn_detect_clicked();
 
 private:
     Ui::MainWindow *ui;
@@ -73,6 +78,8 @@ private:
     int consoleLines={0};
     float _mapScale= {1.};
     bool _inputSourceSelected= {false};
+    bool _recording= {false};
+    bool _detecting= {false};
 
     void drawImages(cv::Mat& map, cv::Mat& curFrame);
     void decodeGPSMessage(const std::string &msg);

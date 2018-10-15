@@ -27,9 +27,10 @@ void MapManager::open(InputMethod method){
     else if(method==IPCAMERA){
         _input.reset(new IPCamImageInput(camIP));
     }
-    if(method==IPCAMERA || method==CAMERA)
+    if(method==IPCAMERA || method==CAMERA){
         use_image_thread=true;
-
+        std::cout<<"Using image thread"<<std::endl;
+    }
     _mission.reset(new Mission());
 }
 
@@ -43,8 +44,6 @@ void MapManager::start(){
         _image_thread.detach();
 
     }
-    _mission_thread=std::thread(&MapManager::missionFunction, this);
-    _mission_thread.detach();
 }
 
 void MapManager::getImageFunction(){
@@ -68,8 +67,11 @@ void MapManager::threadFunction(){
         }
 
         if(curFrame.empty()){
-            usleep(10e3);
-            continue;
+            //usleep(10e3);
+            //continue;
+            finished=true;
+            curState=STOP;
+            break;
         }
         cv::Mat stitchImage=equalize(curFrame);
         _mission_run=true;
@@ -143,23 +145,23 @@ void MapManager::threadFunction(){
             time_reached=true;
             duration=0;
         }
-        std::cout<<"Stitching frame "<<curIndex<<std::endl;
+        //std::cout<<"Stitching frame "<<curIndex<<std::endl;
         curIndex++;
     }
     _input->stop();
     _input->release();
     opened=false;
-    //cv::destroyAllWindows();
+
 }
 
 void MapManager::missionFunction(){
-    while(curState!=STOP){
+    while(curState!=STOP && detecting){
         if(!use_image_thread && !_mission_run){
-            usleep(30e3);
+            usleep(5e3);
             continue;
         }
         if(curFrame.empty()){
-            usleep(10e3);
+            usleep(5e3);
             continue;
         }
         cv::Mat missionImage;
@@ -171,7 +173,7 @@ void MapManager::missionFunction(){
 
 
         if(targets.size()==0){
-            if(!_mission->isGpsInHistory(gps))
+            _mission->isGpsInHistory(gps);
                 _mission->compareTargetsWithGps(rects, targets, gps, "iou", 0.1);
         }
         else{
@@ -191,6 +193,7 @@ void MapManager::missionFunction(){
         ++frame_index;
         _mission_run=false;
     }
+    cv::destroyAllWindows();
 }
 
 cv::Mat MapManager::getImage(bool withRect){
@@ -208,4 +211,25 @@ cv::Mat MapManager::equalize(cv::Mat& image){
     cv::Mat out;
     cv::normalize(image, out, 0, 255, cv::NORM_MINMAX);
     return out;
+}
+
+void MapManager::record(bool flag){
+    if(flag){
+        std::stringstream ss;
+        ss<<"videos/video_"<<videoIndex<<".avi";
+        _input->startRecord(ss.str());
+    }
+    else
+        _input->endRecord();
+}
+
+void MapManager::detect(bool flag){
+    if(flag){
+        detecting=true;
+        _mission_thread=std::thread(&MapManager::missionFunction, this);
+        _mission_thread.detach();
+    }
+    else{
+        detecting=false;
+    }
 }

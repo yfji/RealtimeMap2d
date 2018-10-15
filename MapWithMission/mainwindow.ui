@@ -211,8 +211,8 @@ IP Camera</string>
      <property name="geometry">
       <rect>
        <x>180</x>
-       <y>30</y>
-       <width>131</width>
+       <y>80</y>
+       <width>61</width>
        <height>41</height>
       </rect>
      </property>
@@ -223,9 +223,9 @@ IP Camera</string>
     <widget class="QPushButton" name="btn_resume">
      <property name="geometry">
       <rect>
-       <x>180</x>
+       <x>250</x>
        <y>80</y>
-       <width>131</width>
+       <width>61</width>
        <height>41</height>
       </rect>
      </property>
@@ -441,12 +441,12 @@ IP Camera</string>
       <rect>
        <x>20</x>
        <y>30</y>
-       <width>141</width>
+       <width>71</width>
        <height>41</height>
       </rect>
      </property>
      <property name="text">
-      <string>Start Preview</string>
+      <string>Preview</string>
      </property>
     </widget>
     <widget class="QTextEdit" name="txt_console">
@@ -579,6 +579,59 @@ IP Camera</string>
       <string/>
      </property>
     </widget>
+    <widget class="QPushButton" name="btn_record">
+     <property name="geometry">
+      <rect>
+       <x>180</x>
+       <y>30</y>
+       <width>131</width>
+       <height>41</height>
+      </rect>
+     </property>
+     <property name="text">
+      <string>Start Record</string>
+     </property>
+    </widget>
+    <widget class="QPushButton" name="btn_detect">
+     <property name="geometry">
+      <rect>
+       <x>100</x>
+       <y>30</y>
+       <width>61</width>
+       <height>41</height>
+      </rect>
+     </property>
+     <property name="text">
+      <string>Detect</string>
+     </property>
+    </widget>
+    <zorder>btn_record</zorder>
+    <zorder>btn_start</zorder>
+    <zorder>btn_pause</zorder>
+    <zorder>btn_resume</zorder>
+    <zorder>btn_finish</zorder>
+    <zorder>btn_save</zorder>
+    <zorder>label_2</zorder>
+    <zorder>slide_period</zorder>
+    <zorder>label</zorder>
+    <zorder>txt_max_time</zorder>
+    <zorder>txt_cur_time</zorder>
+    <zorder>slide_offset</zorder>
+    <zorder>slide_optim</zorder>
+    <zorder>txt_offset</zorder>
+    <zorder>txt_optim</zorder>
+    <zorder>label_4</zorder>
+    <zorder>label_5</zorder>
+    <zorder>label_6</zorder>
+    <zorder>btn_preview</zorder>
+    <zorder>txt_console</zorder>
+    <zorder>txt_count</zorder>
+    <zorder>txt_lon</zorder>
+    <zorder>txt_lat</zorder>
+    <zorder>label_8</zorder>
+    <zorder>slide_ignore</zorder>
+    <zorder>txt_ignore</zorder>
+    <zorder>btn_detect</zorder>
    </widget>
    <widget class="QGroupBox" name="groupBox_4">
     <property name="geometry">
