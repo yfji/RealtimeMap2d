@@ -74,6 +74,85 @@ cv::Mat salientDetect(cv::Mat& image){
 	return salMap;
 }
 
+void RGB2LabKernel(uchar* src_ptr, float* dst_ptr, int* size, std::vector<float>* means){
+    float L=0,A=0,B=0;
+    for(int i=0;i<(*size);++i){
+        int index=i*3;
+        RGBToLab(src_ptr+index, dst_ptr+index);
+        L+=dst_ptr[index];
+        A+=dst_ptr[index+1];
+        B+=dst_ptr[index+2];
+    }
+    means->push_back(L);
+    means->push_back(A);
+    means->push_back(B);
+}
+
+cv::Mat salientDetectFaster(cv::Mat& image, const int num_threads){
+    assert(image.channels()==3);
+
+    std::vector<std::thread> threads(num_threads);
+
+    cv::Mat salMap(image.size(), CV_32FC1);
+    cv::Mat labf;
+    int h = image.rows, w = image.cols;
+    int total_size=h*w;
+
+    labf.create(cv::Size(w, h), CV_32FC3);
+
+    uchar* fSrc = image.data;
+    float* fLab = (float*)labf.data;
+    float* fDst = (float*)salMap.data;
+
+    int row_per_thread=(int)(h/num_threads);
+    int except_row=h-row_per_thread*(num_threads-1);
+    int offset=0;
+
+    std::vector<std::vector<float> > means(num_threads);
+    std::vector<int> sizes(num_threads);
+
+    for(int i=0;i<num_threads;++i){
+        sizes[i]=row_per_thread*w;
+        if(i==0){
+            sizes[i]=except_row*w;
+        }
+        uchar* src_ptr=fSrc+offset;
+        float* lab_ptr=fLab+offset;
+        threads[i]=std::thread(&RGB2LabKernel, src_ptr, lab_ptr, &(sizes[i]), &(means[i]));
+
+        offset+=sizes[i]*3;
+    }
+    for(int i=0;i<num_threads;++i){
+        threads[i].join();
+    }
+    float meanL=0, meanA=0, meanB=0;
+
+    for(int i=0;i<num_threads;++i){
+        meanL+=means[i][0];
+        meanA+=means[i][1];
+        meanB+=means[i][2];
+    }
+
+    meanL/=total_size;
+    meanA/=total_size;
+    meanB/=total_size;
+
+    cv::GaussianBlur(labf, labf, cv::Size(5,5), 1);
+
+    for(int i=0;i<total_size;++i){
+        int index=i*3;
+        float diff_L=meanL-fLab[index];
+        float diff_A=meanA-fLab[index+1];
+        float diff_B=meanB-fLab[index+2];
+
+        fDst[i]=diff_L*diff_L+diff_A*diff_A+diff_B*diff_B;
+    }
+
+    cv::normalize(salMap, salMap, 0, 1, cv::NORM_MINMAX);
+    salMap.convertTo(salMap, CV_8UC1, 255);
+    return salMap;
+}
+
 cv::Mat adaBinarize(cv::Mat& salientMap){
     assert(salientMap.channels() == 1);
 	const int blockSize = 13;

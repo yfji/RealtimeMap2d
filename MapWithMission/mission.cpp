@@ -318,8 +318,9 @@ void Mission::compareTargetsWithGps(std::vector<std::pair<cv::Rect, TYPE> >& loc
         updateGPS(currentGPS);
 }
 
-std::vector<std::pair<cv::Rect, TYPE> > Mission::findTargets(cv::Mat& oriImg){
-    cv::Mat salientMap=salientDetect(oriImg);
+std::vector<std::pair<cv::Rect, TYPE> > Mission::findTargets(cv::Mat& oriImg, const int num_threads){
+    cv::Mat salientMap=salientDetectFaster(oriImg, num_threads);
+    //cv::Mat salientMap=salientDetect(oriImg);
     //cv::Mat biImg=adaBinarize(salientMap);
     cv::Mat biImg;
     cv::threshold(salientMap, biImg, 180, 255, cv::THRESH_OTSU);

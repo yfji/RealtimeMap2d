@@ -146,7 +146,7 @@ public:
                         const float eps=10, \
                         const int forgetFrame=3);
 
-    std::vector<std::pair<cv::Rect, TYPE> > findTargets(cv::Mat& oriImg);
+    std::vector<std::pair<cv::Rect, TYPE> > findTargets(cv::Mat& oriImg, const int num_threads=12);
 
     void saveTargets();
 

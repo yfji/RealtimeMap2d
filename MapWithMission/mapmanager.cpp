@@ -160,12 +160,13 @@ void MapManager::missionFunction(){
             usleep(5e3);
             continue;
         }
+        img_mutex.lock();
         if(curFrame.empty()){
+            img_mutex.unlock();
             usleep(5e3);
             continue;
         }
         cv::Mat missionImage;
-        img_mutex.lock();
         cv::resize(curFrame, missionImage, cv::Size(), 0.5, 0.5, cv::INTER_LINEAR);
         img_mutex.unlock();
         auto rects=_mission->findTargets(missionImage);
@@ -174,13 +175,12 @@ void MapManager::missionFunction(){
 
         if(targets.size()==0){
             _mission->isGpsInHistory(gps);
-                _mission->compareTargetsWithGps(rects, targets, gps, "iou", 0.1);
+            _mission->compareTargetsWithGps(rects, targets, gps, "iou", 0.1);
         }
         else{
             //_mission->compareTargets(rects, targets, "iou", 0.1);
             _mission->compareTargetsWithGps(rects, targets, gps, "iou", 0.1);
         }
-
 
         /*
          * Save targets here per (check_interval) frames
