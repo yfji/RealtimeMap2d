@@ -35,7 +35,7 @@ private:
     cv::Mat previewImage;
     std::thread _thread;
 
-    void previewFunction();
+    void readStreamFunction();
 };
 
 #endif // IPCAMIMAGEINPUT_H

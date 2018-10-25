@@ -58,6 +58,7 @@ void MapManager::getImageFunction(){
 void MapManager::threadFunction(){
     char time_reached=true;
     float duration=0;
+    int numEmptyFrames=0;
     while(curState!=STOP){
         auto start=std::chrono::high_resolution_clock::now();
         if(!use_image_thread){
@@ -67,11 +68,16 @@ void MapManager::threadFunction(){
         }
 
         if(curFrame.empty()){
-            //usleep(10e3);
+            numEmptyFrames++;
             //continue;
-            finished=true;
-            curState=STOP;
-            break;
+            if(numEmptyFrames==50){
+                finished=true;
+                curState=STOP;
+                break;
+            }
+            std::cout<<"Empty frame, wait"<<std::endl;
+            usleep(100e3);
+            continue;
         }
         cv::Mat stitchImage=equalize(curFrame);
         _mission_run=true;
@@ -168,6 +174,9 @@ void MapManager::missionFunction(){
         }
         cv::Mat missionImage;
         cv::resize(curFrame, missionImage, cv::Size(), 0.5, 0.5, cv::INTER_LINEAR);
+        //curFrame: 960x640
+        //missionImage: 480x320
+        //std::cout<<curFrame.rows<<','<<curFrame.cols<<std::endl;
         img_mutex.unlock();
         auto rects=_mission->findTargets(missionImage);
         auto& targets=_mission->targets;
@@ -198,7 +207,7 @@ void MapManager::missionFunction(){
 
 cv::Mat MapManager::getImage(bool withRect){
     cv::Mat image;
-    if(curState==BUILD){
+    if(curState==BUILD || curState==STOP){
         image=_stitcher->getStitchedImage(withRect);
     }
     else if(curState==PAUSE){

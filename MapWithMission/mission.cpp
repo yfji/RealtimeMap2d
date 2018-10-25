@@ -40,11 +40,13 @@ std::vector<std::pair<cv::Rect, TYPE> > Mission::findBoundingBoxes(cv::Mat& rgbI
             cvSeqRemove(pContour, 0);
             continue;
         }
-        int barrel_b=0, barrel_g=0, barrel_r=0;
-        int croco_b=0, croco_g=0, croco_r=0;
         cv::Mat patch=rgbImg(bbox).clone(); //must clone!!!
         uchar* data=patch.data;
         int size=bbox.width*bbox.height;
+
+        int barrel_b=0, barrel_g=0, barrel_r=0;
+        int croco_b=0, croco_g=0, croco_r=0;
+
         for(int i=0;i<size;++i){
             int ind=i*3;
             int b=data[ind];
@@ -73,9 +75,11 @@ std::vector<std::pair<cv::Rect, TYPE> > Mission::findBoundingBoxes(cv::Mat& rgbI
         std::tuple<int,int,int> croco_count=std::tuple<int,int,int>(croco_b, croco_g, croco_r);
         if(isBarrel(barrel_count, bbox)){
             boxes.push_back(std::pair<cv::Rect, TYPE>(bbox, BARREL));
+            //std::cout<<"Found barrel"<<std::endl;
         }
         else if(isCrocodile(croco_count, bbox)){
             boxes.push_back(std::pair<cv::Rect, TYPE>(bbox, CROCODILE));
+            //std::cout<<"Found crocodile"<<std::endl;
         }
     }
     cvReleaseMemStorage(&pStorage);
@@ -149,8 +153,8 @@ void Mission::compareTargets(std::vector<std::pair<cv::Rect, TYPE> >& locations,
         float max_iou=0;
         int max_ind=0;
         for(int j=0;j<nLocations;++j){
-            cv::Rect& loc=locations[i].first;
-            TYPE type=locations[i].second;
+            cv::Rect& loc=locations[j].first;
+            TYPE type=locations[j].second;
             int lx=loc.x, ly=loc.y;
             int lw=loc.width, lh=loc.height;
             if(strcmp(mode, "dist")==0){
@@ -205,7 +209,7 @@ void Mission::compareTargets(std::vector<std::pair<cv::Rect, TYPE> >& locations,
 
     for(int i=0;i<nLocations;++i){
         if(!matched[i]){
-            int max_id=targets.size()>0?targets[nTargets-1].id:0;
+            int max_id=targets.size()>0?targets[nTargets-1].id+1:0;
             targets.push_back(Target{currentGPS, locations[i].first, max_id, 0, 0, locations[i].second});
         }
     }
@@ -238,16 +242,18 @@ void Mission::compareTargetsWithGps(std::vector<std::pair<cv::Rect, TYPE> >& loc
     for(int i=0;i<nTargets;++i){
         Target& target=targets[i];
         cv::Rect& t_loc=target.location;
+
         int tx=t_loc.x, ty=t_loc.y;
         int tw=t_loc.width, th=t_loc.height;
+
         float min_dist=1e7;
         int min_ind=0;
         float max_iou=0;
         int max_ind=0;
 
         for(int j=0;j<nLocations;++j){
-            cv::Rect& loc=locations[i].first;
-            TYPE type=locations[i].second;
+            cv::Rect& loc=locations[j].first;
+            TYPE type=locations[j].second;
             int lx=loc.x, ly=loc.y;
             int lw=loc.width, lh=loc.height;
             if(strcmp(mode, "dist")==0){
@@ -256,8 +262,9 @@ void Mission::compareTargetsWithGps(std::vector<std::pair<cv::Rect, TYPE> >& loc
                 if(dist<min_dist && type==target.type){
                     min_dist=dist;
                     min_ind=j;
-                    if(dist<eps)
+                    if(dist<eps){
                         matched[j]=1;
+                    }
                 }
             }
             else if(strcmp(mode, "iou")==0){
@@ -266,13 +273,14 @@ void Mission::compareTargetsWithGps(std::vector<std::pair<cv::Rect, TYPE> >& loc
                 int overlap_w=MAX(0, rbx-ltx);
                 int overlap_h=MAX(0, rby-lty);
                 int t_area=tw*th, l_area=lw*lh;
-                float overlap_area=overlap_w*overlap_h;
+                float overlap_area=1.0*overlap_w*overlap_h;
                 float iou=overlap_area/(t_area+l_area-overlap_area);
                 if(iou>max_iou && type==target.type){
                     max_iou=iou;
                     max_ind=j;
-                    if(iou>overlap)
+                    if(iou>overlap){
                         matched[j]=1;
+                    }
                 }
             }
             else
@@ -288,12 +296,14 @@ void Mission::compareTargetsWithGps(std::vector<std::pair<cv::Rect, TYPE> >& loc
                 target.gpsLocation.lon=lon;
                 target.gpsLocation.lat=lat;
             }
-            else
+            else{
                 target.forgot++;
+                target.life--;
+            }
         }
         else if(strcmp(mode, "iou")==0){
             if(max_iou>overlap){
-                target.location=locations[min_ind].first;
+                target.location=locations[max_ind].first;
                 float lon=0.5*(target.gpsLocation.lon+currentGps.lon);
                 float lat=0.5*(target.gpsLocation.lat+currentGps.lat);
                 target.life++;
@@ -301,16 +311,18 @@ void Mission::compareTargetsWithGps(std::vector<std::pair<cv::Rect, TYPE> >& loc
                 target.gpsLocation.lon=lon;
                 target.gpsLocation.lat=lat;
             }
-            else
+            else{
                 target.forgot++;
+                target.life--;
+            }
         }
         else
             assert(0);
     }
-    for(int i=0;i<nLocations;++i){
-        if(!matched[i]){
-            int max_id=targets.size()>0?targets[nTargets-1].id:0;
-            targets.push_back(Target{currentGps, locations[i].first, max_id, 1, 0, locations[i].second});
+    for(int j=0;j<nLocations;++j){
+        if(matched[j]==0){
+            int max_id=targets.size()>0?targets[nTargets-1].id+1:0;
+            targets.push_back(Target{currentGps, locations[j].first, max_id, 1, 0, locations[j].second});
         }
     }
     currentGPS=currentGps;
@@ -323,9 +335,9 @@ std::vector<std::pair<cv::Rect, TYPE> > Mission::findTargets(cv::Mat& oriImg, co
     //cv::Mat salientMap=salientDetect(oriImg);
     //cv::Mat biImg=adaBinarize(salientMap);
     cv::Mat biImg;
-    cv::threshold(salientMap, biImg, 180, 255, cv::THRESH_OTSU);
+    cv::threshold(salientMap, biImg, 120, 255, cv::THRESH_OTSU);
     cv::imshow("bi", biImg);
-    auto locations=findBoundingBoxes(oriImg, biImg, 100, 400000);
+    auto locations=findBoundingBoxes(oriImg, biImg, 64, 40000);
     return locations;
 }
 
@@ -359,13 +371,18 @@ bool Mission::isGpsInHistory(GPS &curGps){
 void Mission::saveTargets(){
     bool has_target=false;
     for(int i=0;i<targets.size();++i){
-        if(targets[i].life>3 && targets[i].forgot<3){
-            cv::rectangle(currentImage, targets[i].location, cv::Scalar(0,0,255), 2);
+        if(targets[i].life>=3 && targets[i].forgot<3){
+            cv::Scalar color;
             std::string name="";
-            if(targets[i].type==BARREL)
+            if(targets[i].type==BARREL){
+                color=cv::Scalar(0,0,255);
                 name="barrel";
-            else if(targets[i].type==CROCODILE)
+            }
+            else if(targets[i].type==CROCODILE){
+                color=cv::Scalar(255,0,0);
                 name="crocodile";
+            }
+            cv::rectangle(currentImage, targets[i].location, color, 2);
             std::stringstream ss;
             ss<<"["<<savedIndex<<"]:"<<name.c_str()<<"---->"<<targets[i].gpsLocation.lat<<','<<targets[i].gpsLocation.lon;
             std::string s=ss.str();

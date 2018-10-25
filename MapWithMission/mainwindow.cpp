@@ -125,6 +125,9 @@ void MainWindow::on_btn_finish_clicked()
         QMessageBox::warning(this,tr("Warning"),tr("Input source not opened!"),QMessageBox::Ok);
         return;
     }
+    ui->btn_detect->setText(tr("Detect"));
+    _mapManager->detect(false);
+
     _mapManager->updateState(STOP);
     _mapManager->record(false);
     _mapManager->detect(false);
@@ -134,9 +137,13 @@ void MainWindow::on_btn_finish_clicked()
 void MainWindow::on_btn_save_clicked()
 {
     cv::Mat map2d=_mapManager->getImage(false);
+    if(map2d.empty()){
+        std::cout<<"No valid image"<<std::endl;
+        return;
+    }
     std::stringstream ss;
     ss<<"./maps/map_"<<savedIndex<<".jpg";
-    std::cout<<"Savint to "<<ss.str()<<std::endl;
+    std::cout<<"Saving to "<<ss.str()<<std::endl;
     savedIndex++;
     cv::imwrite(ss.str(), map2d);
 }

@@ -12,17 +12,23 @@ IPCamImageInput::IPCamImageInput(const std::string& s):
     im_w=960;
     im_h=540;
 
-    _thread=std::thread(&IPCamImageInput::previewFunction,this);
+    _thread=std::thread(&IPCamImageInput::readStreamFunction,this);
     _thread.detach();
 }
 
-void IPCamImageInput::previewFunction(){
+void IPCamImageInput::readStreamFunction(){
     std::cout<<"Start fetching IP stream"<<std::endl;
     while(opened && !_requestStop){
         _mutex.lock();
         cap.read(previewImage);
         _mutex.unlock();
-        usleep(100);
+        usleep(10);
+    }
+    if(!opened){
+        std::cout<<"Open ip stream failed"<<std::endl;
+    }
+    if(_requestStop){
+        std::cout<<"Request stop triggered"<<std::endl;
     }
     std::cout<<"Finish fetching stream"<<std::endl;
 }

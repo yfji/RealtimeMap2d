@@ -111,7 +111,7 @@ private:
     float micro_seconds;
 
     int frame_index= {0};
-    const int check_interval= {4};
+    const int check_interval= {3};
 
     const int frame_h= {360};
     const int frame_w= {640};
