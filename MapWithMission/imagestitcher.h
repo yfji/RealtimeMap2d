@@ -54,6 +54,8 @@ private:
     float speed_x={0.};
     float speed_y={0.};
 
+    int _index={0};
+
     float _alpha_offset = {0.3};
     float _alpha_optim = {0.6};
     float _ignore_thresh = {0.33};

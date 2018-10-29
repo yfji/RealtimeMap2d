@@ -3,6 +3,7 @@
 IPCamImageInput::IPCamImageInput(const std::string& s):
     BaseImageInput(s)
 {
+    type=IPCAMERA;
     cap.open(strSource);
     opened=cap.isOpened();
     numFrames=-1;
@@ -11,6 +12,20 @@ IPCamImageInput::IPCamImageInput(const std::string& s):
     cam.initMatrix();
     im_w=960;
     im_h=540;
+
+#ifdef SAVE_GPS
+    std::ifstream in;
+    in.open(cfg_path, std::ios::in);
+    int index;
+    in>>index;
+    in.close();
+
+    std::stringstream ss;
+    ss<<"logs/gps_"<<index-1<<".log";
+
+    out_gps.open(ss.str().c_str(), std::ios::out);
+
+#endif
 
     _thread=std::thread(&IPCamImageInput::readStreamFunction,this);
     _thread.detach();
@@ -43,6 +58,10 @@ cv::Mat IPCamImageInput::getRawImage(){
         cv::Mat tempImg=previewImage.clone();
         _mutex.unlock();
 
+        if(tempImg.empty()){
+            return cv::Mat();
+        }
+
         if(calib){
 #ifdef _1080P
             cv::resize(tempImg, tempImg, cv::Size(960,540), cv::INTER_LINEAR);
@@ -52,6 +71,15 @@ cv::Mat IPCamImageInput::getRawImage(){
             image=tempImg(cv::Rect(start_x, start_y, im_w, im_h));
             if(bRecording)
                 writer<<image;
+#ifdef SAVE_GPS
+            char _lon[20];
+            char _lat[20];
+            sprintf(_lon, "%.15f",_gps->lon);
+            sprintf(_lat, "%.15f",_gps->lat);
+
+            out_gps<<_lon<<' '<<_lat<<std::endl;
+#endif
+
 #endif
             if (correctedImage.empty())
                 correctedImage = cv::Mat::zeros(image.size(), image.type());

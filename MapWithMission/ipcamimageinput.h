@@ -28,6 +28,8 @@ private:
 
     std::mutex _mutex;
 
+    std::ofstream out_gps;
+
     //const int im_h=540;
     //const int im_w=960;
 

@@ -3,7 +3,18 @@
 
 #include <opencv2/opencv.hpp>
 #include <iostream>
+#include "mission.h"
 #include "cameracalibration.h"
+
+enum InputMethod{
+    CAMERA,
+    IPCAMERA,
+    VIDEO,
+    FILELIST,
+    FOLDER
+};
+
+#define SAVE_GPS
 
 class BaseImageInput
 {
@@ -24,22 +35,24 @@ public:
         return opened;
     }
 
-    inline void startRecord(const std::string& video_name){
-        writer.open(video_name, CV_FOURCC('M','J','P','G'), 30, cv::Size(im_w, im_h));
-        bRecording=(writer.isOpened());
-    }
+    void startRecord();
 
     inline void endRecord(){
         bRecording=false;
     }
     virtual cv::Mat getRawImage()=0;
 
+    virtual std::vector<float> getGPS(){
+        return {0,0};
+    }
+
     virtual void release(){}
 
     virtual void stop(){}
 
-    int im_w = {0};
-    int im_h = {0};
+    const GPS* _gps;
+
+    InputMethod type;
 
 protected:
     int numFrames;
@@ -49,6 +62,10 @@ protected:
     bool calib = {false};
     bool bRecording = {false};
 
+    int im_w = {0};
+    int im_h = {0};
+
+    const char* cfg_path="./videos/cfg";
 
     int digitSource;
     std::string strSource;

@@ -3,6 +3,7 @@
 CameraImageInput::CameraImageInput(int d):
     BaseImageInput(d)
 {
+    type=CAMERA;
     cap.open(digitSource);
     opened=cap.isOpened();
     numFrames=-1;

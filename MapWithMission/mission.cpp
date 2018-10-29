@@ -1,13 +1,12 @@
 #include "mission.h"
 
-
 Mission::Mission()
 {
-    out.open("./maps/mission.log", std::ios::out);
+    out_det.open("./logs/mission.log", std::ios::out);
 }
 
 Mission::~Mission(){
-    out.close();
+    out_det.close();
 }
 
 std::vector<std::pair<cv::Rect, TYPE> > Mission::findBoundingBoxes(cv::Mat& rgbImg, cv::Mat& biImg, int min_area, int max_area){
@@ -326,8 +325,9 @@ void Mission::compareTargetsWithGps(std::vector<std::pair<cv::Rect, TYPE> >& loc
         }
     }
     currentGPS=currentGps;
-    if(targets.size()>0)
+    if(targets.size()>0){
         updateGPS(currentGPS);
+    }
 }
 
 std::vector<std::pair<cv::Rect, TYPE> > Mission::findTargets(cv::Mat& oriImg, const int num_threads){
@@ -369,7 +369,7 @@ bool Mission::isGpsInHistory(GPS &curGps){
 }
 
 void Mission::saveTargets(){
-    bool has_target=false;
+    has_target=false;
     for(int i=0;i<targets.size();++i){
         if(targets[i].life>=3 && targets[i].forgot<3){
             cv::Scalar color;
@@ -384,17 +384,17 @@ void Mission::saveTargets(){
             }
             cv::rectangle(currentImage, targets[i].location, color, 2);
             std::stringstream ss;
-            ss<<"["<<savedIndex<<"]:"<<name.c_str()<<"---->"<<targets[i].gpsLocation.lat<<','<<targets[i].gpsLocation.lon;
+            ss<<"["<<savedIndex<<"]:"<<name.c_str()<<"---->"<<targets[i].gpsLocation.lon<<','<<targets[i].gpsLocation.lat;
             std::string s=ss.str();
             std::cout<<s<<std::endl;
-            out<<s<<std::endl;
+            out_det<<s<<std::endl;
             has_target=true;
         }
     }
     //if(has_target && !gpsInHistory){
     if(has_target){
         std::stringstream ss;
-        ss<<"./maps/target_"<<savedIndex<<".jpg";
+        ss<<"./logs/target_"<<savedIndex<<".jpg";
         cv::imwrite(ss.str(), currentImage);
         ++savedIndex;
     }

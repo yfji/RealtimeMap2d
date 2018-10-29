@@ -104,9 +104,12 @@ public:
         currentGPS=g;
     }
 
+    bool has_target = {false};
+
 private:
     int savedIndex = {0};
-    std::ofstream out;
+    std::ofstream out_det;
+
     bool gpsInHistory = {false};
 
     GPS currentGPS;
@@ -149,6 +152,7 @@ public:
     std::vector<std::pair<cv::Rect, TYPE> > findTargets(cv::Mat& oriImg, const int num_threads=12);
 
     void saveTargets();
+    void saveGPS();
 
     bool isGpsInHistory(GPS& curGps);
 

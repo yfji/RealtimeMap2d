@@ -21,8 +21,8 @@ QT_BEGIN_MOC_NAMESPACE
 QT_WARNING_PUSH
 QT_WARNING_DISABLE_DEPRECATED
 struct qt_meta_stringdata_MainWindow_t {
-    QByteArrayData data[32];
-    char stringdata0[592];
+    QByteArrayData data[35];
+    char stringdata0[618];
 };
 #define QT_MOC_LITERAL(idx, ofs, len) \
     Q_STATIC_BYTE_ARRAY_DATA_HEADER_INITIALIZER_WITH_OFFSET(len, \
@@ -58,11 +58,14 @@ QT_MOC_LITERAL(23, 435, 12), // "cv::Point2f&"
 QT_MOC_LITERAL(24, 448, 11), // "onGPSUpdate"
 QT_MOC_LITERAL(25, 460, 11), // "std::string"
 QT_MOC_LITERAL(26, 472, 3), // "msg"
-QT_MOC_LITERAL(27, 476, 13), // "detectMessage"
-QT_MOC_LITERAL(28, 490, 25), // "on_btn_open_ipcam_clicked"
-QT_MOC_LITERAL(29, 516, 31), // "on_slide_ignore_actionTriggered"
-QT_MOC_LITERAL(30, 548, 21), // "on_btn_record_clicked"
-QT_MOC_LITERAL(31, 570, 21) // "on_btn_detect_clicked"
+QT_MOC_LITERAL(27, 476, 17), // "onRecordGPSUpdate"
+QT_MOC_LITERAL(28, 494, 3), // "lon"
+QT_MOC_LITERAL(29, 498, 3), // "lat"
+QT_MOC_LITERAL(30, 502, 13), // "detectMessage"
+QT_MOC_LITERAL(31, 516, 25), // "on_btn_open_ipcam_clicked"
+QT_MOC_LITERAL(32, 542, 31), // "on_slide_ignore_actionTriggered"
+QT_MOC_LITERAL(33, 574, 21), // "on_btn_record_clicked"
+QT_MOC_LITERAL(34, 596, 21) // "on_btn_detect_clicked"
 
     },
     "MainWindow\0on_btn_open_cam_clicked\0\0"
@@ -78,7 +81,8 @@ QT_MOC_LITERAL(31, 570, 21) // "on_btn_detect_clicked"
     "onUpdateFrames\0cv::Mat&\0onUpdateStates\0"
     "std::string&\0onUpdateClickedPoint\0"
     "cv::Point2f&\0onGPSUpdate\0std::string\0"
-    "msg\0detectMessage\0on_btn_open_ipcam_clicked\0"
+    "msg\0onRecordGPSUpdate\0lon\0lat\0"
+    "detectMessage\0on_btn_open_ipcam_clicked\0"
     "on_slide_ignore_actionTriggered\0"
     "on_btn_record_clicked\0on_btn_detect_clicked"
 };
@@ -90,7 +94,7 @@ static const uint qt_meta_data_MainWindow[] = {
        7,       // revision
        0,       // classname
        0,    0, // classinfo
-      23,   14, // methods
+      24,   14, // methods
        0,    0, // properties
        0,    0, // enums/sets
        0,    0, // constructors
@@ -98,29 +102,30 @@ static const uint qt_meta_data_MainWindow[] = {
        0,       // signalCount
 
  // slots: name, argc, parameters, tag, flags
-       1,    0,  129,    2, 0x08 /* Private */,
-       3,    0,  130,    2, 0x08 /* Private */,
-       4,    0,  131,    2, 0x08 /* Private */,
-       5,    0,  132,    2, 0x08 /* Private */,
-       6,    0,  133,    2, 0x08 /* Private */,
-       7,    0,  134,    2, 0x08 /* Private */,
-       8,    0,  135,    2, 0x08 /* Private */,
-       9,    0,  136,    2, 0x08 /* Private */,
-      10,    1,  137,    2, 0x08 /* Private */,
-      12,    0,  140,    2, 0x08 /* Private */,
-      13,    0,  141,    2, 0x08 /* Private */,
-      14,    1,  142,    2, 0x08 /* Private */,
-      15,    1,  145,    2, 0x08 /* Private */,
-      16,    1,  148,    2, 0x08 /* Private */,
-      18,    2,  151,    2, 0x08 /* Private */,
-      20,    1,  156,    2, 0x08 /* Private */,
-      22,    1,  159,    2, 0x08 /* Private */,
-      24,    1,  162,    2, 0x08 /* Private */,
-      27,    0,  165,    2, 0x08 /* Private */,
-      28,    0,  166,    2, 0x08 /* Private */,
-      29,    1,  167,    2, 0x08 /* Private */,
-      30,    0,  170,    2, 0x08 /* Private */,
-      31,    0,  171,    2, 0x08 /* Private */,
+       1,    0,  134,    2, 0x08 /* Private */,
+       3,    0,  135,    2, 0x08 /* Private */,
+       4,    0,  136,    2, 0x08 /* Private */,
+       5,    0,  137,    2, 0x08 /* Private */,
+       6,    0,  138,    2, 0x08 /* Private */,
+       7,    0,  139,    2, 0x08 /* Private */,
+       8,    0,  140,    2, 0x08 /* Private */,
+       9,    0,  141,    2, 0x08 /* Private */,
+      10,    1,  142,    2, 0x08 /* Private */,
+      12,    0,  145,    2, 0x08 /* Private */,
+      13,    0,  146,    2, 0x08 /* Private */,
+      14,    1,  147,    2, 0x08 /* Private */,
+      15,    1,  150,    2, 0x08 /* Private */,
+      16,    1,  153,    2, 0x08 /* Private */,
+      18,    2,  156,    2, 0x08 /* Private */,
+      20,    1,  161,    2, 0x08 /* Private */,
+      22,    1,  164,    2, 0x08 /* Private */,
+      24,    1,  167,    2, 0x08 /* Private */,
+      27,    2,  170,    2, 0x08 /* Private */,
+      30,    0,  175,    2, 0x08 /* Private */,
+      31,    0,  176,    2, 0x08 /* Private */,
+      32,    1,  177,    2, 0x08 /* Private */,
+      33,    0,  180,    2, 0x08 /* Private */,
+      34,    0,  181,    2, 0x08 /* Private */,
 
  // slots: parameters
     QMetaType::Void,
@@ -141,6 +146,7 @@ static const uint qt_meta_data_MainWindow[] = {
     QMetaType::Void, 0x80000000 | 21,    2,
     QMetaType::Void, 0x80000000 | 23,    2,
     QMetaType::Void, 0x80000000 | 25,   26,
+    QMetaType::Void, QMetaType::Float, QMetaType::Float,   28,   29,
     QMetaType::Void,
     QMetaType::Void,
     QMetaType::Void, QMetaType::Int,   11,
@@ -174,11 +180,12 @@ void MainWindow::qt_static_metacall(QObject *_o, QMetaObject::Call _c, int _id, 
         case 15: _t->onUpdateStates((*reinterpret_cast< std::string(*)>(_a[1]))); break;
         case 16: _t->onUpdateClickedPoint((*reinterpret_cast< cv::Point2f(*)>(_a[1]))); break;
         case 17: _t->onGPSUpdate((*reinterpret_cast< std::string(*)>(_a[1]))); break;
-        case 18: _t->detectMessage(); break;
-        case 19: _t->on_btn_open_ipcam_clicked(); break;
-        case 20: _t->on_slide_ignore_actionTriggered((*reinterpret_cast< int(*)>(_a[1]))); break;
-        case 21: _t->on_btn_record_clicked(); break;
-        case 22: _t->on_btn_detect_clicked(); break;
+        case 18: _t->onRecordGPSUpdate((*reinterpret_cast< float(*)>(_a[1])),(*reinterpret_cast< float(*)>(_a[2]))); break;
+        case 19: _t->detectMessage(); break;
+        case 20: _t->on_btn_open_ipcam_clicked(); break;
+        case 21: _t->on_slide_ignore_actionTriggered((*reinterpret_cast< int(*)>(_a[1]))); break;
+        case 22: _t->on_btn_record_clicked(); break;
+        case 23: _t->on_btn_detect_clicked(); break;
         default: ;
         }
     }
@@ -209,13 +216,13 @@ int MainWindow::qt_metacall(QMetaObject::Call _c, int _id, void **_a)
     if (_id < 0)
         return _id;
     if (_c == QMetaObject::InvokeMetaMethod) {
-        if (_id < 23)
+        if (_id < 24)
             qt_static_metacall(this, _c, _id, _a);
-        _id -= 23;
+        _id -= 24;
     } else if (_c == QMetaObject::RegisterMethodArgumentMetaType) {
-        if (_id < 23)
+        if (_id < 24)
             *reinterpret_cast<int*>(_a[0]) = -1;
-        _id -= 23;
+        _id -= 24;
     }
     return _id;
 }

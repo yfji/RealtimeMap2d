@@ -53,6 +53,7 @@ private slots:
     void onUpdateStates(std::string&);
     void onUpdateClickedPoint(cv::Point2f&);
     void onGPSUpdate(std::string msg);
+    void onRecordGPSUpdate(float lon, float lat);
     void detectMessage();
 
     void on_btn_open_ipcam_clicked();

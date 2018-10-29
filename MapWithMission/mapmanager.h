@@ -21,14 +21,6 @@
 #include "ipcamimageinput.h"
 #include "mission.h"
 
-enum InputMethod{
-    CAMERA,
-    IPCAMERA,
-    VIDEO,
-    FILELIST,
-    FOLDER
-};
-
 enum State{
     PREVIEW,
     BUILD,
@@ -99,6 +91,7 @@ public:
 signals:
     void publishFrames(cv::Mat&, cv::Mat&);
     void publishStates(std::string&);
+    void publishRecordGPS(float, float);
 
 private:
     State curState = {STOP};

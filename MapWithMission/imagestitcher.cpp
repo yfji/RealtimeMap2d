@@ -24,6 +24,7 @@ void ImageStitcher::reset(){
     offset=cv::Point2i(0,0);
     max_roi_offset=cv::Point2i(0,0);
     min_roi_offset=cv::Point2i(1e4,1e4);
+    firstImg=1;
 }
 
 ImageStitcher::~ImageStitcher()
@@ -248,6 +249,13 @@ void ImageStitcher::stitch(cv::Mat& img) {
         map2dCanvas=map2dNoStitch.clone();
         cv::rectangle(map2dCanvas, cv::Rect(0,0, width, height), cv::Scalar(0,0,255), 2);
         state="First frame";
+        /*
+        std::stringstream ss;
+        ss<<"1stframe_"<<_index<<".jpg";
+        cv::imwrite(ss.str(), img);
+        ++_index;
+        std::cout<<"First frame"<<std::endl;
+        */
         return;
     }
     std::vector<cv::Point2f> pt_left, pt_right;

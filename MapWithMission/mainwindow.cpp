@@ -20,7 +20,7 @@ MainWindow::MainWindow(QWidget *parent) :
     QObject::connect(_mapManager.get(), SIGNAL(publishStates(std::string&)), SLOT(onUpdateStates(std::string&)));
     QObject::connect(_mapLabel, SIGNAL(publishClickedPoint(cv::Point2f&)), SLOT(onUpdateClickedPoint(cv::Point2f&)));
     QObject::connect(&(_gpsClient->publisher), SIGNAL(publishGPSMessage(std::string)), SLOT(onGPSUpdate(std::string)));
-
+    QObject::connect(_mapManager.get(), SIGNAL(publishRecordGPS(float,float)), SLOT(onRecordGPSUpdate(float,float)));
     _gpsClient->startConnect(10);
 }
 
@@ -127,6 +127,8 @@ void MainWindow::on_btn_finish_clicked()
     }
     ui->btn_detect->setText(tr("Detect"));
     _mapManager->detect(false);
+    ui->btn_record->setText(tr("Start Record"));
+    _mapManager->record(false);
 
     _mapManager->updateState(STOP);
     _mapManager->record(false);
@@ -151,8 +153,15 @@ void MainWindow::on_btn_save_clicked()
 void MainWindow::drawImages(cv::Mat& map, cv::Mat& curFrame){
     if(curFrame.empty()){
         //QMessageBox::information(this,tr("Info"),tr("All frames stitched!"),QMessageBox::Ok);
+        ui->label_frame->clear();
         return;
     }
+    /*
+    if(map.empty()){
+        ui->label_map->clear();
+        return;
+    }
+    */
     int map_w=ui->label_map->width();
     int map_h=ui->label_map->height();
     int frame_w=ui->label_frame->width();
@@ -285,12 +294,22 @@ void MainWindow::onGPSUpdate(std::string msg){
     float lon=gpsDataMap["lon"];
     float lat=gpsDataMap["lat"];
 
-    sprintf(data_lat, "%.6f", lat);
-    sprintf(data_lon, "%.6f", lon);
+    sprintf(data_lat, "%.2f", lat);
+    sprintf(data_lon, "%.2f", lon);
     ui->txt_count->setText(QString::number(count));
     ui->txt_lat->setText(QString(data_lat));
     ui->txt_lon->setText(QString(data_lon));
 
+    _mapManager->gps=GPS{lon, lat};
+}
+
+void MainWindow::onRecordGPSUpdate(float lon, float lat){
+    char data_lat[20];
+    char data_lon[20];
+    sprintf(data_lat, "%.2f", lat);
+    sprintf(data_lon, "%.2f", lon);
+    ui->txt_lat->setText(QString(data_lat));
+    ui->txt_lon->setText(QString(data_lon));
     _mapManager->gps=GPS{lon, lat};
 }
 

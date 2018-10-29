@@ -31,7 +31,12 @@ void MapManager::open(InputMethod method){
         use_image_thread=true;
         std::cout<<"Using image thread"<<std::endl;
     }
+    else{
+        use_image_thread=false;
+        std::cout<<"Using stable image source"<<std::endl;
+    }
     _mission.reset(new Mission());
+    _input->_gps=&gps;
 }
 
 void MapManager::start(){
@@ -40,9 +45,9 @@ void MapManager::start(){
     _thread.detach();
 
     if(use_image_thread){
+        std::cout<<"Open image stream"<<std::endl;
         _image_thread=std::thread(&MapManager::getImageFunction, this);
         _image_thread.detach();
-
     }
 }
 
@@ -59,18 +64,35 @@ void MapManager::threadFunction(){
     char time_reached=true;
     float duration=0;
     int numEmptyFrames=0;
+    int checkFrames=5;
+    int check_ind=0;
+#ifdef USE_GPS
+    vector<float> lon_lat;
+#endif
+
     while(curState!=STOP){
+        //img_mutex.lock();
+        //curFrame=_input->getRawImage();
+        //img_mutex.unlock();
+
         auto start=std::chrono::high_resolution_clock::now();
         if(!use_image_thread){
             img_mutex.lock();
             curFrame=_input->getRawImage();
+#ifdef USE_GPS
+            lon_lat=_input->getGPS();
+#endif
             img_mutex.unlock();
+            _mission_run=true;
         }
-
+#ifdef USE_GPS
+        if(_input->type==VIDEO)  {
+            emit publishRecordGPS(lon_lat[0], lon_lat[1]);
+        }
+#endif
         if(curFrame.empty()){
             numEmptyFrames++;
-            //continue;
-            if(numEmptyFrames==50){
+            if(numEmptyFrames==50+checkFrames){
                 finished=true;
                 curState=STOP;
                 break;
@@ -79,10 +101,15 @@ void MapManager::threadFunction(){
             usleep(100e3);
             continue;
         }
+        else if(use_image_thread && check_ind<checkFrames){
+            usleep(10e3);
+            ++check_ind;
+            continue;
+        }
         cv::Mat stitchImage=equalize(curFrame);
-        _mission_run=true;
 
         cv::Mat map2d;
+        /*
         if(stitchImage.empty()){
             finished=true;
             curState=STOP;
@@ -91,7 +118,7 @@ void MapManager::threadFunction(){
             break;
         }
         //curFrame=equalize(curFrame);
-
+        */
         if(curState==PREVIEW){
             //callbackFunction(map2d, curFrame);
             emit publishFrames(map2d, stitchImage);
@@ -122,6 +149,8 @@ void MapManager::threadFunction(){
             }
             map2d = _stitcher->getStitchedImage();
         }
+        //cv::imshow("map",map2d);
+        //cv::waitKey(10);
         /*
          *
          * Determines the frequency to read frames
@@ -154,6 +183,7 @@ void MapManager::threadFunction(){
         //std::cout<<"Stitching frame "<<curIndex<<std::endl;
         curIndex++;
     }
+    //_stitcher->reset();
     _input->stop();
     _input->release();
     opened=false;
@@ -169,7 +199,7 @@ void MapManager::missionFunction(){
         img_mutex.lock();
         if(curFrame.empty()){
             img_mutex.unlock();
-            usleep(5e3);
+            usleep(30e3);
             continue;
         }
         cv::Mat missionImage;
@@ -178,13 +208,17 @@ void MapManager::missionFunction(){
         //missionImage: 480x320
         //std::cout<<curFrame.rows<<','<<curFrame.cols<<std::endl;
         img_mutex.unlock();
+
         auto rects=_mission->findTargets(missionImage);
         auto& targets=_mission->targets;
 
 
+        bool _gpsInHisory=false;
         if(targets.size()==0){
-            _mission->isGpsInHistory(gps);
-            _mission->compareTargetsWithGps(rects, targets, gps, "iou", 0.1);
+            _gpsInHisory=_mission->isGpsInHistory(gps);
+
+            if(!_gpsInHisory)
+                _mission->compareTargetsWithGps(rects, targets, gps, "iou", 0.1);
         }
         else{
             //_mission->compareTargets(rects, targets, "iou", 0.1);
@@ -224,9 +258,7 @@ cv::Mat MapManager::equalize(cv::Mat& image){
 
 void MapManager::record(bool flag){
     if(flag){
-        std::stringstream ss;
-        ss<<"videos/video_"<<videoIndex<<".avi";
-        _input->startRecord(ss.str());
+        _input->startRecord();
     }
     else
         _input->endRecord();

@@ -4,6 +4,7 @@
 FileListImageInput::FileListImageInput(const std::string& s):
     BaseImageInput(s)
 {
+    type=FILELIST;
     fileList=s;
     loadFrames();
 }
