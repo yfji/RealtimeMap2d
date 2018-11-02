@@ -6,6 +6,9 @@
 *.jpg
 *.png
 
-*compiled files
+#compiled files
 *.o
 *.d
+
+#log files
+*.log
