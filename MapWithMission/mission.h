@@ -107,6 +107,8 @@ public:
     bool has_target = {false};
 
 private:
+    int nTargets= {0};
+    int curTargets= {0};
     int savedIndex = {0};
     std::ofstream out_det;
 
@@ -119,7 +121,7 @@ private:
     const int barrel_thresh = {120};
     const int barrel_diff_thresh ={30};
     const int croco_thresh = {120};
-    const int croco_diff_thresh = {30};
+    const int croco_diff_thresh = {20};
 
     const float gps_dist_thresh={20};
 
@@ -130,8 +132,6 @@ private:
     bool isBarrel(std::tuple<int,int,int>& count, cv::Rect& rect, float min_ratio=0.2, float max_ratio=4);//ratio:w/h
 
     bool isCrocodile(std::tuple<int,int,int>& count, cv::Rect& rect, float min_ratio=0.8, float max_ratio=1.5);
-
-    void updateGPS(const GPS& g);
 
 public:
     void compareTargets(std::vector<std::pair<cv::Rect, TYPE> >& locations, \
@@ -153,6 +153,7 @@ public:
 
     void saveTargets();
     void saveGPS();
+    void updateGPS(const GPS& g);
 
     bool isGpsInHistory(GPS& curGps);
 

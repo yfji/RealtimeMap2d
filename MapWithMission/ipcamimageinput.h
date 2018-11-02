@@ -38,6 +38,7 @@ private:
     std::thread _thread;
 
     void readStreamFunction();
+    void startRecord();
 };
 
 #endif // IPCAMIMAGEINPUT_H

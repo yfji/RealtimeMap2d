@@ -35,7 +35,7 @@ public:
         return opened;
     }
 
-    void startRecord();
+    virtual void startRecord();
 
     inline void endRecord(){
         bRecording=false;

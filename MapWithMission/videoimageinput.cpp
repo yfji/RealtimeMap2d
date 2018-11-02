@@ -1,4 +1,5 @@
 #include "videoimageinput.h"
+#include <iomanip>
 
 VideoImageInput::VideoImageInput(const std::string& s):
     BaseImageInput(s)
@@ -34,8 +35,17 @@ VideoImageInput::VideoImageInput(const std::string& s):
 
 std::vector<float> VideoImageInput::getGPS(){
     float lon, lat;
-    log_in>>lon>>lat;
-    return {lon, lat};
+    std::string s_lon, s_lat;
+    log_in>>s_lon>>s_lat;
+
+    //std::stringstream ss;
+    //ss<<s_lon<<' '<<s_lat;
+    //ss>>lon>>lat;
+    lon=strtof(s_lon.c_str(), NULL);
+    lat=strtof(s_lat.c_str(), NULL);
+
+    //std::cout<<std::setiosflags(ios::fixed)<<std::setprecision(15)<<"lon: "<<lon<<','<<"lat: "<<lat<<std::endl;
+    return {1.0f*lon, 1.0f*lat};
 }
 
 int VideoImageInput::getVideoIndex(const string &filename){

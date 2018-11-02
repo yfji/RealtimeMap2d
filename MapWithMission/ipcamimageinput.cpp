@@ -13,6 +13,11 @@ IPCamImageInput::IPCamImageInput(const std::string& s):
     im_w=960;
     im_h=540;
 
+    _thread=std::thread(&IPCamImageInput::readStreamFunction,this);
+    _thread.detach();
+}
+
+void IPCamImageInput::startRecord(){
 #ifdef SAVE_GPS
     std::ifstream in;
     in.open(cfg_path, std::ios::in);
@@ -21,14 +26,12 @@ IPCamImageInput::IPCamImageInput(const std::string& s):
     in.close();
 
     std::stringstream ss;
-    ss<<"logs/gps_"<<index-1<<".log";
+    ss<<"logs/gps_"<<index<<".log";
 
     out_gps.open(ss.str().c_str(), std::ios::out);
 
 #endif
-
-    _thread=std::thread(&IPCamImageInput::readStreamFunction,this);
-    _thread.detach();
+    BaseImageInput::startRecord();
 }
 
 void IPCamImageInput::readStreamFunction(){
@@ -37,7 +40,7 @@ void IPCamImageInput::readStreamFunction(){
         _mutex.lock();
         cap.read(previewImage);
         _mutex.unlock();
-        usleep(10);
+        usleep(1000);
     }
     if(!opened){
         std::cout<<"Open ip stream failed"<<std::endl;
@@ -64,27 +67,42 @@ cv::Mat IPCamImageInput::getRawImage(){
 
         if(calib){
 #ifdef _1080P
-            cv::resize(tempImg, tempImg, cv::Size(960,540), cv::INTER_LINEAR);
+            cv::resize(tempImg, imageImg, cv::Size(960,540), cv::INTER_LINEAR);
 #else
             int start_y=(tempImg.rows-im_h)/2;
             int start_x=(tempImg.cols-im_w)/2;
-            image=tempImg(cv::Rect(start_x, start_y, im_w, im_h));
+            try{
+                image=tempImg(cv::Rect(start_x, start_y, im_w, im_h));
+            }
+            catch(cv::Exception& e){
+                std::cout<<e.msg<<std::endl;
+                std::cout<<"IP camera roi error"<<std::endl;
+                return cv::Mat();
+            }
+#endif
             if(bRecording)
                 writer<<image;
 #ifdef SAVE_GPS
-            char _lon[20];
-            char _lat[20];
-            sprintf(_lon, "%.15f",_gps->lon);
-            sprintf(_lat, "%.15f",_gps->lat);
+            if(bRecording){
+                char _lon[30];
+                char _lat[30];
+                sprintf(_lon, "%.15f",_gps->lon);
+                sprintf(_lat, "%.15f",_gps->lat);
 
-            out_gps<<_lon<<' '<<_lat<<std::endl;
-#endif
-
+                out_gps<<_lon<<' '<<_lat<<std::endl;
+            }
 #endif
             if (correctedImage.empty())
                 correctedImage = cv::Mat::zeros(image.size(), image.type());
             cam.getInterpImage(image, correctedImage);
-            cv::resize(correctedImage, correctedImage, cv::Size(960, 640), cv::INTER_LINEAR);
+            try{
+                cv::resize(correctedImage, correctedImage, cv::Size(960, 640), cv::INTER_LINEAR);
+            }
+            catch(cv::Exception& e){
+                std::cout<<e.msg<<std::endl;
+                std::cout<<"IP camera resize error"<<std::endl;
+                return cv::Mat();
+            }
         }
         else{
             correctedImage=image;

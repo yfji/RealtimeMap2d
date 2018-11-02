@@ -40,15 +40,16 @@ void MapManager::open(InputMethod method){
 }
 
 void MapManager::start(){
-    _stitcher->reset();
-    _thread=std::thread(&MapManager::threadFunction,this);
-    _thread.detach();
-
     if(use_image_thread){
         std::cout<<"Open image stream"<<std::endl;
         _image_thread=std::thread(&MapManager::getImageFunction, this);
         _image_thread.detach();
+        usleep(1000);
     }
+
+    _stitcher->reset();
+    _thread=std::thread(&MapManager::threadFunction,this);
+    _thread.detach();
 }
 
 void MapManager::getImageFunction(){
@@ -80,7 +81,8 @@ void MapManager::threadFunction(){
             img_mutex.lock();
             curFrame=_input->getRawImage();
 #ifdef USE_GPS
-            lon_lat=_input->getGPS();
+            if(_input->type==VIDEO && !curFrame.empty())
+                lon_lat=_input->getGPS();
 #endif
             img_mutex.unlock();
             _mission_run=true;
@@ -92,6 +94,13 @@ void MapManager::threadFunction(){
 #endif
         if(curFrame.empty()){
             numEmptyFrames++;
+
+            if(!use_image_thread){
+                finished=true;
+                curState=STOP;
+                emit finishNatrual();
+                break;
+            }
             if(numEmptyFrames==50+checkFrames){
                 finished=true;
                 curState=STOP;
@@ -104,6 +113,7 @@ void MapManager::threadFunction(){
         else if(use_image_thread && check_ind<checkFrames){
             usleep(10e3);
             ++check_ind;
+            std::cout<<"Check frame successfully"<<std::endl;
             continue;
         }
         cv::Mat stitchImage=equalize(curFrame);
@@ -187,7 +197,6 @@ void MapManager::threadFunction(){
     _input->stop();
     _input->release();
     opened=false;
-
 }
 
 void MapManager::missionFunction(){
@@ -214,6 +223,7 @@ void MapManager::missionFunction(){
 
 
         bool _gpsInHisory=false;
+        /*
         if(targets.size()==0){
             _gpsInHisory=_mission->isGpsInHistory(gps);
 
@@ -224,12 +234,23 @@ void MapManager::missionFunction(){
             //_mission->compareTargets(rects, targets, "iou", 0.1);
             _mission->compareTargetsWithGps(rects, targets, gps, "iou", 0.1);
         }
+        */
+        if(!_gpsInHisory){
+            _mission->compareTargetsWithGps(rects, targets, gps, "iou", 0.1);
+        }
 
         /*
          * Save targets here per (check_interval) frames
          *
          */
         if(frame_index==check_interval){
+            if(_mission->has_target){   //valid targets
+                _gpsInHisory=_mission->isGpsInHistory(gps);
+                if(!_gpsInHisory)
+                    _mission->updateGPS(gps);
+            }
+            else
+                _gpsInHisory=false;
             _mission->saveTargets();
             frame_index=0;
         }

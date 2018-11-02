@@ -92,6 +92,7 @@ signals:
     void publishFrames(cv::Mat&, cv::Mat&);
     void publishStates(std::string&);
     void publishRecordGPS(float, float);
+    void finishNatrual();
 
 private:
     State curState = {STOP};

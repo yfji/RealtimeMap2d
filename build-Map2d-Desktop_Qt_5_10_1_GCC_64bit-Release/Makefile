@@ -848,13 +848,13 @@ moc_mainwindow.cpp: ../../../../Qt5.10.1/5.10.1/gcc_64/include/QtWidgets/QMainWi
 		../MapWithMission/gms_matcher.h \
 		../MapWithMission/Header.h \
 		../MapWithMission/baseimageinput.h \
+		../MapWithMission/mission.h \
+		../MapWithMission/salient.h \
 		../MapWithMission/cameracalibration.h \
 		../MapWithMission/videoimageinput.h \
 		../MapWithMission/cameraimageinput.h \
 		../MapWithMission/filelistimageinput.h \
 		../MapWithMission/ipcamimageinput.h \
-		../MapWithMission/mission.h \
-		../MapWithMission/salient.h \
 		../MapWithMission/maplabel.h \
 		../../../../Qt5.10.1/5.10.1/gcc_64/include/QtWidgets/QLabel \
 		../../../../Qt5.10.1/5.10.1/gcc_64/include/QtWidgets/qlabel.h \
@@ -925,13 +925,13 @@ moc_mapmanager.cpp: ../../../../Qt5.10.1/5.10.1/gcc_64/include/QtCore/QObject \
 		../MapWithMission/gms_matcher.h \
 		../MapWithMission/Header.h \
 		../MapWithMission/baseimageinput.h \
+		../MapWithMission/mission.h \
+		../MapWithMission/salient.h \
 		../MapWithMission/cameracalibration.h \
 		../MapWithMission/videoimageinput.h \
 		../MapWithMission/cameraimageinput.h \
 		../MapWithMission/filelistimageinput.h \
 		../MapWithMission/ipcamimageinput.h \
-		../MapWithMission/mission.h \
-		../MapWithMission/salient.h \
 		../MapWithMission/mapmanager.h \
 		moc_predefs.h \
 		../../../../Qt5.10.1/5.10.1/gcc_64/bin/moc
@@ -1351,13 +1351,13 @@ main.o: ../MapWithMission/main.cpp ../MapWithMission/mainwindow.h \
 		../MapWithMission/gms_matcher.h \
 		../MapWithMission/Header.h \
 		../MapWithMission/baseimageinput.h \
+		../MapWithMission/mission.h \
+		../MapWithMission/salient.h \
 		../MapWithMission/cameracalibration.h \
 		../MapWithMission/videoimageinput.h \
 		../MapWithMission/cameraimageinput.h \
 		../MapWithMission/filelistimageinput.h \
 		../MapWithMission/ipcamimageinput.h \
-		../MapWithMission/mission.h \
-		../MapWithMission/salient.h \
 		../MapWithMission/maplabel.h \
 		../../../../Qt5.10.1/5.10.1/gcc_64/include/QtWidgets/QLabel \
 		../../../../Qt5.10.1/5.10.1/gcc_64/include/QtWidgets/qlabel.h \
@@ -1491,13 +1491,13 @@ mainwindow.o: ../MapWithMission/mainwindow.cpp ../MapWithMission/mainwindow.h \
 		../MapWithMission/gms_matcher.h \
 		../MapWithMission/Header.h \
 		../MapWithMission/baseimageinput.h \
+		../MapWithMission/mission.h \
+		../MapWithMission/salient.h \
 		../MapWithMission/cameracalibration.h \
 		../MapWithMission/videoimageinput.h \
 		../MapWithMission/cameraimageinput.h \
 		../MapWithMission/filelistimageinput.h \
 		../MapWithMission/ipcamimageinput.h \
-		../MapWithMission/mission.h \
-		../MapWithMission/salient.h \
 		../MapWithMission/maplabel.h \
 		../../../../Qt5.10.1/5.10.1/gcc_64/include/QtWidgets/QLabel \
 		../../../../Qt5.10.1/5.10.1/gcc_64/include/QtWidgets/qlabel.h \
@@ -1645,36 +1645,46 @@ mapmanager.o: ../MapWithMission/mapmanager.cpp ../MapWithMission/mapmanager.h \
 		../MapWithMission/gms_matcher.h \
 		../MapWithMission/Header.h \
 		../MapWithMission/baseimageinput.h \
+		../MapWithMission/mission.h \
+		../MapWithMission/salient.h \
 		../MapWithMission/cameracalibration.h \
 		../MapWithMission/videoimageinput.h \
 		../MapWithMission/cameraimageinput.h \
 		../MapWithMission/filelistimageinput.h \
-		../MapWithMission/ipcamimageinput.h \
-		../MapWithMission/mission.h \
-		../MapWithMission/salient.h
+		../MapWithMission/ipcamimageinput.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o mapmanager.o ../MapWithMission/mapmanager.cpp
 
 baseimageinput.o: ../MapWithMission/baseimageinput.cpp ../MapWithMission/baseimageinput.h \
+		../MapWithMission/mission.h \
+		../MapWithMission/salient.h \
 		../MapWithMission/cameracalibration.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o baseimageinput.o ../MapWithMission/baseimageinput.cpp
 
 videoimageinput.o: ../MapWithMission/videoimageinput.cpp ../MapWithMission/videoimageinput.h \
 		../MapWithMission/baseimageinput.h \
+		../MapWithMission/mission.h \
+		../MapWithMission/salient.h \
 		../MapWithMission/cameracalibration.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o videoimageinput.o ../MapWithMission/videoimageinput.cpp
 
 cameraimageinput.o: ../MapWithMission/cameraimageinput.cpp ../MapWithMission/cameraimageinput.h \
 		../MapWithMission/baseimageinput.h \
+		../MapWithMission/mission.h \
+		../MapWithMission/salient.h \
 		../MapWithMission/cameracalibration.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o cameraimageinput.o ../MapWithMission/cameraimageinput.cpp
 
 filelistimageinput.o: ../MapWithMission/filelistimageinput.cpp ../MapWithMission/filelistimageinput.h \
 		../MapWithMission/baseimageinput.h \
+		../MapWithMission/mission.h \
+		../MapWithMission/salient.h \
 		../MapWithMission/cameracalibration.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o filelistimageinput.o ../MapWithMission/filelistimageinput.cpp
 
 ipcamimageinput.o: ../MapWithMission/ipcamimageinput.cpp ../MapWithMission/ipcamimageinput.h \
 		../MapWithMission/baseimageinput.h \
+		../MapWithMission/mission.h \
+		../MapWithMission/salient.h \
 		../MapWithMission/cameracalibration.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o ipcamimageinput.o ../MapWithMission/ipcamimageinput.cpp
 

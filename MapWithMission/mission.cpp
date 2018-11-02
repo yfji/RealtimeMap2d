@@ -325,9 +325,11 @@ void Mission::compareTargetsWithGps(std::vector<std::pair<cv::Rect, TYPE> >& loc
         }
     }
     currentGPS=currentGps;
+    /*
     if(targets.size()>0){
         updateGPS(currentGPS);
     }
+    */
 }
 
 std::vector<std::pair<cv::Rect, TYPE> > Mission::findTargets(cv::Mat& oriImg, const int num_threads){
@@ -351,11 +353,15 @@ bool Mission::isGpsInHistory(GPS &curGps){
     if(len==0)
         return false;
     float min_dist=1e7;
+    std::cout<<"History"<<std::endl;
     for(int i=0;i<len;++i){
         GPS& gps=historyGps[i];
-        //float dist_lat=curGps.lat-gps.lat;
-        //float dist_lon=curGps.lon-gps.lon;
-        //float dist=sqrt(dist_lat*dist_lat+dist_lon*dist_lon);
+        /*
+        float dist_lat=curGps.lat-gps.lat;
+        float dist_lon=curGps.lon-gps.lon;
+        float dist=sqrt(dist_lat*dist_lat+dist_lon*dist_lon);
+        */
+        std::cout<<'('<<gps.lon<<','<<gps.lat<<')'<<std::endl;
         float direct_dist=GetDirectDistance(gps.lat, gps.lon, curGps.lat, curGps.lon);
         min_dist=MIN(min_dist, direct_dist);
     }
@@ -370,6 +376,17 @@ bool Mission::isGpsInHistory(GPS &curGps){
 
 void Mission::saveTargets(){
     has_target=false;
+    curTargets=0;
+    for(int i=0;i<targets.size();++i){
+        if(targets[i].life>=3 && targets[i].forgot<3){
+            ++curTargets;
+        }
+    }
+    if(curTargets==nTargets){   //not updated
+        return;
+    }
+    char data_lon[30];
+    char data_lat[30];
     for(int i=0;i<targets.size();++i){
         if(targets[i].life>=3 && targets[i].forgot<3){
             cv::Scalar color;
@@ -383,8 +400,12 @@ void Mission::saveTargets(){
                 name="crocodile";
             }
             cv::rectangle(currentImage, targets[i].location, color, 2);
+            cv::imshow("targets", currentImage);
+
             std::stringstream ss;
-            ss<<"["<<savedIndex<<"]:"<<name.c_str()<<"---->"<<targets[i].gpsLocation.lon<<','<<targets[i].gpsLocation.lat;
+            sprintf(data_lon, "%.15f", targets[i].gpsLocation.lon);
+            sprintf(data_lat, "%.15f", targets[i].gpsLocation.lat);
+            ss<<"["<<savedIndex<<"]:"<<name.c_str()<<"---->"<<data_lon<<','<<data_lat;
             std::string s=ss.str();
             std::cout<<s<<std::endl;
             out_det<<s<<std::endl;
@@ -395,7 +416,8 @@ void Mission::saveTargets(){
     if(has_target){
         std::stringstream ss;
         ss<<"./logs/target_"<<savedIndex<<".jpg";
-        cv::imwrite(ss.str(), currentImage);
+        //cv::imwrite(ss.str(), currentImage);
         ++savedIndex;
     }
+    nTargets=curTargets;
 }
